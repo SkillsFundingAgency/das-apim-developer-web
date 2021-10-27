@@ -10,6 +10,14 @@ namespace SFA.DAS.Apim.Developer.Domain.Employers.Api
 
         public static implicit operator GetEmployerUserAccounts(GetUserAccountsResponse source)
         {
+            if (source?.UserAccounts == null)
+            {
+                return new GetEmployerUserAccounts
+                {
+                    EmployerAccounts = new List<GetEmployerUserAccountItem>()
+                };
+            }
+            
             return new GetEmployerUserAccounts
             {
                 EmployerAccounts = source.UserAccounts.Select(c=>(GetEmployerUserAccountItem)c).ToList()
