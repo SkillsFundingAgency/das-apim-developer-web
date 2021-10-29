@@ -29,7 +29,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             serviceCollection.AddConfigurationOptions(configuration);
             serviceCollection.AddDistributedMemoryCache();
             serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
-            serviceCollection.AddEmployerAuthenticationServices(configuration);
+            serviceCollection.AddEmployerAuthenticationServices();
 
             var provider = serviceCollection.BuildServiceProvider();
 

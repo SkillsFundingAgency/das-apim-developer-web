@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
+using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
