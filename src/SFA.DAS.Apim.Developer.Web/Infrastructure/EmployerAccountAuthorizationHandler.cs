@@ -5,12 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api;
-using SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
 namespace SFA.DAS.Apim.Developer.Web.Infrastructure
@@ -22,11 +22,13 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
     public class EmployerAccountAuthorizationHandler: AuthorizationHandler<EmployerAccountRequirement>, IEmployerAccountAuthorisationHandler
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmployerAccountService _accountsService;
         private readonly ILogger<EmployerAccountAuthorizationHandler> _logger;
 
-        public EmployerAccountAuthorizationHandler(IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger)
+        public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger)
         {
+            _httpContextAccessor = httpContextAccessor;
             _accountsService = accountsService;
             _logger = logger;
         }
@@ -45,10 +47,11 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
         public bool IsEmployerAuthorised(AuthorizationHandlerContext context, bool allowAllUserRoles)
         {
-            if (context.Resource is not AuthorizationFilterContext mvcContext || !mvcContext.RouteData.Values.ContainsKey(RouteValues.EmployerAccountId)) 
+            if (!_httpContextAccessor.HttpContext.Request.RouteValues.ContainsKey(RouteValues.EmployerAccountId))
+            {
                 return false;
-            
-            var accountIdFromUrl = mvcContext.RouteData.Values[RouteValues.EmployerAccountId].ToString().ToUpper();
+            }
+            var accountIdFromUrl = _httpContextAccessor.HttpContext.Request.RouteValues[RouteValues.EmployerAccountId].ToString().ToUpper();
             var employerAccountClaim = context.User.FindFirst(c=>c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
 
             if(employerAccountClaim?.Value == null)
@@ -101,9 +104,9 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 employerIdentifier = updatedEmployerAccounts[accountIdFromUrl];
             }
 
-            if (!mvcContext.HttpContext.Items.ContainsKey(ContextItemKeys.EmployerIdentifier))
+            if (!_httpContextAccessor.HttpContext.Items.ContainsKey(ContextItemKeys.EmployerIdentifier))
             {
-                mvcContext.HttpContext.Items.Add(ContextItemKeys.EmployerIdentifier, employerAccounts.GetValueOrDefault(accountIdFromUrl));
+                _httpContextAccessor.HttpContext.Items.Add(ContextItemKeys.EmployerIdentifier, employerAccounts.GetValueOrDefault(accountIdFromUrl));
             }
 
             if (!CheckUserRoleForAccess(employerIdentifier, allowAllUserRoles))

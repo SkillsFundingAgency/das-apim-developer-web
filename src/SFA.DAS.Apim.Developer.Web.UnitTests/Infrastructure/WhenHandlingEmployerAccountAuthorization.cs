@@ -3,10 +3,7 @@ using System.Security.Claims;
 using AutoFixture.NUnit3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http.Features;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -24,6 +21,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_True_If_Employer_Is_Authorized(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -32,13 +30,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new [] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
@@ -52,6 +48,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             string accountId,
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -60,14 +57,12 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,accountId.ToUpper());
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
 
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, accountId.ToUpper());
-            
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
@@ -82,7 +77,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
             GetEmployerUserAccountItem serviceResponse,
-            [Frozen] Mock<HttpContext> httpContext,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             [Frozen] Mock<IEmployerAccountService> employerAccountService,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
@@ -99,12 +94,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var employerAccountClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {employerAccountClaim, userClaim})});
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(httpContext.Object,new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, accountId.ToUpper());
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,accountId.ToUpper());
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
@@ -121,6 +115,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
             GetEmployerUserAccountItem serviceResponse,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             [Frozen] Mock<IEmployerAccountService> employerAccountService,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
@@ -137,12 +132,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var employerAccountClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {employerAccountClaim, userClaim})});
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, accountId.ToUpper());
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,accountId.ToUpper());
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
@@ -155,6 +149,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_False_If_Employer_Is_Authorized_But_Viewer_Role_Not_Allowed(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -163,13 +158,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
@@ -182,6 +175,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_True_If_Employer_Is_Authorized_But_Has_Viewer_Role(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -190,13 +184,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
@@ -209,6 +201,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_False_If_Employer_Is_Authorized_But_Has_Invalid_Role_But_Should_Allow_All_known_Roles(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -217,13 +210,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
@@ -237,6 +228,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_False_If_AccountId_Not_In_Url(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -245,12 +237,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Clear();
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
@@ -263,6 +254,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_False_If_No_Matching_AccountIdentifier_Claim_Found(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -271,13 +263,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim("SomeOtherClaim", JsonConvert.SerializeObject(employerAccounts));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
@@ -290,6 +280,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_Returns_False_If_The_Claim_Cannot_Be_Deserialized(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
@@ -297,13 +288,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerIdentifier));
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
-
-            var contextFilter = new AuthorizationFilterContext(new ActionContext(Mock.Of<HttpContext>(),new RouteData(), new ActionDescriptor()),new List<IFilterMetadata> {});
-                
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, contextFilter);
-            var filter = context.Resource as AuthorizationFilterContext;
-            filter.HttpContext.Items = new Dictionary<object, object>();
-            filter.RouteData.Values.Add(RouteValues.EmployerAccountId, employerIdentifier.AccountId);
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             //Act
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
