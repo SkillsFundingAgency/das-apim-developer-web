@@ -1,3 +1,4 @@
+using System.Web;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
 namespace SFA.DAS.Apim.Developer.Domain.Employers.Api.Requests
@@ -11,6 +12,6 @@ namespace SFA.DAS.Apim.Developer.Domain.Employers.Api.Requests
             _userId = userId;
         }
 
-        public string GetUrl => $"accounts/{_userId}";
+        public string GetUrl => $"accountusers/{_userId}/accounts";
     }
 }
