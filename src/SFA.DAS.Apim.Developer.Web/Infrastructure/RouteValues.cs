@@ -4,6 +4,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
     {
         public const string EmployerAccountId = "employerAccountId";
 
-        public const string UkPrn = "ukprn";
+        public const string Ukprn = "ukprn";
+        
     }
 }
