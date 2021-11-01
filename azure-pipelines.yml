@@ -6,14 +6,14 @@ trigger:
 
 variables:
 - name: SolutionBaseName
-  value: __SolutionBaseName__
+  value: SFA.DAS.Apim.Developer
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
   value: any cpu
 
 pool:
-  name: DAS - Continuous Integration
+  name: DAS - Continuous Integration Agents
   workspace:
     clean: all
 
