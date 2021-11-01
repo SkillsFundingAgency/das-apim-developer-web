@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.Memory;
@@ -36,6 +39,33 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             var type = provider.GetService(toResolve);
             Assert.IsNotNull(type);
         }
+
+        [Test]
+        public void Then_Resolves_Authorization_Handlers()
+        {
+            var hostEnvironment = new Mock<IWebHostEnvironment>();
+            var serviceCollection = new ServiceCollection();
+
+            var configuration = GenerateConfiguration();
+            
+            serviceCollection.AddSingleton(hostEnvironment.Object);
+            serviceCollection.AddSingleton(Mock.Of<IConfiguration>());
+            serviceCollection.AddConfigurationOptions(configuration);
+            serviceCollection.AddDistributedMemoryCache();
+            serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
+            serviceCollection.AddEmployerAuthenticationServices();
+            serviceCollection.AddProviderAuthenticationServices();
+
+            var provider = serviceCollection.BuildServiceProvider();
+            
+            var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
+            Assert.IsNotNull(type);
+            type.Count.Should().Be(2);
+            type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
+            type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
+
+        }
+        
         private static IConfigurationRoot GenerateConfiguration()
         {
             var configSource = new MemoryConfigurationSource
