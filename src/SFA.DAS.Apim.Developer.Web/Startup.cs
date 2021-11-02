@@ -67,6 +67,7 @@ namespace SFA.DAS.Apim.Developer.Web
 
             services.AddConfigurationOptions(_configuration);
             services.AddEmployerAuthenticationServices();
+            services.AddProviderAuthenticationServices();
             
             services.AddAndConfigureEmployerAuthentication(
                 _configuration

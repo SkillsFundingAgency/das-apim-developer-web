@@ -18,6 +18,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton(cfg => cfg.GetService<IOptions<ApimDeveloperApi>>().Value);
             services.Configure<IdentityServerConfiguration>(configuration.GetSection("Identity"));
             services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
+            services.Configure<ProviderIdams>(configuration.GetSection("ProviderIdams"));
+            services.AddSingleton(cfg => cfg.GetService<IOptions<ProviderIdams>>().Value);
         }
     }
 }
