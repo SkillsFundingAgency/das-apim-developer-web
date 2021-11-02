@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
+using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -85,6 +86,7 @@ namespace SFA.DAS.Apim.Developer.Web
             
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
+            services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
             services.Configure<RouteOptions>(options =>
             {
                 options.LowercaseUrls = true;
