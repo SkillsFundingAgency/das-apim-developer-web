@@ -12,6 +12,7 @@ using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Provider.Shared.UI.Startup;
 
 namespace SFA.DAS.Apim.Developer.Web
 {
@@ -69,10 +70,18 @@ namespace SFA.DAS.Apim.Developer.Web
             services.AddEmployerAuthenticationServices();
             services.AddProviderAuthenticationServices();
             
+            services.AddProviderUiServiceRegistration(_configuration);
+            
             services.AddAndConfigureEmployerAuthentication(
                 _configuration
                     .GetSection("Identity")
                     .Get<IdentityServerConfiguration>());
+            
+            services.AddAndConfigureProviderAuthentication(_configuration
+                .GetSection(nameof(ProviderIdams))
+                .Get<ProviderIdams>());
+            
+            services.AddAuthenticationCookie();
             
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });

@@ -14,5 +14,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderAccount))]
+        [Route("{ukprn}/recruitment/api", Name = RouteNames.ProviderRecruitInform)]
+        public IActionResult ProviderIndex()
+        {
+            return View();
+        }
     }
 }
