@@ -78,7 +78,9 @@ namespace SFA.DAS.Apim.Developer.Web
                 services.AddAndConfigureEmployerAuthentication(
                     _configuration
                         .GetSection("Identity")
-                        .Get<IdentityServerConfiguration>());    
+                        .Get<IdentityServerConfiguration>());
+                
+                services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
             }
 
             if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
@@ -94,7 +96,7 @@ namespace SFA.DAS.Apim.Developer.Web
             
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-            services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
+            
             services.Configure<RouteOptions>(options =>
             {
                 options.LowercaseUrls = true;
