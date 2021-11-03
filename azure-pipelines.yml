@@ -5,6 +5,7 @@ trigger:
       - "*"
 
 variables:
+- group: RELEASE das-apim-developer-web
 - name: SolutionBaseName
   value: SFA.DAS.Apim.Developer.Web
 - name: BuildConfiguration
@@ -18,8 +19,13 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/0.3.31
+    ref: refs/tags/0.4.14
     endpoint: SkillsFundingAgency
+  - repository: das-platform-automation
+    type: github
+    name: SkillsFundingAgency/das-platform-automation
+    ref: refs/tags/4.5.0
+    endpoint: GitHub (SFA)
 
 stages:
 - stage: Build
@@ -28,4 +34,16 @@ stages:
     parameters:
       SolutionBaseName: $(SolutionBaseName)
       BuildConfiguration: $(BuildConfiguration)
-    
+
+- stage: Deploy_AT
+  dependsOn: Build
+  displayName: Deploy to AT
+  variables:
+  - group: DevTest Management Resources
+  - group: AT DevTest Shared Resources
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: AT
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      SolutionBaseName: $(SolutionBaseName)
