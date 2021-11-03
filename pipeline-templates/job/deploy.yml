@@ -20,7 +20,8 @@ jobs:
             Environment: ${{ parameters.Environment }}
             TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.json
             ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
-            IsMultiRepoCheckout: true
+            ##TO DO: change to true when adding generate config task
+            IsMultiRepoCheckout: false
             TemplateSecrets:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
               ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
