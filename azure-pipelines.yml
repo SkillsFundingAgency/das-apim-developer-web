@@ -5,6 +5,7 @@ trigger:
       - "*"
 
 variables:
+- group: Release Management Resources
 - group: RELEASE das-apim-developer-web
 - name: SolutionBaseName
   value: SFA.DAS.Apim.Developer.Web
@@ -25,7 +26,7 @@ resources:
     type: github
     name: SkillsFundingAgency/das-platform-automation
     ref: refs/tags/4.5.0
-    endpoint: GitHub (SFA)
+    endpoint: SkillsFundingAgency
 
 stages:
 - stage: Build
