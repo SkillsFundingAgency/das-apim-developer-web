@@ -44,7 +44,7 @@ jobs:
             ##TO DO: correct path for Employers app artifact
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
 
-- deployment: DeployEmployersApp
+- deployment: DeployProvidersApp
   displayName: Deploy APIM Dev Providers App
   dependsOn: DeployResources
   pool:
