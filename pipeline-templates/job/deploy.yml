@@ -4,7 +4,8 @@
   Environment:
 
 jobs:
-- deployment: DeployWebApp
+- deployment: DeployResources
+  displayName: Deploy Azure Resources
   pool:
     name: DAS - Continuous Deployment Agents
   environment: ${{ parameters.Environment }}
@@ -25,8 +26,37 @@ jobs:
             TemplateSecrets:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
               ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
+
+- deployment: DeployEmployersApp
+  displayName: Deploy APIM Dev Employers App
+  dependsOn: DeployResources
+  pool:
+    name: DAS - Continuous Deployment Agents
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
         - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
-            AppServiceName: $(AppServiceName)
+            AppServiceName: $(EmployersAppServiceName)
+            ##TO DO: correct path for Employers app artifact
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
+
+- deployment: DeployEmployersApp
+  displayName: Deploy APIM Dev Providers App
+  dependsOn: DeployResources
+  pool:
+    name: DAS - Continuous Deployment Agents
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(ProvidersAppServiceName)
+            ##TO DO: correct path for Providers app artifact
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
