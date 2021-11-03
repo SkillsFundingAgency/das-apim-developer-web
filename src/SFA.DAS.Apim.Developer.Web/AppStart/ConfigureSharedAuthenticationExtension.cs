@@ -7,13 +7,14 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
     public static class ConfigureSharedAuthenticationExtension
     {
-        public static void AddAuthenticationCookie(this IServiceCollection services)
+        public static void AddAuthenticationCookie(this IServiceCollection services,
+            AuthenticationType? serviceParametersAuthenticationType)
         {
             services.AddAuthentication().AddCookie(options =>
             {
                 options.AccessDeniedPath = new PathString("/error/403");
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.Cookie.Name = "SFA.DAS.Apim.Developer.Web.Auth";
+                options.Cookie.Name = $"SFA.DAS.Apim.Developer.Web.{serviceParametersAuthenticationType}Auth";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;

@@ -54,35 +54,43 @@ namespace SFA.DAS.Apim.Developer.Web
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
             services.AddOptions();
-
-            var serviceParameters = new ServiceParameters
+            var serviceParameters = new ServiceParameters();
+            if (_configuration["AuthType"].Equals("Employer", StringComparison.CurrentCultureIgnoreCase))
             {
-                AuthenticationType = AuthenticationType.Employer
-            };
-
+                serviceParameters.AuthenticationType = AuthenticationType.Employer;
+            }
+            else if (_configuration["AuthType"].Equals("Provider", StringComparison.CurrentCultureIgnoreCase))
+            {
+                serviceParameters.AuthenticationType = AuthenticationType.Provider;
+            }
 
             services.AddConfigurationOptions(_configuration);
-            services.AddEmployerAuthenticationServices();
-            services.AddProviderAuthenticationServices();
             
-            services.AddProviderUiServiceRegistration(_configuration);
+
+            if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
+            {
+                services.AddEmployerAuthenticationServices();
+                services.AddAndConfigureEmployerAuthentication(
+                    _configuration
+                        .GetSection("Identity")
+                        .Get<IdentityServerConfiguration>());    
+            }
+
+            if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
+            {
+                services.AddProviderUiServiceRegistration(_configuration);
+                services.AddProviderAuthenticationServices();
+                services.AddAndConfigureProviderAuthentication(_configuration
+                    .GetSection(nameof(ProviderIdams))
+                    .Get<ProviderIdams>());    
+            }
             
-            services.AddAndConfigureEmployerAuthentication(
-                _configuration
-                    .GetSection("Identity")
-                    .Get<IdentityServerConfiguration>());
-            
-            services.AddAndConfigureProviderAuthentication(_configuration
-                .GetSection(nameof(ProviderIdams))
-                .Get<ProviderIdams>());
-            
-            services.AddAuthenticationCookie();
+            services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
