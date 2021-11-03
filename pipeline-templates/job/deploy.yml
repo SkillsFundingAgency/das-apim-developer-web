@@ -6,9 +6,9 @@
 jobs:
 - deployment: DeployResources
   displayName: Deploy Azure Resources
+  environment: ${{ parameters.Environment }}
   pool:
     name: DAS - Continuous Deployment Agents
-  environment: ${{ parameters.Environment }}
   strategy:
     runOnce:
       deploy:
@@ -26,13 +26,18 @@ jobs:
             TemplateSecrets:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
               ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
+        ##TO DO: get APIM subscription key
+        ##TO DO: generate config
 
 - deployment: DeployEmployersApp
-  displayName: Deploy APIM Dev Employers App
   dependsOn: DeployResources
+  displayName: Deploy APIM Dev Employers App
+  environment: ${{ parameters.Environment }}
   pool:
     name: DAS - Continuous Deployment Agents
-  environment: ${{ parameters.Environment }}
+  variables:
+    ResourceGroupName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ResourceGroupName'] ]
+    EmployersAppServiceName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.EmployersAppServiceName'] ]
   strategy:
     runOnce:
       deploy:
@@ -45,11 +50,14 @@ jobs:
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
 
 - deployment: DeployProvidersApp
-  displayName: Deploy APIM Dev Providers App
   dependsOn: DeployResources
+  displayName: Deploy APIM Dev Providers App
+  environment: ${{ parameters.Environment }}
   pool:
     name: DAS - Continuous Deployment Agents
-  environment: ${{ parameters.Environment }}
+  variables:
+    ResourceGroupName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ResourceGroupName'] ]
+    ProvidersAppServiceName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ProvidersAppServiceName'] ]
   strategy:
     runOnce:
       deploy:
