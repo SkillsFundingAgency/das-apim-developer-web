@@ -50,10 +50,10 @@
         "sharedFrontEndAppServicePlanName": {
             "type": "string"
         },
-        "sharedFrontEndSubnetResourceId": { 
+        "sharedFrontEndSubnetResourceId": {
             "type": "string"
         },
-        "frontEndAccessRestrictions": { 
+        "frontEndAccessRestrictions": {
             "type": "array"
         },
         "sharedApimName": {
@@ -230,6 +230,10 @@
                                 {
                                     "name": "LoggingRedisKey",
                                     "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "AuthType",
+                                    "value": "employer"
                                 }
                             ]
                         }
@@ -303,6 +307,10 @@
                                 {
                                     "name": "LoggingRedisKey",
                                     "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "AuthType",
+                                    "value": "provider"
                                 }
                             ]
                         }
