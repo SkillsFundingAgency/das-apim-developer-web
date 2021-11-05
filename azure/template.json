@@ -207,6 +207,10 @@
                         "value": {
                             "array": [
                                 {
+                                    "name": "Environment",
+                                    "value": "[parameters('environmentName')]"
+                                },
+                                {
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
                                 },
@@ -287,6 +291,10 @@
                     "appServiceAppSettings": {
                         "value": {
                             "array": [
+                                {
+                                    "name": "Environment",
+                                    "value": "[parameters('environmentName')]"
+                                },
                                 {
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
