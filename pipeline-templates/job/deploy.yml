@@ -21,12 +21,26 @@ jobs:
             Environment: ${{ parameters.Environment }}
             TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.json
             ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
-            ##TO DO: change to true when adding generate config task
-            IsMultiRepoCheckout: false
+            IsMultiRepoCheckout: true
             TemplateSecrets:
               LoggingRedisConnectionString: $(LoggingRedisConnectionString)
               ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
-        ##TO DO: get APIM subscription key
+        - template: azure-pipelines-templates/deploy/step/get-apim-subscription-key.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            ApimResourceGroup: $(SharedApimResourceGroup)
+            ApimName: $(SharedApimName)
+            SubscriptionId: $(EmployersAppServiceName)
+            PipelineVariableName: EmployerApimDeveloperApimSubscriptionKey
+            IsMultiRepoCheckout: true
+        - template: azure-pipelines-templates/deploy/step/get-apim-subscription-key.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            ApimResourceGroup: $(SharedApimResourceGroup)
+            ApimName: $(SharedApimName)
+            SubscriptionId: $(ProvidersAppServiceName)
+            PipelineVariableName: ProviderApimDeveloperApimSubscriptionKey
+            IsMultiRepoCheckout: true
         ##TO DO: generate config
 
 - deployment: DeployEmployersApp
