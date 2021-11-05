@@ -65,7 +65,6 @@ jobs:
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(EmployersAppServiceName)
-            ##TO DO: correct path for Employers app artifact
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
 
 - deployment: DeployProvidersApp
@@ -85,5 +84,4 @@ jobs:
           parameters:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(ProvidersAppServiceName)
-            ##TO DO: correct path for Providers app artifact
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
