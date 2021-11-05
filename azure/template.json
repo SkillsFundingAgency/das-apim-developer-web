@@ -61,6 +61,9 @@
         },
         "sharedApimResourceGroup": {
             "type": "string"
+        },
+        "cdnUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -232,6 +235,10 @@
                                     "value": "[parameters('loggingRedisKey')]"
                                 },
                                 {
+                                    "name": "Cdn:Url",
+                                    "value": "[parameters('cdnUrl')]"
+                                },
+                                {
                                     "name": "AuthType",
                                     "value": "employer"
                                 }
@@ -307,6 +314,10 @@
                                 {
                                     "name": "LoggingRedisKey",
                                     "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "Cdn:Url",
+                                    "value": "[parameters('cdnUrl')]"
                                 },
                                 {
                                     "name": "AuthType",
