@@ -209,6 +209,10 @@
                     }
                 }
             },
+            "copy": {
+                "name": "appServiceCopy",
+                "count": "[parameters('appConfiguration')]"
+            },
             "dependsOn": [
                 "[variables('resourceGroupName')]"
             ]
@@ -235,6 +239,10 @@
                         "value": "[concat(subscription().id, '/resourceGroups/', parameters('sharedApimResourceGroup'), '/providers/Microsoft.ApiManagement/service/', parameters('sharedApimName'), '/products/ApimDeveloperOuterApi')]"
                     }
                 }
+            },
+            "copy": {
+                "name": "apimSubscriptionCopy",
+                "count": "[parameters('appConfiguration')]"
             }
         }
     ],
