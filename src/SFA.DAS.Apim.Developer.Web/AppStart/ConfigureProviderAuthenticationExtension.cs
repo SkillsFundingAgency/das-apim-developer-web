@@ -16,13 +16,6 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         public static void AddAndConfigureProviderAuthentication(this IServiceCollection services,
             ProviderIdams configuration)
         {
-            var cookieOptions = new Action<CookieAuthenticationOptions>(options =>
-            {
-                options.CookieManager = new ChunkingCookieManager {ChunkSize = 3000};
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.AccessDeniedPath = "/error/403";
-            });
-
             services.AddAuthentication(sharedOptions =>
                 {
                     sharedOptions.DefaultScheme =
@@ -41,7 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                     {
                         await PopulateProviderClaims(ctx.HttpContext, ctx.Principal);
                     };
-                }).AddCookie(cookieOptions);   
+                });   
         }
         private static Task PopulateProviderClaims(HttpContext httpContext, ClaimsPrincipal principal)
         {

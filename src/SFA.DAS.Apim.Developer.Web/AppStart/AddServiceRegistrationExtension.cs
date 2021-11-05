@@ -15,7 +15,6 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddHttpContextAccessor();
             services.AddHttpClient<IApiClient, ApiClient>();
             services.AddTransient<IEmployerAccountService, EmployerAccountService>();
-            services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
         }
     }
 }

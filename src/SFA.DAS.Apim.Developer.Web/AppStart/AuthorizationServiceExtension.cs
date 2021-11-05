@@ -19,19 +19,20 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         .HasEmployerAccount
                     , policy =>
                     {
-                        policy.RequireAuthenticatedUser();
                         policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                         policy.Requirements.Add(new EmployerAccountRequirement());
+                        policy.RequireAuthenticatedUser();
                     });
                 options.AddPolicy(
                     PolicyNames
                         .HasProviderAccount
                     , policy =>
                     {
-                        policy.RequireAuthenticatedUser();
+                     
                         policy.RequireClaim(ProviderClaims.ProviderUkprn);
                         policy.RequireClaim(ProviderClaims.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
                         policy.Requirements.Add(new ProviderAccountRequirement());
+                        policy.RequireAuthenticatedUser();
                     });
             });
         }

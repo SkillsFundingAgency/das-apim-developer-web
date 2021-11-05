@@ -1,0 +1,10 @@
+@{
+    Layout = "_Layout.cshtml";
+}
+
+@section breadcrumb
+{
+    @RenderSection("breadcrumb", required: false)
+}
+
+@RenderBody()
