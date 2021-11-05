@@ -113,10 +113,10 @@
                 },
                 "parameters": {
                     "appInsightsName": {
-                        "value": "[concat(variables('resourceNamePrefix'),parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
                     "attachedService": {
-                        "value": "[concat(variables('resourceNamePrefix'),parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     }
                 }
             },
@@ -141,7 +141,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[concat(variables('resourceNamePrefix'), parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
                     "appServicePlanName": {
                         "value": "[parameters('sharedFrontEndAppServicePlanName')]"
@@ -233,7 +233,7 @@
                         "value": "[parameters('sharedApimName')]"
                     },
                     "subscriptionName": {
-                        "value": "[concat(variables('resourceNamePrefix'), parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
                     "subscriptionScope": {
                         "value": "[concat(subscription().id, '/resourceGroups/', parameters('sharedApimResourceGroup'), '/providers/Microsoft.ApiManagement/service/', parameters('sharedApimName'), '/products/ApimDeveloperOuterApi')]"
