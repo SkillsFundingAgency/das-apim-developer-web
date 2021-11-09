@@ -1,0 +1,87 @@
+﻿parameters:
+  ServiceConnection:
+  SolutionBaseName:
+  Environment:
+
+jobs:
+- deployment: DeployResources
+  displayName: Deploy Azure Resources
+  environment: ${{ parameters.Environment }}
+  pool:
+    name: DAS - Continuous Deployment Agents
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: azure-pipelines-templates/deploy/step/arm-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            SubscriptionId: $(SubscriptionId)
+            Location: $(ResourceGroupLocation)
+            Environment: ${{ parameters.Environment }}
+            TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.json
+            ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
+            IsMultiRepoCheckout: true
+            TemplateSecrets:
+              LoggingRedisConnectionString: $(LoggingRedisConnectionString)
+              ConfigurationStorageConnectionString: $(ConfigurationStorageConnectionString)
+        - template: azure-pipelines-templates/deploy/step/get-apim-subscription-key.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            ApimResourceGroup: $(SharedApimResourceGroup)
+            ApimName: $(SharedApimName)
+            SubscriptionId: $(EmployersAppServiceName)
+            PipelineVariableName: EmployerApimDeveloperApimSubscriptionKey
+            IsMultiRepoCheckout: true
+        - template: azure-pipelines-templates/deploy/step/get-apim-subscription-key.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            ApimResourceGroup: $(SharedApimResourceGroup)
+            ApimName: $(SharedApimName)
+            SubscriptionId: $(ProvidersAppServiceName)
+            PipelineVariableName: ProviderApimDeveloperApimSubscriptionKey
+            IsMultiRepoCheckout: true
+        - template: azure-pipelines-templates/deploy/step/generate-config.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            SourcePath: $(Pipeline.Workspace)/das-employer-config/Configuration/das-apim-developer-web
+            TargetFileName: '*.schema.json'
+            TableName: Configuration
+
+- deployment: DeployEmployersApp
+  dependsOn: DeployResources
+  displayName: Deploy APIM Dev Employers App
+  environment: ${{ parameters.Environment }}
+  pool:
+    name: DAS - Continuous Deployment Agents
+  variables:
+    ResourceGroupName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ResourceGroupName'] ]
+    EmployersAppServiceName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.EmployersAppServiceName'] ]
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(EmployersAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
+
+- deployment: DeployProvidersApp
+  dependsOn: DeployResources
+  displayName: Deploy APIM Dev Providers App
+  environment: ${{ parameters.Environment }}
+  pool:
+    name: DAS - Continuous Deployment Agents
+  variables:
+    ResourceGroupName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ResourceGroupName'] ]
+    ProvidersAppServiceName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ProvidersAppServiceName'] ]
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(ProvidersAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
