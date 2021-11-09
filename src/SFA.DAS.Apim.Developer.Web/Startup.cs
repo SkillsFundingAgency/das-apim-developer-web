@@ -69,7 +69,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 serviceParameters.AuthenticationType = AuthenticationType.Provider;
             }
 
-            services.AddConfigurationOptions(_configuration);
+            services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
             
 
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)

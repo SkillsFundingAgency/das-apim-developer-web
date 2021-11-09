@@ -29,7 +29,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             
             serviceCollection.AddSingleton(hostEnvironment.Object);
             serviceCollection.AddSingleton(Mock.Of<IConfiguration>());
-            serviceCollection.AddConfigurationOptions(configuration);
+            serviceCollection.AddConfigurationOptions(configuration, AuthenticationType.Employer);
             serviceCollection.AddDistributedMemoryCache();
             serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
             serviceCollection.AddEmployerAuthenticationServices();
@@ -50,7 +50,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             
             serviceCollection.AddSingleton(hostEnvironment.Object);
             serviceCollection.AddSingleton(Mock.Of<IConfiguration>());
-            serviceCollection.AddConfigurationOptions(configuration);
+            serviceCollection.AddConfigurationOptions(configuration, AuthenticationType.Employer);
             serviceCollection.AddDistributedMemoryCache();
             serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
             serviceCollection.AddEmployerAuthenticationServices();
@@ -72,8 +72,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             {
                 InitialData = new List<KeyValuePair<string, string>>
                 {
-                    new KeyValuePair<string, string>("ApimDeveloperApi:BaseUrl", "https://test.com/"),
-                    new KeyValuePair<string, string>("ApimDeveloperApi:Key", "123edc"),
+                    new KeyValuePair<string, string>("EmployerApimDeveloperApi:BaseUrl", "https://test.com/"),
+                    new KeyValuePair<string, string>("EmployerApimDeveloperApi:Key", "123edc"),
                     new KeyValuePair<string, string>("Environment", "test"),
                 }
             };
