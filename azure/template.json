@@ -11,6 +11,9 @@
         "serviceName": {
             "type": "string"
         },
+        "appConfiguration": {
+            "type": "array"
+        },
         "sharedEnvResourceGroup": {
             "type": "string"
         },
@@ -35,34 +38,29 @@
         "sharedKeyVaultName": {
             "type": "string"
         },
-        "employersCustomHostName": {
-            "type": "string"
-        },
-        "providersCustomHostName": {
-            "type": "string"
-        },
-        "employersKeyVaultCertificateName": {
-            "type": "string"
-        },
-        "providersKeyVaultCertificateName": {
-            "type": "string"
-        },
         "sharedFrontEndAppServicePlanName": {
             "type": "string"
         },
-        "sharedFrontEndSubnetResourceId": { 
+        "sharedFrontEndSubnetResourceId": {
             "type": "string"
         },
-        "frontEndAccessRestrictions": { 
+        "frontEndAccessRestrictions": {
             "type": "array"
+        },
+        "sharedApimName": {
+            "type": "string"
+        },
+        "sharedApimResourceGroup": {
+            "type": "string"
+        },
+        "cdnUrl": {
+            "type": "string"
         }
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-        "employersAppServiceName": "[concat(variables('resourceNamePrefix'), '-emp-as')]",
-        "providersAppServiceName": "[concat(variables('resourceNamePrefix'), '-prv-as')]",
         "configNames": "SFA.DAS.Apim.Developer.Web"
     },
     "resources": [
@@ -76,7 +74,7 @@
         },
         {
             "apiVersion": "2021-04-01",
-            "name": "employers-app-service-certificate",
+            "name": "[concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-app-service-certificate')]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -87,7 +85,7 @@
                 },
                 "parameters": {
                     "keyVaultCertificateName": {
-                        "value": "[parameters('employersKeyVaultCertificateName')]"
+                        "value": "[parameters('appConfiguration')[copyIndex()].keyVaultCertificateName]"
                     },
                     "keyVaultName": {
                         "value": "[parameters('sharedKeyVaultName')]"
@@ -96,35 +94,15 @@
                         "value": "[parameters('sharedManagementResourceGroup')]"
                     }
                 }
+            },
+            "copy": {
+                "name": "certificateCopy",
+                "count": "[length(parameters('appConfiguration'))]"
             }
         },
         {
             "apiVersion": "2021-04-01",
-            "name": "providers-app-service-certificate",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "keyVaultCertificateName": {
-                        "value": "[parameters('providersKeyVaultCertificateName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[parameters('sharedKeyVaultName')]"
-                    },
-                    "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedManagementResourceGroup')]"
-                    }
-                }
-            }
-        },
-        {
-            "apiVersion": "2021-04-01",
-            "name": "employers-application-insights",
+            "name": "[concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-application-insights')]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -135,12 +113,16 @@
                 },
                 "parameters": {
                     "appInsightsName": {
-                        "value": "[variables('employersAppServiceName')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
                     "attachedService": {
-                        "value": "[variables('employersAppServiceName')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     }
                 }
+            },
+            "copy": {
+                "name": "appInsightsCopy",
+                "count": "[length(parameters('appConfiguration'))]"
             },
             "dependsOn": [
                 "[variables('resourceGroupName')]"
@@ -148,31 +130,7 @@
         },
         {
             "apiVersion": "2021-04-01",
-            "name": "providers-application-insights",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[variables('resourceGroupName')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "appInsightsName": {
-                        "value": "[variables('providersAppServiceName')]"
-                    },
-                    "attachedService": {
-                        "value": "[variables('providersAppServiceName')]"
-                    }
-                }
-            },
-            "dependsOn": [
-                "[variables('resourceGroupName')]"
-            ]
-        },
-        {
-            "apiVersion": "2021-04-01",
-            "name": "employers-app-service",
+            "name": "[concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-app-service')]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
@@ -183,7 +141,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[variables('employersAppServiceName')]"
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
                     "appServicePlanName": {
                         "value": "[parameters('sharedFrontEndAppServicePlanName')]"
@@ -197,6 +155,10 @@
                     "appServiceAppSettings": {
                         "value": {
                             "array": [
+                                {
+                                    "name": "Environment",
+                                    "value": "[parameters('environmentName')]"
+                                },
                                 {
                                     "name": "EnvironmentName",
                                     "value": "[parameters('environmentName')]"
@@ -215,7 +177,7 @@
                                 },
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('employers-application-insights').outputs.InstrumentationKey.value]"
+                                    "value": "[reference(concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-application-insights')).outputs.InstrumentationKey.value]"
                                 },
                                 {
                                     "name": "LoggingRedisConnectionString",
@@ -224,97 +186,64 @@
                                 {
                                     "name": "LoggingRedisKey",
                                     "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "Cdn:Url",
+                                    "value": "[parameters('cdnUrl')]"
+                                },
+                                {
+                                    "name": "AuthType",
+                                    "value": "[parameters('appConfiguration')[copyIndex()].authType]"
                                 }
                             ]
                         }
                     },
                     "customHostName": {
-                        "value": "[parameters('employersCustomHostName')]"
+                        "value": "[parameters('appConfiguration')[copyIndex()].customHostName]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference('employers-app-service-certificate').outputs.certificateThumbprint.value]"
+                        "value": "[reference(concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-app-service-certificate')).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
                         "value": "[parameters('frontEndAccessRestrictions')]"
                     }
                 }
+            },
+            "copy": {
+                "name": "appServiceCopy",
+                "count": "[length(parameters('appConfiguration'))]"
             },
             "dependsOn": [
                 "[variables('resourceGroupName')]"
             ]
         },
         {
-            "apiVersion": "2021-04-01",
-            "name": "providers-app-service",
+            "apiVersion": "2020-06-01",
+            "name": "[concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-apim-product-subscription')]",
+            "resourceGroup": "[parameters('sharedApimResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-v2.json')]",
+                    "uri": "[concat(variables('deploymentUrlBase'),'apim/apim-subscription.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "appServiceName": {
-                        "value": "[variables('providersAppServiceName')]"
+                    "apimName": {
+                        "value": "[parameters('sharedApimName')]"
                     },
-                    "appServicePlanName": {
-                        "value": "[parameters('sharedFrontEndAppServicePlanName')]"
+                    "subscriptionName": {
+                        "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
                     },
-                    "appServicePlanResourceGroup": {
-                        "value": "[parameters('sharedEnvResourceGroup')]"
-                    },
-                    "subnetResourceId": {
-                        "value": "[parameters('sharedFrontEndSubnetResourceId')]"
-                    },
-                    "appServiceAppSettings": {
-                        "value": {
-                            "array": [
-                                {
-                                    "name": "EnvironmentName",
-                                    "value": "[parameters('environmentName')]"
-                                },
-                                {
-                                    "name": "ConfigurationStorageConnectionString",
-                                    "value": "[parameters('configurationStorageConnectionString')]"
-                                },
-                                {
-                                    "name": "ConfigNames",
-                                    "value": "[variables('configNames')]"
-                                },
-                                {
-                                    "name": "Version",
-                                    "value": "1.0"
-                                },
-                                {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('providers-application-insights').outputs.InstrumentationKey.value]"
-                                },
-                                {
-                                    "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('loggingRedisConnectionString')]"
-                                },
-                                {
-                                    "name": "LoggingRedisKey",
-                                    "value": "[parameters('loggingRedisKey')]"
-                                }
-                            ]
-                        }
-                    },
-                    "customHostName": {
-                        "value": "[parameters('providersCustomHostName')]"
-                    },
-                    "certificateThumbprint": {
-                        "value": "[reference('providers-app-service-certificate').outputs.certificateThumbprint.value]"
-                    },
-                    "ipSecurityRestrictions": {
-                        "value": "[parameters('frontEndAccessRestrictions')]"
+                    "subscriptionScope": {
+                        "value": "[concat(subscription().id, '/resourceGroups/', parameters('sharedApimResourceGroup'), '/providers/Microsoft.ApiManagement/service/', parameters('sharedApimName'), '/products/ApimDeveloperOuterApi')]"
                     }
                 }
             },
-            "dependsOn": [
-                "[variables('resourceGroupName')]"
-            ]
+            "copy": {
+                "name": "apimSubscriptionCopy",
+                "count": "[length(parameters('appConfiguration'))]"
+            }
         }
     ],
     "outputs": {
@@ -324,11 +253,11 @@
         },
         "EmployersAppServiceName": {
             "type": "string",
-            "value": "[variables('employersAppServiceName')]"
+            "value": "[concat(variables('resourceNamePrefix'), '-emp-as')]"
         },
         "ProvidersAppServiceName": {
             "type": "string",
-            "value": "[variables('providersAppServiceName')]"
+            "value": "[concat(variables('resourceNamePrefix'), '-prv-as')]"
         }
     }
 }
