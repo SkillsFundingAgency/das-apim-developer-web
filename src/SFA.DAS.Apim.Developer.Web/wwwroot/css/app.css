@@ -1,0 +1,40 @@
+.app-summary-card {
+    border: 1px solid #b1b4b6;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-summary-card {
+        margin-bottom: 30px;
+    }
+}
+
+.app-summary-card__header {
+    background: #f3f2f1;
+    padding: 10px 15px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-summary-card__header {
+        padding: 15px 20px;
+    }
+}
+
+.app-summary-card__heading {
+    margin: 0;
+}
+
+.app-summary-card__content {
+    padding: 15px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-summary-card__content {
+        padding: 20px;
+    }
+}
+
+.app-code {
+    color: darkred;
+    font-size: 14px;
+}
