@@ -16,11 +16,7 @@
                         <h3 class="govuk-heading-s app-summary-card__heading">@subscriptionItem.DisplayName</h3>
                     </header>
                     <div class="app-summary-card__content">
-                        <p class="govuk-body">
-                            @subscriptionItem.Description
-                            @* Create an advert on any website and Find an apprenticeship.<br> *@
-                            @* Give the key and <a href="#" class="govuk-link govuk-link--no-visited-state">this link to the API page</a> to your developer. *@
-                        </p>
+                        <api-description data="@subscriptionItem.Description"/>
                         <dl class="govuk-summary-list govuk-summary-list__m">
                             <div class="govuk-summary-list__row">
                                 <dt class="govuk-summary-list__key">
@@ -29,7 +25,7 @@
                                 <dd class="govuk-summary-list__value">
                                     <code class="app-code"></code>
                                 </dd>
-                            </div>            
+                            </div>
                             <div class="govuk-summary-list__row">
                                 <dt class="govuk-summary-list__key">
                                     Key name
