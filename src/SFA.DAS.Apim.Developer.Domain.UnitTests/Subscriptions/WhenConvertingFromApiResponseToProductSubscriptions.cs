@@ -16,7 +16,7 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Subscriptions
             actual.Products.Should().BeEquivalentTo(source.Products);
         }
 
-        [Test]
+        [Test, AutoData]
         public void Then_If_Null_Then_Empty_Returned(GetAvailableProductSubscriptionsResponse source)
         {
             source.Products = null;
