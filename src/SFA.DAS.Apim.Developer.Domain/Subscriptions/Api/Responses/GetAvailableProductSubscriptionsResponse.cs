@@ -6,10 +6,10 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Responses
     public class GetAvailableProductSubscriptionsResponse
     {
         [JsonProperty("products")]
-        public List<ProductSubscriptionItem> Products { get; set; }
+        public List<GetProductSubscriptionItem> Products { get; set; }
     }
 
-    public class ProductSubscriptionItem
+    public class GetProductSubscriptionItem
     {
         [JsonProperty("displayName")]
         public string DisplayName { get; set; }

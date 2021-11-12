@@ -1,0 +1,44 @@
+using System.Collections.Generic;
+using System.Linq;
+using SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Responses;
+
+namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
+{
+    public class ProductSubscriptions
+    {
+        public IEnumerable<ProductSubscriptionItem> Products { get ; set ; }
+
+        public static implicit operator ProductSubscriptions(GetAvailableProductSubscriptionsResponse source)
+        {
+            if (source == null)
+            {
+                return new ProductSubscriptions
+                {
+                    Products = new List<ProductSubscriptionItem>()
+                };
+            }
+            
+            return new ProductSubscriptions
+            {
+                Products = source.Products.Select(c=>(ProductSubscriptionItem)c)
+            };
+        }
+    }
+
+    public class ProductSubscriptionItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string DisplayName { get; set; }
+
+        public static implicit operator ProductSubscriptionItem(GetProductSubscriptionItem source)
+        {
+            return new ProductSubscriptionItem
+            {
+                Description = source.Description,
+                Name = source.Name,
+                DisplayName = source.DisplayName
+            };
+        }
+    }
+}
