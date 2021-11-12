@@ -56,11 +56,11 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
             if(employerAccountClaim?.Value == null)
                 return false;
 
-            Dictionary<string, GetEmployerUserAccountItem> employerAccounts;
+            Dictionary<string, EmployerUserAccountItem> employerAccounts;
 
             try
             {
-                employerAccounts = JsonConvert.DeserializeObject<Dictionary<string, GetEmployerUserAccountItem>>(employerAccountClaim.Value);
+                employerAccounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim.Value);
             }
             catch (JsonSerializationException e)
             {
@@ -68,7 +68,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 return false;
             }
 
-            GetEmployerUserAccountItem employerIdentifier = null;
+            EmployerUserAccountItem employerIdentifier = null;
 
             if (employerAccounts != null)
             {
@@ -91,7 +91,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
                 var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
                 
-                var updatedEmployerAccounts = JsonConvert.DeserializeObject<Dictionary<string, GetEmployerUserAccountItem>>(associatedAccountsClaim.Value);
+                var updatedEmployerAccounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(associatedAccountsClaim.Value);
 
                 userClaim.Subject.AddClaim(associatedAccountsClaim);
                 
@@ -116,7 +116,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
             return true;
         }
 
-        private static bool CheckUserRoleForAccess(GetEmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)
+        private static bool CheckUserRoleForAccess(EmployerUserAccountItem employerIdentifier, bool allowAllUserRoles)
         {
             if (!Enum.TryParse<EmployerUserRole>(employerIdentifier.Role, true, out var userRole))
             {
