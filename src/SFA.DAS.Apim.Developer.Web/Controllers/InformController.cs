@@ -27,6 +27,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpGet]
+        [Route("accounts/{employerAccountId}/recruitment/api/hub", Name = RouteNames.ApiHub)]
+        public IActionResult ApiHub()
+        {
+            return View();
+        }
+
+        [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderAccount))]
         [Route("{ukprn}/recruitment/api", Name = RouteNames.ProviderRecruitInform)]
         [SetNavigationSection(NavigationSection.Recruit)]

@@ -22,6 +22,7 @@
 
 .app-summary-card__heading {
     margin: 0;
+    font-weight: normal;
 }
 
 .app-summary-card__content {
