@@ -11,15 +11,16 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Subscriptions
         [Test, AutoData]
         public void Then_The_Values_Are_Mapped(GetAvailableProductSubscriptionsResponse source)
         {
-            var actual = (ProductSubscriptions) source;
+            var actual = (ProductSubscriptions) source.Products;
 
             actual.Products.Should().BeEquivalentTo(source.Products);
         }
 
         [Test]
-        public void Then_If_Null_Then_Empty_Returned()
+        public void Then_If_Null_Then_Empty_Returned(GetAvailableProductSubscriptionsResponse source)
         {
-            var actual = (ProductSubscriptions) (GetAvailableProductSubscriptionsResponse)null;
+            source.Products = null;
+            var actual = (ProductSubscriptions) source.Products;
 
             actual.Products.Should().BeEmpty();
         }

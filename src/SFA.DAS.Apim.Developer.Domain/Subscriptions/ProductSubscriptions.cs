@@ -8,7 +8,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
     {
         public IEnumerable<ProductSubscriptionItem> Products { get ; set ; }
 
-        public static implicit operator ProductSubscriptions(GetAvailableProductSubscriptionsResponse source)
+        public static implicit operator ProductSubscriptions(List<GetProductSubscriptionItem> source)
         {
             if (source == null)
             {
@@ -20,7 +20,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
             
             return new ProductSubscriptions
             {
-                Products = source.Products.Select(c=>(ProductSubscriptionItem)c)
+                Products = source.Select(c=>(ProductSubscriptionItem)c)
             };
         }
     }

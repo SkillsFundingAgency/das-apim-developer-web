@@ -25,7 +25,7 @@ namespace SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableP
 
             return new GetAvailableProductsQueryResult
             {
-                Products = result.Body
+                Products = result.Body.Products
             };
         }
     }
