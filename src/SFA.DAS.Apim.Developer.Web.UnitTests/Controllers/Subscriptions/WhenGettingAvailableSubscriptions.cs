@@ -20,6 +20,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
     {
         [Test, MoqAutoData]
         public async Task Then_Mediator_Query_Handled_And_Data_Returned(
+            string employerAccountId,
             GetAvailableProductsQueryResult mediatorResult,
             [Frozen] Mock<ServiceParameters> serviceParameters, 
             [Frozen] Mock<IMediator> mediator)
@@ -31,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
                     CancellationToken.None)).ReturnsAsync(mediatorResult);
             var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
             
-            var actual = await controller.ApiHub() as ViewResult;
+            var actual = await controller.ApiHub(employerAccountId) as ViewResult;
             
             Assert.IsNotNull(actual);
             var actualModel = actual.Model as SubscriptionsViewModel;

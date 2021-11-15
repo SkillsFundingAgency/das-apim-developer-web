@@ -23,8 +23,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
-        [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.ApiHub)]
-        public async Task<IActionResult> ApiHub()
+        [Route("accounts/{employerAccountId}/[controller]", Name = RouteNames.ApiHub)]
+        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId)
         {
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
