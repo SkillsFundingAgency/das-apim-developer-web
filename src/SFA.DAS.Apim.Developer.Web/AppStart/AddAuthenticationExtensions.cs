@@ -14,6 +14,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         {
             services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, EmployerAccountAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, EmployerViewerAuthorizationHandler>();
         }
 
         public static void AddProviderAuthenticationServices(this IServiceCollection services)
