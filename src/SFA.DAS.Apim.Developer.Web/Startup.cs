@@ -102,7 +102,7 @@ namespace SFA.DAS.Apim.Developer.Web
             
             services.Configure<RouteOptions>(options =>
             {
-                options.LowercaseUrls = true;
+                
             }).AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
