@@ -11,6 +11,8 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Responses
 
     public class GetProductSubscriptionItem
     {
+        [JsonProperty("key")]
+        public string Key { get; set; }
         [JsonProperty("displayName")]
         public string DisplayName { get; set; }
         [JsonProperty("name")]

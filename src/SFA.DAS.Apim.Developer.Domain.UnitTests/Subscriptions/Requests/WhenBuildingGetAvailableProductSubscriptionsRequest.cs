@@ -8,11 +8,11 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Subscriptions.Requests
     public class WhenBuildingGetAvailableProductSubscriptionsRequest
     {
         [Test, AutoData]
-        public void Then_The_Request_Is_Correctly_Built(string accountType)
+        public void Then_The_Request_Is_Correctly_Built(string accountType, string accountIdentifier)
         {
-            var actual = new GetAvailableProductSubscriptionsRequest(accountType);
+            var actual = new GetAvailableProductSubscriptionsRequest(accountType, accountIdentifier);
 
-            actual.GetUrl.Should().Be($"subscriptions/products?accountType={accountType}");
+            actual.GetUrl.Should().Be($"subscriptions/products/{accountIdentifier}?accountType={accountType}");
         }
     }
 }
