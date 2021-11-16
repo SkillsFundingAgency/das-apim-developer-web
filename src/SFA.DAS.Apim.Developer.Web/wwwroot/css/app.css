@@ -39,3 +39,7 @@
     color: darkred;
     font-size: 14px;
 }
+
+.app-copy-confirmation {
+    display: none;
+}
