@@ -27,6 +27,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
 
     public class ProductSubscriptionItem
     {
+        public string Key { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
@@ -35,6 +36,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
         {
             return new ProductSubscriptionItem
             {
+                Key = source.Key,
                 Description = source.Description,
                 Name = source.Name,
                 DisplayName = source.DisplayName

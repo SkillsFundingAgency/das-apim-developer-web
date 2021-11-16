@@ -21,7 +21,7 @@ namespace SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableP
         {
             var result =
                 await _apiClient.Get<GetAvailableProductSubscriptionsResponse>(
-                    new GetAvailableProductSubscriptionsRequest(request.AccountType));
+                    new GetAvailableProductSubscriptionsRequest(request.AccountType, request.AccountIdentifier));
 
             return new GetAvailableProductsQueryResult
             {

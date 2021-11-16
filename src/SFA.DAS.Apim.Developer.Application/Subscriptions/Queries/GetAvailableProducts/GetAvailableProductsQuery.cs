@@ -5,5 +5,6 @@ namespace SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableP
     public class GetAvailableProductsQuery : IRequest<GetAvailableProductsQueryResult>
     {
         public string AccountType { get; set; }
+        public string AccountIdentifier { get ; set ; }
     }
 }
