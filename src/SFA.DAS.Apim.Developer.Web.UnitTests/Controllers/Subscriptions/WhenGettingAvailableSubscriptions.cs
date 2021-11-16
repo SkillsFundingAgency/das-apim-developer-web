@@ -28,7 +28,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             serviceParameters.Object.AuthenticationType = AuthenticationType.Employer;
             mediator.Setup(x =>
                 x.Send(
-                    It.Is<GetAvailableProductsQuery>(c => c.AccountType.Equals(AuthenticationType.Employer.GetDescription())),
+                    It.Is<GetAvailableProductsQuery>(c => 
+                        c.AccountType.Equals(AuthenticationType.Employer.GetDescription())
+                        && c.AccountIdentifier.Equals(employerAccountId)),
                     CancellationToken.None)).ReturnsAsync(mediatorResult);
             var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
             

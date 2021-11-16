@@ -28,7 +28,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
-                AccountType = _serviceParameters.AuthenticationType.GetDescription()
+                AccountType = _serviceParameters.AuthenticationType.GetDescription(),
+                AccountIdentifier = employerAccountId
             });
             
             var model = (SubscriptionsViewModel)result;
