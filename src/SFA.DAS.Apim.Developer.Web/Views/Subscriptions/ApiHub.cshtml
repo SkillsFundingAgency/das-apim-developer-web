@@ -7,6 +7,11 @@
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-panel govuk-panel--confirmation app-copy-confirmation" id="copy-confirmation-banner" aria-hidden="true">
+                <h1 class="govuk-panel__title">
+                    Key copied
+                </h1>
+            </div>
             <h1 class="govuk-heading-xl">Create keys for APIs</h1>
             <p>You need to copy a key and give it to your developer, this gives them permission to connect to the API on your behalf.</p>
             @foreach (var subscriptionItem in Model.Products)
@@ -23,7 +28,10 @@
                                     API key
                                 </dt>
                                 <dd class="govuk-summary-list__value">
-                                    <code class="app-code">@subscriptionItem.Key</code>
+                                    <code class="app-code" id="key-@subscriptionItem.Key">@subscriptionItem.Key</code>
+                                </dd>
+                                <dd class="govuk-summary-list__actions">
+                                    <span data-copy-target="key-@subscriptionItem.Key" data-accessible-label="@subscriptionItem.DisplayName"></span>
                                 </dd>
                             </div>
                             <div class="govuk-summary-list__row">
@@ -33,6 +41,7 @@
                                 <dd class="govuk-summary-list__value">
                                     @subscriptionItem.Name
                                 </dd>
+                                <dd class="govuk-summary-list__actions"></dd>
                             </div>
                         </dl>
                         <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
