@@ -4,6 +4,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
     {
         public const string RecruitInform = "recruit-inform";
         public const string ApiHub = "api-hub";
+        public const string EmployerRenewKey = "employer-renew-key";
         public const string ProviderRecruitInform = "provider-recruit-inform";
         public const string RecruitDocumentation = "recruitment_api_doc";
         

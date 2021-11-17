@@ -36,5 +36,21 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
+        public IActionResult PostConfirmRenewKey(string employerAccountId, string id, RenewKeyViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmRenewKey", viewModel);
+            }
+
+            if (viewModel.ConfirmRenew.HasValue && viewModel.ConfirmRenew.Value)
+            {
+                return RedirectToRoute(RouteNames.EmployerKeyRenewed, new { employerAccountId });    
+            }
+            return RedirectToRoute(RouteNames.EmployerApiHub, new { employerAccountId });
+        }
     }
 }
