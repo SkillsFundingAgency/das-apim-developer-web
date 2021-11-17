@@ -10,6 +10,7 @@ using SFA.DAS.Apim.Developer.Web.Models;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
+    
     public class SubscriptionsController : Controller
     {
         private readonly IMediator _mediator;
@@ -23,8 +24,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
-        [Route("accounts/{employerAccountId}/[controller]", Name = RouteNames.ApiHub)]
-        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId)
+        [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
+        public async Task<IActionResult> ApiHub(string employerAccountId)
         {
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
@@ -33,7 +34,16 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             });
             
             var model = (SubscriptionsViewModel)result;
+            model.EmployerAccountId = employerAccountId;
             return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
+        public IActionResult ConfirmRenewKey(string employerAccountId, string id)
+        {
+            return View();
         }
 
         [HttpPost]
@@ -52,5 +62,14 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             }
             return RedirectToRoute(RouteNames.EmployerApiHub, new { employerAccountId });
         }
+
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/key-renewed", Name = RouteNames.EmployerKeyRenewed)]
+        public IActionResult KeyRenewed(string employerAccountId)
+        {
+            return View("KeyRenewed", employerAccountId);
+        }
+
     }
 }
