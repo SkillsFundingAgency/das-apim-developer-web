@@ -13,6 +13,8 @@ variables:
   value: release
 - name: BuildPlatform
   value: any cpu
+- name: Deploy
+  value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.Reason'], 'Manual'))]
 
 resources:
   repositories:
@@ -44,6 +46,7 @@ stages:
 - stage: Deploy_AT
   dependsOn: Build
   displayName: Deploy to AT
+  condition: and(succeeded(), eq(variables.Deploy, 'true'))
   variables:
   - group: DevTest Management Resources
   - group: AT DevTest Shared Resources
