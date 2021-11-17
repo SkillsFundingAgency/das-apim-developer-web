@@ -1,0 +1,16 @@
+@model string
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@{
+    Layout = "_LayoutEmployer";
+    ViewData["Title"] = "Key renewed";
+}
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+
+            <h1 class="govuk-heading-xl">Key renewed</h1>
+            <p><a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API hub</a></p>
+        </div>
+    </div>
+</main>

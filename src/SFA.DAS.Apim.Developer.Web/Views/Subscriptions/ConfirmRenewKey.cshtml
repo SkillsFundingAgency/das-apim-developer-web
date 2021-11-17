@@ -1,0 +1,52 @@
+@{
+    Layout = "_LayoutEmployer";
+    ViewData["Title"] = "Renew keys for APIs";
+}
+<span class="das-js-back-link"></span>
+<main class="govuk-main-wrapper " id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+        <partial name="_PageErrorsOverview" />
+
+        <h1 class="govuk-heading-xl">Are you sure you want to renew this key?</h1>
+
+            <p class="govuk-uk--body">
+                Renewing the key will disable the previous key and will stop your API from working until you use the new key   
+            </p>
+            <form method="post">
+                <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")">
+                <fieldset class="govuk-fieldset">
+                
+                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("ConfirmRenew"))
+                        {
+                            <span id="confirm-error" class="govuk-error-message">
+                                <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["ConfirmRenew"].Errors.First().ErrorMessage
+                            </span>
+                        }
+                        <div class="govuk-radios">
+
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="ConfirmRenew-yes" name="ConfirmRenew" type="radio" value="true">
+                                <label class="govuk-label govuk-radios__label govuk-label--s" for="ConfirmRenew-yes">
+                                    Yes
+                                </label>
+                            </div>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="ConfirmRenew-no" name="ConfirmRenew" type="radio" value="false">
+                                <label class="govuk-label govuk-radios__label govuk-label--s" for="ConfirmRenew-no">
+                                    No
+                                </label>
+                            </div>
+                            
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button type="submit" draggable="false" class="govuk-button">
+                    Continue
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
