@@ -32,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 .SetBasePath(Directory.GetCurrentDirectory())
 #if DEBUG
                 .AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", false)
+                .AddJsonFile("appsettings.Development.json", true)
 #endif
                 .AddEnvironmentVariables();
 
