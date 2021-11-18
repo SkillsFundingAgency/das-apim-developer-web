@@ -24,6 +24,15 @@ namespace SFA.DAS.Apim.Developer.MockServer
             };
             var server = StandAloneApp.Start(settings);
 
+            server.Given(Request.Create()
+                .WithPath(s => Regex.IsMatch(s, "/subscriptions/products/([A-Za-z0-9])+\\?accountType=([A-Za-z])+"))
+                .UsingGet()
+            ).RespondWith(
+                Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBodyFromFile("product-subscriptions.json"));
+
             return server;
         }
     }

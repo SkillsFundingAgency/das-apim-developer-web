@@ -1,0 +1,23 @@
+{
+  "products": [
+    {
+      "id": "VacanciesManageOuterApi",
+      "displayName": "VacanciesManageOuterApi",
+      "name": "VacanciesManageOuterApi-v1",
+      "key": "12rdf86dd272412a945b8d69104fe925"
+    },
+    {
+      "id": "VacanciesManageOuterApi-Sandbox",
+      "displayName": "VacanciesManageOuterApi",
+      "name": "VacanciesManageOuterApi-v1",
+      "key": ""
+    },
+    {
+      "id": "VacanciesOuterApi",
+      "description": "Display recruitment adverts from Find an apprenticeship. Give the key and {{this link to the API Page|display_advert_api_doc}} to your developer.",
+      "displayName": "Display Advert API",
+      "name": "Display-Advert-API-v1",
+      "key": ""
+    }
+  ]
+}
