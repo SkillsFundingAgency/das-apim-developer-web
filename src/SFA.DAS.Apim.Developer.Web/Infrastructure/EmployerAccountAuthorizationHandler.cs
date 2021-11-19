@@ -123,7 +123,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 return false;
             }
 
-            return allowAllUserRoles || (userRole == EmployerUserRole.Owner || userRole == EmployerUserRole.Transactor);
+            return allowAllUserRoles || userRole == EmployerUserRole.Owner;
         }
     }
 }
