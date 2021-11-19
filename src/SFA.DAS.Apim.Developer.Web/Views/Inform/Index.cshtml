@@ -1,5 +1,8 @@
-@model string
+@using Microsoft.Extensions.Options
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration
+@inject IOptions<ExternalLinksConfiguration> linksConfig
+@model string
 @{
     Layout = "_LayoutEmployer";
     ViewData["Title"] = "Get started with the recruitment API";
@@ -9,22 +12,20 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h1 class="govuk-heading-xl">Get started with the recruitment API</h1>
-            <p>Integrating with our API may be useful if you are a large employer and want to create adverts using your existing systems. It will allow you to publish to multiple sites, as well as <a href="#" target="_blank" class="govuk-link">Find an apprenticeship</a>. </p>
-            <p>You can also use the API to display all your adverts on any website.</p>
+            <p>Integrating with our <a href="#" class="govuk-link">Recruitment API</a> may be useful if you want to create adverts using your existing systems. It will allow you to publish to multiple sites, as well as <a href="@linksConfig?.Value?.FindAnApprenticeshipSiteUrl" target="_blank" class="govuk-link">Find an apprenticeship</a>. </p>
+            <p>You can also use the <a href="#" class="govuk-link">Display adverts API</a> to display adverts on any website.</p>
             <h2 class="govuk-heading-l">What does the API do?</h2>
-            <p>APIs let applications share information and data with each other.</p>
-            <p>If you connect using our API, you can use your own systems to create adverts on <a href="#" class="govuk-link">Find an apprenticeship</a>.</p>
-            <p>You can also use our API to display your adverts on any website.</p>
+            <p>APIs (Application Programming Interfaces) let applications share information and data with each other.</p>
+            <p>If you connect using our <a href="#" class="govuk-link">Recruitment API</a>, you can use your own systems to create adverts on <a href="@linksConfig?.Value?.FindAnApprenticeshipSiteUrl" target="_blank" class="govuk-link">Find an apprenticeship</a>.</p>
+            <p>You can also use our <a href="#" class="govuk-link">Display adverts API</a> to display your adverts on any website.</p>
             <h2 class="govuk-heading-l">How do I use the API?</h2>
-            <p>You can share this <a href="#" class="govuk-link">technical documentation</a> with the person who is going to connect your software program with the API. </p>
             <div class="govuk-inset-text">You'll need someone with technical knowledge to connect your software program with the API, for example a software developer.</div>
+            <p>You can share this <a href="#" class="govuk-link">API page</a> with the person who is going to connect your software program with the API. </p>
             <p>It can take a while to connect using an API, so leave enough time to integrate it.</p>
-            <p>Only accounts with owner permissions can access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API hub</a>.</p>
             <h2 class="govuk-heading-l">How do I access the API?</h2>
-            <p>If you have owner permissions you can access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API hub</a>.</p>
+            <p>If you have owner permissions you can access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API keys</a>.</p>
             <p>Your developer will be able to try out the API using the sandbox provided.</p>
-            <h2 class="govuk-heading-l">Where can I get help and support?</h2>
-            <p>If you have any issues, either during development or once your software is live, you can get <a href="#" class="govuk-link">help and support</a> from us.</p>
+            <p>You will need to <a href="#" class="govuk-link">provide your developer with a key</a> so they can use the API.</p>
         </div>
     </div>
  </main>
