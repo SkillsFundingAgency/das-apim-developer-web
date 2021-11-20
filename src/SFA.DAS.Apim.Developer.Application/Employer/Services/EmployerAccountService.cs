@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api.Requests;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses;
@@ -15,7 +16,7 @@ namespace SFA.DAS.Apim.Developer.Application.Employer.Services
         {
             _apiClient = apiClient;
         }
-        public async Task<GetEmployerUserAccounts> GetUserAccounts(string userId)
+        public async Task<EmployerUserAccounts> GetUserAccounts(string userId)
         {
             var result = await _apiClient.Get<GetUserAccountsResponse>(new GetUserAccountsRequest(userId));
 

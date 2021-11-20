@@ -8,4 +8,8 @@
       <ProjectReference Include="..\SFA.DAS.Apim.Developer.Domain\SFA.DAS.Apim.Developer.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="8.1.0" />
+    </ItemGroup>
+
 </Project>

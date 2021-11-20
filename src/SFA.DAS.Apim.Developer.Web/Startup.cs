@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
@@ -30,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 .SetBasePath(Directory.GetCurrentDirectory())
 #if DEBUG
                 .AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", false)
+                .AddJsonFile("appsettings.Development.json", true)
 #endif
                 .AddEnvironmentVariables();
 
@@ -94,12 +96,13 @@ namespace SFA.DAS.Apim.Developer.Web
             
             services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
+            services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
             
             services.Configure<RouteOptions>(options =>
             {
-                options.LowercaseUrls = true;
+                
             }).AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

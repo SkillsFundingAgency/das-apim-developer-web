@@ -8,29 +8,21 @@ using SFA.DAS.Provider.Shared.UI.Attributes;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
-    
     public class InformController : Controller
     {
-        private readonly ExternalLinksConfiguration _configuration;
-
-        public InformController(IOptions<ExternalLinksConfiguration> configuration)
-        {
-            _configuration = configuration.Value;
-        }
-
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
-        [Route("accounts/{employerAccountId}/recruitment/api", Name = RouteNames.RecruitInform)]
-        public IActionResult Index()
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerViewAccount))]
+        [Route("accounts/{employerAccountId}/recruitment/api", Name = RouteNames.EmployerRecruitInform)]
+        public IActionResult Index([FromRoute]string employerAccountId)
         {
-            return View();
+            return View("Index", employerAccountId);
         }
 
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderAccount))]
         [Route("{ukprn}/recruitment/api", Name = RouteNames.ProviderRecruitInform)]
         [SetNavigationSection(NavigationSection.Recruit)]
-        public IActionResult ProviderIndex()
+        public IActionResult ProviderIndex([FromRoute]int ukprn)
         {
             return View();
         }

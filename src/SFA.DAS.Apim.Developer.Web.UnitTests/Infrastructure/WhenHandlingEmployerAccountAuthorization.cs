@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
@@ -76,7 +77,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             string userId,
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
-            GetEmployerUserAccountItem serviceResponse,
+            EmployerUserAccountItem serviceResponse,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             [Frozen] Mock<IEmployerAccountService> employerAccountService,
             EmployerAccountAuthorizationHandler authorizationHandler)
@@ -85,9 +86,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId))
-                .ReturnsAsync(new GetEmployerUserAccounts
+                .ReturnsAsync(new EmployerUserAccounts
                 {
-                    EmployerAccounts = new List<GetEmployerUserAccountItem>{ serviceResponse }
+                    EmployerAccounts = new List<EmployerUserAccountItem>{ serviceResponse }
                 });
             
             var userClaim = new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId);
@@ -114,7 +115,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             string userId,
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
-            GetEmployerUserAccountItem serviceResponse,
+            EmployerUserAccountItem serviceResponse,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             [Frozen] Mock<IEmployerAccountService> employerAccountService,
             EmployerAccountAuthorizationHandler authorizationHandler)
@@ -123,9 +124,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             serviceResponse.AccountId = serviceResponse.AccountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId))
-                .ReturnsAsync(new GetEmployerUserAccounts
+                .ReturnsAsync(new EmployerUserAccounts
                 {
-                    EmployerAccounts = new List<GetEmployerUserAccountItem>{ serviceResponse }
+                    EmployerAccounts = new List<EmployerUserAccountItem>{ serviceResponse }
                 });
             
             var userClaim = new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId);
@@ -154,6 +155,32 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         {
             //Arrange
             employerIdentifier.Role = "Viewer";
+            employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
+            var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
+            var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
+            var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+            
+            //Act
+            var result = authorizationHandler.IsEmployerAuthorised(context, false);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+        
+        [Test, MoqAutoData]
+        public void Then_Returns_False_If_Employer_Is_Authorized_But_Transactor_Role_Not_Allowed(
+            EmployerIdentifier employerIdentifier,
+            EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+            EmployerAccountAuthorizationHandler authorizationHandler)
+        {
+            //Arrange
+            employerIdentifier.Role = "Transactor";
             employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));

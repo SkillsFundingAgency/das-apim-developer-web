@@ -24,6 +24,13 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireAuthenticatedUser();
                     });
                 options.AddPolicy(
+                    PolicyNames.HasEmployerViewAccount, policy =>
+                    {
+                        policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                        policy.Requirements.Add(new EmployerViewerRoleRequirement());
+                        policy.RequireAuthenticatedUser();
+                    });
+                options.AddPolicy(
                     PolicyNames
                         .HasProviderAccount
                     , policy =>
