@@ -173,6 +173,32 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         }
         
         [Test, MoqAutoData]
+        public void Then_Returns_False_If_Employer_Is_Authorized_But_Transactor_Role_Not_Allowed(
+            EmployerIdentifier employerIdentifier,
+            EmployerAccountRequirement requirement,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+            EmployerAccountAuthorizationHandler authorizationHandler)
+        {
+            //Arrange
+            employerIdentifier.Role = "Transactor";
+            employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
+            var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
+            var claim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
+            var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
+            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
+            var responseMock = new FeatureCollection();
+            var httpContext = new DefaultHttpContext(responseMock);
+            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,employerIdentifier.AccountId);
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
+            
+            //Act
+            var result = authorizationHandler.IsEmployerAuthorised(context, false);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
+        
+        [Test, MoqAutoData]
         public void Then_Returns_True_If_Employer_Is_Authorized_But_Has_Viewer_Role(
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,

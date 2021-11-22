@@ -40,6 +40,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             var actualModel = actual.Model as SubscriptionsViewModel;
             Assert.IsNotNull(actualModel);
             actualModel.Products.Select(c=>c.DisplayName).Should().BeEquivalentTo(mediatorResult.Products.Products.Select(c=>c.DisplayName));
+            actualModel.EmployerAccountId.Should().Be(employerAccountId);
         }
     }
 }

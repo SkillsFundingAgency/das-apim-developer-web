@@ -12,7 +12,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     {
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasEmployerViewAccount))]
-        [Route("accounts/{employerAccountId}/recruitment/api", Name = RouteNames.RecruitInform)]
+        [Route("accounts/{employerAccountId}/recruitment/api", Name = RouteNames.EmployerRecruitInform)]
         public IActionResult Index([FromRoute]string employerAccountId)
         {
             return View("Index", employerAccountId);

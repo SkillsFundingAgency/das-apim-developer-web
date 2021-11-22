@@ -8,6 +8,8 @@ namespace SFA.DAS.Apim.Developer.Web.Models
     public class SubscriptionsViewModel
     {
         public List<SubscriptionItem> Products { get; set; }
+        public string EmployerAccountId { get ; set ; }
+
         public static implicit operator SubscriptionsViewModel(GetAvailableProductsQueryResult source)
         {
             return new SubscriptionsViewModel
