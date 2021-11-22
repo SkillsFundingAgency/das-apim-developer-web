@@ -13,6 +13,14 @@
                     Key copied
                 </h1>
             </div>
+            @if (Model.ShowRenewedBanner)
+            {
+                <div class="govuk-panel govuk-panel--confirmation app-copy-confirmation" id="renew-confirmation-banner" aria-hidden="true">
+                    <h1 class="govuk-panel__title">
+                        Key renewed
+                    </h1>
+                </div>
+            }
             <h1 class="govuk-heading-xl">Create keys for APIs</h1>
             <p>You need to copy a key and give it to your developer, this gives them permission to connect to the API on your behalf.</p>
             @foreach (var subscriptionItem in Model.Products)

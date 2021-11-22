@@ -9,6 +9,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
     {
         public List<SubscriptionItem> Products { get; set; }
         public string EmployerAccountId { get ; set ; }
+        public bool ShowRenewedBanner { get; set; }
 
         public static implicit operator SubscriptionsViewModel(GetAvailableProductsQueryResult source)
         {

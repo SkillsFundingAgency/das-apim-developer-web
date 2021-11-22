@@ -26,7 +26,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
-        public async Task<IActionResult> ApiHub(string employerAccountId)
+        public async Task<IActionResult> ApiHub(string employerAccountId, [FromQuery]bool? keyRenewed = null)
         {
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
@@ -36,6 +36,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             
             var model = (SubscriptionsViewModel)result;
             model.EmployerAccountId = employerAccountId;
+            model.ShowRenewedBanner = keyRenewed ?? false;
             return View(model);
         }
 
