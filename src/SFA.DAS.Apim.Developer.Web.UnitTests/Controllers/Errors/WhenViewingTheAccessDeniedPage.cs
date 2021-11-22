@@ -14,7 +14,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Errors
     public class WhenViewingTheAccessDeniedPage
     {
         [Test, MoqAutoData]
-        public async Task Then_The_HomePage_Url_Is_Passed_To_The_View(
+        public void Then_The_HomePage_Url_Is_Passed_To_The_View(
             string homepageUrl,
             [Frozen] Mock<IOptions<ExternalLinksConfiguration>> externalLinks,
             [Greedy] ErrorController errorController)

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.RenewSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Extensions;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -49,7 +50,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpPost]
         [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
-        public IActionResult PostConfirmRenewKey(string employerAccountId, string id, RenewKeyViewModel viewModel)
+        public async Task<IActionResult> PostConfirmRenewKey(string employerAccountId, string id, RenewKeyViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -58,7 +59,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
 
             if (viewModel.ConfirmRenew.HasValue && viewModel.ConfirmRenew.Value)
             {
-                return RedirectToRoute(RouteNames.EmployerKeyRenewed, new { employerAccountId });    
+                var renewCommand = new RenewSubscriptionKeyCommand
+                {
+                    AccountIdentifier = employerAccountId,
+                    ProductId = id
+                };
+                await _mediator.Send(renewCommand);
+                return RedirectToRoute(RouteNames.EmployerApiHub, new { employerAccountId, keyRenewed = true });    
             }
             return RedirectToRoute(RouteNames.EmployerApiHub, new { employerAccountId });
         }
