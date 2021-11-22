@@ -27,15 +27,18 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
 
     public class ProductSubscriptionItem
     {
+        public string Id { get ; set ; }
         public string Key { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
 
+
         public static implicit operator ProductSubscriptionItem(GetProductSubscriptionItem source)
         {
             return new ProductSubscriptionItem
             {
+                Id = source.Id,
                 Key = source.Key,
                 Description = source.Description,
                 Name = source.Name,

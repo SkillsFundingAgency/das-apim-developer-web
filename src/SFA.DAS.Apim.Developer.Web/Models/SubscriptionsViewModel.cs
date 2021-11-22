@@ -23,6 +23,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
 
     public class SubscriptionItem
     {
+        public string Id { get ; set ; }
         public string Key { get ; set ; }
         public string DisplayName { get; set; }
         public string Name { get; set; }
@@ -33,6 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         {
             return new SubscriptionItem
             {
+                Id = source.Id,
                 Key = source.Key,
                 DisplayName = source.DisplayName,
                 Name = source.Name.ToLower(),
