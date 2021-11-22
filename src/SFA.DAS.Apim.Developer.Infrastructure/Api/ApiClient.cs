@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -23,17 +24,41 @@ namespace SFA.DAS.Apim.Developer.Infrastructure.Api
         }
         public async Task<ApiResponse<TResponse>> Get<TResponse>(IGetApiRequest request)
         {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, request.GetUrl);
-            AddAuthenticationHeader(httpRequestMessage);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, request.GetUrl);
+            AddAuthenticationHeader(requestMessage);
             
-            var response = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(false);
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
 
+            return await ProcessResponse<TResponse>(response);
+        }
+        
+        public async Task<ApiResponse<TResponse>> Post<TResponse>(IPostApiRequest request)
+        {
+            var stringContent = request.Data != null ? new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json") : null;
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, request.PostUrl);
+            requestMessage.Content = stringContent;
+            AddAuthenticationHeader(requestMessage);
+            
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            return await ProcessResponse<TResponse>(response);
+        }
+
+        private void AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
+        {
+            httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.Key);
+            httpRequestMessage.Headers.Add("X-Version", "1");
+        }
+
+        private static async Task<ApiResponse<TResponse>> ProcessResponse<TResponse>(HttpResponseMessage response)
+        {
             var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             
             var errorContent = "";
             var responseBody = (TResponse)default;
             
-            if(IsNot200RangeResponseCode(response.StatusCode))
+            if(!response.IsSuccessStatusCode)
             {
                 errorContent = json;
             }
@@ -45,17 +70,6 @@ namespace SFA.DAS.Apim.Developer.Infrastructure.Api
             var getWithResponseCode = new ApiResponse<TResponse>(responseBody, response.StatusCode, errorContent);
             
             return getWithResponseCode;
-        }
-        
-        private static bool IsNot200RangeResponseCode(HttpStatusCode statusCode)
-        {
-            return !((int)statusCode >= 200 && (int)statusCode <= 299);
-        }
-        
-        private void AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
-        {
-            httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.Key);
-            httpRequestMessage.Headers.Add("X-Version", "1");
         }
     }
 }
