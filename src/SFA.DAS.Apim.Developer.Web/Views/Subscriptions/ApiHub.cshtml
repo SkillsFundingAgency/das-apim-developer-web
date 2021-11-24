@@ -2,70 +2,102 @@
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionsViewModel
 @{
     Layout = "_LayoutEmployer";
-    ViewData["Title"] = "Create keys for APIs";
+    ViewData["Title"] = "API list";
 }
 <span class="das-js-back-link"></span>
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <div class="govuk-panel govuk-panel--confirmation app-copy-confirmation" id="copy-confirmation-banner" aria-hidden="true">
-                <h1 class="govuk-panel__title">
-                    Key copied
-                </h1>
-            </div>
-            @if (Model.ShowRenewedBanner)
-            {
-                <div class="govuk-panel govuk-panel--confirmation" id="renew-confirmation-banner">
-                    <h1 class="govuk-panel__title">
-                        Key renewed
-                    </h1>
-                </div>
-            }
-            <h1 class="govuk-heading-xl">Create keys for APIs</h1>
-            <p>You need to copy a key and give it to your developer, this gives them permission to connect to the API on your behalf.</p>
-            @foreach (var subscriptionItem in Model.Products)
-            {
-                <div class="app-summary-card">
-                    <header class="app-summary-card__header">
-                        <h3 class="govuk-heading-s app-summary-card__heading">@subscriptionItem.DisplayName</h3>
-                    </header>
-                    <div class="app-summary-card__content">
-                        <api-description data="@subscriptionItem.Description"/>
-                        <dl class="govuk-summary-list govuk-summary-list__m">
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    API key
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    <code class="app-code" id="key-@subscriptionItem.Key">@subscriptionItem.Key</code>
-                                </dd>
-                                <dd class="govuk-summary-list__actions">
-                                    <span data-copy-target="key-@subscriptionItem.Key" data-accessible-label="@subscriptionItem.DisplayName"></span>
-                                </dd>
-                            </div>
-                            <div class="govuk-summary-list__row">
-                                <dt class="govuk-summary-list__key">
-                                    Key name
-                                </dt>
-                                <dd class="govuk-summary-list__value">
-                                    @subscriptionItem.Name
-                                </dd>
-                                <dd class="govuk-summary-list__actions"></dd>
-                            </div>
-                        </dl>
-                        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                    Do you need a new key?
-                                </span>
-                            </summary>
-                            <div class="govuk-details__text">
-                                <a asp-route="@RouteNames.EmployerRenewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
-                            </div>
-                        </details>
-                    </div>
-                 </div>
-            }
+            @* <div class="govuk-panel govuk-panel--confirmation app-copy-confirmation" id="copy-confirmation-banner" aria-hidden="true"> *@
+            @*     <h1 class="govuk-panel__title"> *@
+            @*         Key copied *@
+            @*     </h1> *@
+            @* </div> *@
+            @* @if (Model.ShowRenewedBanner) *@
+            @* { *@
+            @*     <div class="govuk-panel govuk-panel--confirmation" id="renew-confirmation-banner"> *@
+            @*         <h1 class="govuk-panel__title"> *@
+            @*             Key renewed *@
+            @*         </h1> *@
+            @*     </div> *@
+            @* } *@
+            <h1 class="govuk-heading-xl">API list</h1>
+            
+            
+            <table class="govuk-table">
+                <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th class="govuk-table__header" scope="col"> API name </th>
+                        <th class="govuk-table__header" scope="col" style="width:12%;"> Action </th>
+                    </tr>
+                </thead>      
+                <tbody class="govuk-table__body">
+                @foreach (var subscriptionItem in Model.Products)
+                {
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell" name="api-name">
+                            @subscriptionItem.DisplayName
+                        <span class="govuk-caption-m">@subscriptionItem.Description</span>
+                        </td>
+                        <td class="govuk-table__cell">
+                            @if (!string.IsNullOrEmpty(subscriptionItem.Key))
+                            {
+                                <a asp-route="@RouteNames.EmployerViewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">View key</a>    
+                            }
+                            else
+                            {
+                                <a asp-route="@RouteNames.EmployerGetKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Get key</a>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            
+            @* *@
+            @* @foreach (var subscriptionItem in Model.Products) *@
+            @* { *@
+            @*     <div class="app-summary-card"> *@
+            @*         <header class="app-summary-card__header"> *@
+            @*             <h3 class="govuk-heading-s app-summary-card__heading">@subscriptionItem.DisplayName</h3> *@
+            @*         </header> *@
+            @*         <div class="app-summary-card__content"> *@
+            @*             <api-description data="@subscriptionItem.Description"/> *@
+            @*             <dl class="govuk-summary-list govuk-summary-list__m"> *@
+            @*                 <div class="govuk-summary-list__row"> *@
+            @*                     <dt class="govuk-summary-list__key"> *@
+            @*                         API key *@
+            @*                     </dt> *@
+            @*                     <dd class="govuk-summary-list__value"> *@
+            @*                         <code class="app-code" id="key-@subscriptionItem.Key">@subscriptionItem.Key</code> *@
+            @*                     </dd> *@
+            @*                     <dd class="govuk-summary-list__actions"> *@
+            @*                         <span data-copy-target="key-@subscriptionItem.Key" data-accessible-label="@subscriptionItem.DisplayName"></span> *@
+            @*                     </dd> *@
+            @*                 </div> *@
+            @*                 <div class="govuk-summary-list__row"> *@
+            @*                     <dt class="govuk-summary-list__key"> *@
+            @*                         Key name *@
+            @*                     </dt> *@
+            @*                     <dd class="govuk-summary-list__value"> *@
+            @*                         @subscriptionItem.Name *@
+            @*                     </dd> *@
+            @*                     <dd class="govuk-summary-list__actions"></dd> *@
+            @*                 </div> *@
+            @*             </dl> *@
+            @*             <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details"> *@
+            @*                 <summary class="govuk-details__summary"> *@
+            @*                     <span class="govuk-details__summary-text"> *@
+            @*                         Do you need a new key? *@
+            @*                     </span> *@
+            @*                 </summary> *@
+            @*                 <div class="govuk-details__text"> *@
+            @*                     <a asp-route="@RouteNames.EmployerRenewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key. *@
+            @*                 </div> *@
+            @*             </details> *@
+            @*         </div> *@
+            @*      </div> *@
+            @* } *@
         </div>
     </div>
  </main>
