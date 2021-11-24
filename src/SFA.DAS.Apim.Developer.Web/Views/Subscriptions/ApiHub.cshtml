@@ -13,6 +13,14 @@
                     Key copied
                 </h1>
             </div>
+            @if (Model.ShowRenewedBanner)
+            {
+                <div class="govuk-panel govuk-panel--confirmation" id="renew-confirmation-banner">
+                    <h1 class="govuk-panel__title">
+                        Key renewed
+                    </h1>
+                </div>
+            }
             <h1 class="govuk-heading-xl">Create keys for APIs</h1>
             <p>You need to copy a key and give it to your developer, this gives them permission to connect to the API on your behalf.</p>
             @foreach (var subscriptionItem in Model.Products)
@@ -52,7 +60,7 @@
                                 </span>
                             </summary>
                             <div class="govuk-details__text">
-                                <a asp-route="@RouteNames.EmployerRenewKey" asp-route-id="@subscriptionItem.Name" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
+                                <a asp-route="@RouteNames.EmployerRenewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
                             </div>
                         </details>
                     </div>

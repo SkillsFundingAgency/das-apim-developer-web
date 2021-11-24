@@ -41,6 +41,29 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             Assert.IsNotNull(actualModel);
             actualModel.Products.Select(c=>c.DisplayName).Should().BeEquivalentTo(mediatorResult.Products.Products.Select(c=>c.DisplayName));
             actualModel.EmployerAccountId.Should().Be(employerAccountId);
+            actualModel.ShowRenewedBanner.Should().BeFalse();
+        }
+        
+        [Test, MoqAutoData]
+        public async Task And_KeyRenewed_Then_Shows_Banner(
+            string employerAccountId,
+            bool keyRenewed,
+            GetAvailableProductsQueryResult mediatorResult,
+            [Frozen] Mock<ServiceParameters> serviceParameters, 
+            [Frozen] Mock<IMediator> mediator)
+        {
+            keyRenewed = true;
+            serviceParameters.Object.AuthenticationType = AuthenticationType.Employer;
+            mediator.Setup(x => x.Send(
+                    It.IsAny<GetAvailableProductsQuery>(),
+                    CancellationToken.None))
+                .ReturnsAsync(mediatorResult);
+            var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
+            
+            var actual = await controller.ApiHub(employerAccountId, keyRenewed) as ViewResult;
+            
+            var actualModel = actual!.Model as SubscriptionsViewModel;
+            actualModel!.ShowRenewedBanner.Should().BeTrue();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Models
         {
             var actual = (SubscriptionsViewModel)source;
 
+            actual.Products.Select(x=>x.Id).Should().BeEquivalentTo(source.Products.Products.Select(c=>c.Id));
             actual.Products.Select(x=>x.DisplayName).Should().BeEquivalentTo(source.Products.Products.Select(c=>c.DisplayName));
             actual.Products.Select(x=>x.Description).Should().BeEquivalentTo(source.Products.Products.Select(c=>c.Description));
             actual.Products.Select(x=>x.Key).Should().BeEquivalentTo(source.Products.Products.Select(c=>c.Key));
