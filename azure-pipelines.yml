@@ -119,7 +119,7 @@ stages:
   displayName: Deploy to MO
   variables:
   - group: MO Management Resources
-  - group: MO DevTest Shared Resources
+  - group: MO Shared Resources
   - group: MO das-apim-developer-web
   jobs:
   - template: pipeline-templates/job/deploy.yml
