@@ -27,26 +27,30 @@
             <table class="govuk-table">
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
-                        <th class="govuk-table__header" scope="col"> API name </th>
-                        <th class="govuk-table__header" scope="col" style="width:12%;"> Action </th>
+                        <th class="govuk-table__header das-table-cell-width-85" scope="col"> API name </th>
+                        <th class="govuk-table__header das-table-cell-width-15" scope="col"> Action </th>
                     </tr>
                 </thead>      
                 <tbody class="govuk-table__body">
                 @foreach (var subscriptionItem in Model.Products)
                 {
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell" name="api-name">
+                        <td class="govuk-table__cell">
                             @subscriptionItem.DisplayName
-                        <span class="govuk-caption-m">@subscriptionItem.Description</span>
+                            <span class="govuk-caption-m">@subscriptionItem.Description</span>
                         </td>
                         <td class="govuk-table__cell">
                             @if (!string.IsNullOrEmpty(subscriptionItem.Key))
                             {
-                                <a asp-route="@RouteNames.EmployerViewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">View key</a>    
+                                <a asp-route="@RouteNames.EmployerViewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
+                                    View key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
+                                </a>    
                             }
                             else
                             {
-                                <a asp-route="@RouteNames.EmployerGetKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Get key</a>
+                                <a asp-route="@RouteNames.EmployerGetKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
+                                    Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
+                                </a>
                             }
                         </td>
                     </tr>
