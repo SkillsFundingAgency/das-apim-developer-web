@@ -45,6 +45,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
             actual.RouteValues.Should().ContainKey("employerAccountId");
             actual.RouteValues["employerAccountId"].Should().Be(employerAccountId);
+            actual.RouteValues.Should().ContainKey("id");
+            actual.RouteValues["id"].Should().Be(id);
         }
         
         [Test, MoqAutoData]
@@ -62,6 +64,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
             actual.RouteValues.Should().ContainKey("employerAccountId");
             actual.RouteValues["employerAccountId"].Should().Be(employerAccountId);
+            actual.RouteValues.Should().ContainKey("id");
+            actual.RouteValues["id"].Should().Be(id);
             actual.RouteValues.Should().ContainKey("keyRenewed");
             actual.RouteValues["keyRenewed"].Should().Be(true);
             mockMediator.Verify(mediator => mediator.Send(

@@ -107,9 +107,9 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     ProductId = id
                 };
                 await _mediator.Send(renewCommand);
-                return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, keyRenewed = true });    
+                return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id, keyRenewed = true });    
             }
-            return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId });
+            return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id });
         }
 
         [HttpGet]

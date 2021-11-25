@@ -7,7 +7,6 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string EmployerRenewKey = "employer-renew-key";
         public const string EmployerKeyRenewed = "employer-key-renewed";
         public const string EmployerGetKey = "employer-key-get";
-        public const string EmployerViewKey = "employer-view-get";
         public const string EmployerSignOut = "employer-sign-out";
         public const string EmployerCreateKey = "employer-create-key";
         public const string EmployerViewSubscription = "employer-view-subscription";
