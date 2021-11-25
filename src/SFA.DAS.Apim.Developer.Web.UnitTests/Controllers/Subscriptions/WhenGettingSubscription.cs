@@ -19,7 +19,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
     public class WhenGettingSubscription
     {
         [Test, MoqAutoData]
-        public async Task Then_The_Data_Is_Returned_From_Mediator_And_View_Subscription_Shown(
+        public async Task Then_The_Data_Is_Returned_From_Mediator_And_View_Subscription_Shown_For_Employer(
             string id, 
             string employerAccountId,
             GetSubscriptionQueryResult mediatorResult,
@@ -35,7 +35,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             serviceParameters.Object.AuthenticationType = AuthenticationType.Employer;
             var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
             
-            var actual = await controller.ViewProductSubscription(employerAccountId, id, true) as ViewResult;
+            var actual = await controller.ViewProductSubscription(employerAccountId, id,null, true) as ViewResult;
             
             Assert.IsNotNull(actual);
             var actualModel = actual.Model as SubscriptionViewModel;
@@ -43,7 +43,37 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
             actualModel.EmployerAccountId.Should().Be(employerAccountId);
             actualModel.ShowRenewedBanner.Should().BeTrue();
+            actualModel.RenewKeyRouteName.Should().Be(RouteNames.EmployerRenewKey);
             
+        }
+        [Test, MoqAutoData]
+        public async Task Then_The_Data_Is_Returned_From_Mediator_And_View_Subscription_Shown_For_Provider(
+            string id, 
+            string employerAccountId,
+            int ukprn,
+            GetSubscriptionQueryResult mediatorResult,
+            [Frozen] Mock<ServiceParameters> serviceParameters, 
+            [Frozen] Mock<IMediator> mediator)
+        {
+            mediator.Setup(x =>
+                x.Send(It.Is<GetSubscriptionQuery>(c => 
+                    c.AccountIdentifier.Equals(ukprn.ToString())
+                    && c.AccountType.Equals(AuthenticationType.Provider.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None)).ReturnsAsync(mediatorResult);
+            serviceParameters.Object.AuthenticationType = AuthenticationType.Provider;
+            var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
+            
+            var actual = await controller.ViewProductSubscription(employerAccountId, id,ukprn, true) as ViewResult;
+            
+            Assert.IsNotNull(actual);
+            var actualModel = actual.Model as SubscriptionViewModel;
+            Assert.IsNotNull(actualModel);
+            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
+            actualModel.Ukprn.Should().Be(ukprn);
+            actualModel.ShowRenewedBanner.Should().BeTrue();
+            actualModel.RenewKeyRouteName.Should().Be(RouteNames.ProviderRenewKey);
+
         }
     }
 }

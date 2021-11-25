@@ -79,12 +79,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}", Name = RouteNames.EmployerViewSubscription)]
-        public async Task<IActionResult> ViewProductSubscription(string employerAccountId, string id, [FromQuery]bool? keyRenewed = null)
+        [Route("{ukprn}/subscriptions/{id}", Name = RouteNames.ProviderViewSubscription)]
+        public async Task<IActionResult> ViewProductSubscription([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, [FromQuery]bool? keyRenewed = null)
         {
             var result = await _mediator.Send(new GetSubscriptionQuery
             {
                 AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = employerAccountId,
+                AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
                 ProductId = id
             });
 
@@ -93,7 +94,9 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             {
                 Product = result.Product,
                 EmployerAccountId = employerAccountId,
-                ShowRenewedBanner = keyRenewed != null && keyRenewed.Value
+                Ukprn = ukprn,
+                ShowRenewedBanner = keyRenewed != null && keyRenewed.Value,
+                RenewKeyRouteName = _serviceParameters.AuthenticationType is AuthenticationType.Employer ?RouteNames.EmployerRenewKey : RouteNames.ProviderRenewKey
             };
 
             return View(model);
