@@ -1,3 +1,5 @@
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@model int
 @{
     ViewData["Title"] = "Get started with the recruitment API";
 }
@@ -20,7 +22,7 @@
         <p>You can share this <a href="#" class="govuk-link">API page</a> with the person who is going to connect your software program with the API. </p>
         <p>It can take a while to connect using an API, so leave enough time to integrate it.</p>
         <h2 class="govuk-heading-l">How do I access the API?</h2>
-        <p>If you have owner permissions you can access the <a href="#" class="govuk-link">API keys</a>.</p>
+        <p>If you have owner permissions you can access the <a asp-route="@RouteNames.ProviderApiHub" asp-route-ukprn="@Model" class="govuk-link">API keys</a>.</p>
         <p>Your developer will be able to try out the API using the sandbox provided.</p>
         <p>You will need to <a href="#" class="govuk-link">provide your developer with a key</a> so they can use the API.</p>
     </div>

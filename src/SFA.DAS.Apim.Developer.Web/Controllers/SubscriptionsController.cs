@@ -27,24 +27,32 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
         
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
-        public async Task<IActionResult> ApiHub(string employerAccountId, [FromQuery]bool? keyRenewed = null)
+        [Route("{ukprn}/subscriptions", Name = RouteNames.ProviderApiHub)]
+        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn)
         {
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
                 AccountType = _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = employerAccountId
+                AccountIdentifier = _serviceParameters.AuthenticationType == AuthenticationType.Employer ? 
+                    employerAccountId : ukprn.ToString()
             });
             
             var model = (SubscriptionsViewModel)result;
             model.EmployerAccountId = employerAccountId;
-            model.ShowRenewedBanner = keyRenewed ?? false;
+            model.Ukprn = ukprn;
+            model.CreateKeyRouteName = _serviceParameters.AuthenticationType == AuthenticationType.Employer
+                ? RouteNames.EmployerCreateKey
+                : RouteNames.ProviderCreateKey;
+            model.ViewKeyRouteName = _serviceParameters.AuthenticationType == AuthenticationType.Employer
+                ? RouteNames.EmployerViewSubscription
+                : RouteNames.ProviderViewSubscription;
             return View(model);
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
         public IActionResult ConfirmRenewKey(string employerAccountId, string id)
         {
@@ -52,7 +60,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/create", Name = RouteNames.EmployerCreateKey)]
         public async Task<IActionResult> CreateSubscription(string employerAccountId, string id)
         {
@@ -67,7 +75,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}", Name = RouteNames.EmployerViewSubscription)]
         public async Task<IActionResult> ViewProductSubscription(string employerAccountId, string id, [FromQuery]bool? keyRenewed = null)
         {

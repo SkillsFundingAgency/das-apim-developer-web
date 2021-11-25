@@ -1,26 +1,17 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionsViewModel
 @{
-    Layout = "_LayoutEmployer";
+    if (Model.Ukprn == null)
+    {
+        Layout = "_LayoutEmployer";    
+    }
+    
     ViewData["Title"] = "API list";
 }
 <span class="das-js-back-link"></span>
 <main class="govuk-main-wrapper " id="main-content" role="main">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @* <div class="govuk-panel govuk-panel--confirmation app-copy-confirmation" id="copy-confirmation-banner" aria-hidden="true"> *@
-            @*     <h1 class="govuk-panel__title"> *@
-            @*         Key copied *@
-            @*     </h1> *@
-            @* </div> *@
-            @* @if (Model.ShowRenewedBanner) *@
-            @* { *@
-            @*     <div class="govuk-panel govuk-panel--confirmation" id="renew-confirmation-banner"> *@
-            @*         <h1 class="govuk-panel__title"> *@
-            @*             Key renewed *@
-            @*         </h1> *@
-            @*     </div> *@
-            @* } *@
             <h1 class="govuk-heading-xl">API list</h1>
             
             
@@ -42,13 +33,13 @@
                         <td class="govuk-table__cell">
                             @if (!string.IsNullOrEmpty(subscriptionItem.Key))
                             {
-                                <a asp-route="@RouteNames.EmployerViewSubscription" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
+                                <a asp-route="@Model.ViewKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
                                     View key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                                 </a>    
                             }
                             else
                             {
-                                <form method="post" asp-route="@RouteNames.EmployerCreateKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId">
+                                <form method="post" asp-route="@Model.CreateKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId">
                                     <button type="submit" draggable="false" class="das-button--inline-link">
                                         Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                                     </button>
