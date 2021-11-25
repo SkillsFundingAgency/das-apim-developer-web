@@ -1,9 +1,12 @@
+using System;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.CreateSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.RenewSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetSubscription;
 using SFA.DAS.Apim.Developer.Domain.Extensions;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
@@ -46,6 +49,44 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         public IActionResult ConfirmRenewKey(string employerAccountId, string id)
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}/create", Name = RouteNames.EmployerCreateKey)]
+        public async Task<IActionResult> CreateSubscription(string employerAccountId, string id)
+        {
+            await _mediator.Send(new CreateSubscriptionKeyCommand
+            {
+                AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
+                AccountIdentifier = employerAccountId,
+                ProductId = id
+            });
+
+            return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id });
+        }
+
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}", Name = RouteNames.EmployerViewSubscription)]
+        public async Task<IActionResult> ViewProductSubscription(string employerAccountId, string id, [FromQuery]bool? keyRenewed = null)
+        {
+            var result = await _mediator.Send(new GetSubscriptionQuery
+            {
+                AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
+                AccountIdentifier = employerAccountId,
+                ProductId = id
+            });
+
+            
+            var model = new SubscriptionViewModel
+            {
+                Product = result.Product,
+                EmployerAccountId = employerAccountId,
+                ShowRenewedBanner = keyRenewed != null && keyRenewed.Value
+            };
+
+            return View(model);
         }
 
         [HttpPost]
