@@ -54,9 +54,10 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
-        public IActionResult ConfirmRenewKey(string employerAccountId, string id)
+        [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
+        public IActionResult ConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
         {
-            return View();
+            return View(_serviceParameters.AuthenticationType == AuthenticationType.Employer);
         }
 
         [HttpPost]
@@ -103,35 +104,30 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
-        public async Task<IActionResult> PostConfirmRenewKey(string employerAccountId, string id, RenewKeyViewModel viewModel)
+        [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
+        public async Task<IActionResult> PostConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, RenewKeyViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ConfirmRenewKey", viewModel);
+                return View("ConfirmRenewKey", _serviceParameters.AuthenticationType is AuthenticationType.Employer);
             }
 
+            var routeName = _serviceParameters.AuthenticationType is AuthenticationType.Employer 
+                ? RouteNames.EmployerViewSubscription : RouteNames.ProviderViewSubscription;
+            
             if (viewModel.ConfirmRenew.HasValue && viewModel.ConfirmRenew.Value)
             {
                 var renewCommand = new RenewSubscriptionKeyCommand
                 {
-                    AccountIdentifier = employerAccountId,
+                    AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
                     ProductId = id
                 };
                 await _mediator.Send(renewCommand);
-                return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id, keyRenewed = true });    
+                return RedirectToRoute(routeName, new { employerAccountId, id, ukprn, keyRenewed = true });    
             }
-            return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id });
+            return RedirectToRoute(routeName, new { employerAccountId, ukprn, id });
         }
-
-        [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasEmployerAccount))]
-        [Route("accounts/{employerAccountId}/subscriptions/key-renewed", Name = RouteNames.EmployerKeyRenewed)]
-        public IActionResult KeyRenewed(string employerAccountId)
-        {
-            return View("KeyRenewed", employerAccountId);
-        }
-
     }
 }

@@ -1,7 +1,10 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionViewModel
 @{
-    Layout = "_LayoutEmployer";
+    if (Model.Ukprn == null)
+    {
+        Layout = "_LayoutEmployer";    
+    }
     ViewData["Title"] = "Key for API";
 }
 <span class="das-js-back-link"></span>
@@ -51,7 +54,7 @@
                             </span>
                         </summary>
                         <div class="govuk-details__text">
-                            <a asp-route="@RouteNames.EmployerRenewKey" asp-route-id="@Model.Product.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
+                            <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
                         </div>
                     </details>
                 </div>

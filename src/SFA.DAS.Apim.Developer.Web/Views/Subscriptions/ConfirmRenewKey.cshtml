@@ -1,5 +1,9 @@
+@model bool
 @{
-    Layout = "_LayoutEmployer";
+    if (Model)
+    {
+        Layout = "_LayoutEmployer";    
+    }
     ViewData["Title"] = "Renew keys for APIs";
 }
 <span class="das-js-back-link"></span>
