@@ -42,15 +42,18 @@
                         <td class="govuk-table__cell">
                             @if (!string.IsNullOrEmpty(subscriptionItem.Key))
                             {
-                                <a asp-route="@RouteNames.EmployerViewKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
+                                <a asp-route="@RouteNames.EmployerViewSubscription" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
                                     View key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                                 </a>    
                             }
                             else
                             {
-                                <a asp-route="@RouteNames.EmployerGetKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
-                                    Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
-                                </a>
+                                <form method="post" asp-route="@RouteNames.EmployerCreateKey" asp-route-id="@subscriptionItem.Id" asp-route-employerAccountId="@Model.EmployerAccountId">
+                                    <button type="submit" draggable="false" class="das-button--inline-link">
+                                        Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
+                                    </button>
+                                </form>
+                                
                             }
                         </td>
                     </tr>
