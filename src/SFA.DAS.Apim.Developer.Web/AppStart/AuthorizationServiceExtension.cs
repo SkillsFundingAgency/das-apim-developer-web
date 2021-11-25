@@ -10,7 +10,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         private const string ProviderDac = "DAC";
         private const string ProviderDav = "DAV";
         
-        public static void AddAuthorizationService(this IServiceCollection services)
+        public static void AddAuthorizationService(this IServiceCollection services,
+            AuthenticationType? serviceParametersAuthenticationType)
         {
             services.AddAuthorization(options =>
             {
@@ -39,6 +40,22 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireClaim(ProviderClaims.ProviderUkprn);
                         policy.RequireClaim(ProviderClaims.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
                         policy.Requirements.Add(new ProviderAccountRequirement());
+                        policy.RequireAuthenticatedUser();
+                    });
+                options.AddPolicy(
+                    PolicyNames.HasProviderOrEmployerAccount,
+                    policy =>
+                    {
+                        if (serviceParametersAuthenticationType is AuthenticationType.Employer)
+                        {
+                            policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                        }
+                        else if (serviceParametersAuthenticationType is AuthenticationType.Provider)
+                        {
+                            policy.RequireClaim(ProviderClaims.ProviderUkprn);
+                            policy.RequireClaim(ProviderClaims.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
+                        }
+                        policy.Requirements.Add(new ProviderOrEmployerAccountRequirement());
                         policy.RequireAuthenticatedUser();
                     });
             });

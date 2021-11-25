@@ -20,6 +20,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         [TestCase(typeof(IEmployerAccountService))]
         [TestCase(typeof(IApiClient))]
         [TestCase(typeof(IEmployerAccountAuthorisationHandler))]
+        [TestCase(typeof(IProviderAccountAuthorisationHandler))]
         [TestCase(typeof(IApiDescriptionHelper))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {
@@ -33,7 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             serviceCollection.AddConfigurationOptions(configuration, AuthenticationType.Employer);
             serviceCollection.AddDistributedMemoryCache();
             serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
-            serviceCollection.AddEmployerAuthenticationServices();
+            serviceCollection.AddSharedAuthenticationServices();
 
             var provider = serviceCollection.BuildServiceProvider();
 
@@ -56,15 +57,17 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             serviceCollection.AddServiceRegistration(new ServiceParameters(),configuration);
             serviceCollection.AddEmployerAuthenticationServices();
             serviceCollection.AddProviderAuthenticationServices();
+            serviceCollection.AddSharedAuthenticationServices();
 
             var provider = serviceCollection.BuildServiceProvider();
             
             var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
             Assert.IsNotNull(type);
-            type.Count.Should().Be(3);
+            type.Count.Should().Be(4);
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerViewerAuthorizationHandler));
+            type.Should().ContainSingle(c => c.GetType() == typeof(ProviderOrEmployerAccountAuthorizationHandler));
 
         }
         
