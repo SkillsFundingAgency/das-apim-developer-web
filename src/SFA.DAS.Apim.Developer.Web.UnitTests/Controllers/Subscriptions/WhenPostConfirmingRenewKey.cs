@@ -42,7 +42,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
 
             var actual = await controller.PostConfirmRenewKey(employerAccountId, id, viewModel) as RedirectToRouteResult;
 
-            actual.RouteName.Should().Be(RouteNames.EmployerApiHub);
+            actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
             actual.RouteValues.Should().ContainKey("employerAccountId");
             actual.RouteValues["employerAccountId"].Should().Be(employerAccountId);
         }
@@ -59,7 +59,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
 
             var actual = await controller.PostConfirmRenewKey(employerAccountId, id, viewModel) as RedirectToRouteResult;
 
-            actual.RouteName.Should().Be(RouteNames.EmployerApiHub);
+            actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
             actual.RouteValues.Should().ContainKey("employerAccountId");
             actual.RouteValues["employerAccountId"].Should().Be(employerAccountId);
             actual.RouteValues.Should().ContainKey("keyRenewed");
