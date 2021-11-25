@@ -62,16 +62,18 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpPost]
         [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/create", Name = RouteNames.EmployerCreateKey)]
-        public async Task<IActionResult> CreateSubscription(string employerAccountId, string id)
+        [Route("{ukprn}/subscriptions/{id}/create", Name = RouteNames.ProviderCreateKey)]
+        public async Task<IActionResult> CreateSubscription([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
         {
             await _mediator.Send(new CreateSubscriptionKeyCommand
             {
                 AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = employerAccountId,
+                AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
                 ProductId = id
             });
 
-            return RedirectToRoute(RouteNames.EmployerViewSubscription, new { employerAccountId, id });
+            var employerViewSubscription = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? RouteNames.EmployerViewSubscription : RouteNames.ProviderViewSubscription;
+            return RedirectToRoute(employerViewSubscription, new { employerAccountId, id, ukprn });
         }
 
         [HttpGet]
