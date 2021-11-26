@@ -60,7 +60,10 @@
     @await Html.PartialAsync("_Header", Html.GetHeaderViewModel())
 
         <div class="govuk-width-container">
-            @RenderBody()
+            @RenderSection("breadcrumb", required: false)
+            <main class="govuk-main-wrapper " id="main-content" role="main">
+                @RenderBody()
+            </main>
         </div>
 
     @await Html.PartialAsync("_Footer", Html.GetFooterViewModel())
