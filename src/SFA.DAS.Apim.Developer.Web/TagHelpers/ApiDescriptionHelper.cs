@@ -18,11 +18,16 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             _actionContextAccessor = actionContextAccessor;
         }
 
-        public string ProcessApiDescription(string data, string keyName)
+        public string ProcessApiDescription(string data, string keyName, bool showDocumentationUrl = true)
         {
             if (ApiDescriptionLookup.Descriptions.ContainsKey(keyName))
             {
                 data = ApiDescriptionLookup.Descriptions[keyName];
+            }
+
+            if (!showDocumentationUrl)
+            {
+                return data;
             }
             
             data = data.Replace(".", ".<br>");

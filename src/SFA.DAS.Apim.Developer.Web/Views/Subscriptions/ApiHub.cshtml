@@ -30,7 +30,7 @@
                 <tr class="govuk-table__row">
                     <td class="govuk-table__cell">
                         @subscriptionItem.DisplayName
-                        <span class="govuk-caption-m">@subscriptionItem.Description</span>
+                        <api-description class="govuk-caption-m" tag-name="span" show-documentation-url="false" key-name="@subscriptionItem.Id" data="@subscriptionItem.Description" />
                     </td>
                     <td class="govuk-table__cell">
                         @if (!string.IsNullOrEmpty(subscriptionItem.Key))
