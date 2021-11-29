@@ -1,0 +1,39 @@
+.govuk-template__body {
+    background: #f3f2f1;
+}
+
+.govuk-header__container {
+    padding-left: 20px;
+}
+
+.govuk-header__logotype-crown {
+    display: inline-block;
+}
+
+.govuk-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.sl-flex.sl-items-center.sl-px-4.sl-py-3.sl-border-t {
+    display: none;
+}
+
+.sl-elements {
+    font-size: 16px;
+}
+
+:root {
+    --color-text: #0b0c0c;
+    --color-canvas-100: #fff;
+    --color-canvas-200: #f3f2f1;
+    --color-canvas-300: red;
+    --font-prose: "GDS Transport",arial,sans-serif;
+    --font-ui: "GDS Transport",arial,sans-serif;
+}
+
+:root .sl-inverted {
+    --color-canvas-100: #1d70b8;
+    --color-canvas-200: #003078;
+    --color-canvas-300: #0b0c0c;
+}
