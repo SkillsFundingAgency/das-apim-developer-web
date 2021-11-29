@@ -25,7 +25,7 @@ namespace SFA.DAS.Apim.Developer.MockServer
             var server = StandAloneApp.Start(settings);
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/subscriptions/products/([A-Za-z0-9])+\\?accountType=([A-Za-z])+"))
+                .WithPath(s => Regex.IsMatch(s, "/subscriptions/products/([A-Za-z0-9])+"))
                 .UsingGet()
             ).RespondWith(
                 Response.Create()
