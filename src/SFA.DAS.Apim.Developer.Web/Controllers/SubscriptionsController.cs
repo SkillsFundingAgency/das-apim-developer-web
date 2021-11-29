@@ -27,7 +27,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
         
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
         [Route("{ukprn}/subscriptions", Name = RouteNames.ProviderApiHub)]
         public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn)
@@ -52,7 +52,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
         [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
         public IActionResult ConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
@@ -61,7 +61,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/create", Name = RouteNames.EmployerCreateKey)]
         [Route("{ukprn}/subscriptions/{id}/create", Name = RouteNames.ProviderCreateKey)]
         public async Task<IActionResult> CreateSubscription([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
@@ -78,7 +78,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}", Name = RouteNames.EmployerViewSubscription)]
         [Route("{ukprn}/subscriptions/{id}", Name = RouteNames.ProviderViewSubscription)]
         public async Task<IActionResult> ViewProductSubscription([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, [FromQuery]bool? keyRenewed = null)
@@ -104,7 +104,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
         [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
         public async Task<IActionResult> PostConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, RenewKeyViewModel viewModel)

@@ -43,7 +43,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireAuthenticatedUser();
                     });
                 options.AddPolicy(
-                    PolicyNames.HasProviderOrEmployerAccount,
+                    PolicyNames.HasProviderOrEmployerAdminAccount,
                     policy =>
                     {
                         if (serviceParametersAuthenticationType is AuthenticationType.Employer)
@@ -53,7 +53,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         else if (serviceParametersAuthenticationType is AuthenticationType.Provider)
                         {
                             policy.RequireClaim(ProviderClaims.ProviderUkprn);
-                            policy.RequireClaim(ProviderClaims.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
+                            policy.RequireClaim(ProviderClaims.Service, ProviderDaa);
                         }
                         policy.Requirements.Add(new ProviderOrEmployerAccountRequirement());
                         policy.RequireAuthenticatedUser();
