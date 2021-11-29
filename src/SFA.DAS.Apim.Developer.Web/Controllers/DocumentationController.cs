@@ -8,8 +8,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     public class DocumentationController : Controller
     {
         [HttpGet]
-        [Route("recruitment", Name = RouteNames.RecruitDocumentation)]
-        public IActionResult Recruitment()
+        [Route("{apiName}", Name = RouteNames.Documentation)]
+        public IActionResult Recruitment([FromRoute]string apiName)
         {
             return View();
         }

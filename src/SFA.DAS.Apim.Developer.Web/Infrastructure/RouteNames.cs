@@ -15,7 +15,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ProviderViewSubscription = "provider-view-subscription";
         public const string ProviderRenewKey = "provider-renew-key";
 
-        public const string RecruitDocumentation = "recruitment_api_doc";
+        public const string Documentation = "api_doc";
 
         public const string Error403 = "error-403";
         

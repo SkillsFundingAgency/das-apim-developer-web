@@ -36,7 +36,7 @@
                 <h3 class="govuk-heading-s app-summary-card__heading">@Model.Product.DisplayName</h3>
             </header>
             <div class="app-summary-card__content">
-                <api-description data="@Model.Product.Description"/>
+                <api-description key-name="@Model.Product.Id" data="@Model.Product.Description"/>
                 <dl class="govuk-summary-list govuk-summary-list__m">
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
@@ -57,7 +57,7 @@
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renewing the key</a> will disable the previous key and will stop your API from working until you use the new key.
+                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
                     </div>
                 </details>
             </div>
