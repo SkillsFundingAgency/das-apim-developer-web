@@ -12,4 +12,10 @@
     <PackageReference Include="WireMock.Net.StandAlone" Version="1.4.27" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="product-subscriptions.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
