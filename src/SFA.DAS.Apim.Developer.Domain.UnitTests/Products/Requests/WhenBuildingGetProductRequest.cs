@@ -1,9 +1,10 @@
 using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.Apim.Developer.Domain.Products.Api.Requests;
 using SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Requests;
 
-namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Subscriptions.Requests
+namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Products.Requests
 {
     public class WhenBuildingGetProductRequest
     {
