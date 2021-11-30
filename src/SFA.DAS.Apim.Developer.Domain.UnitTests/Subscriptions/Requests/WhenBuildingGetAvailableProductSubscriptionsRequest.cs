@@ -12,7 +12,7 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.Subscriptions.Requests
         {
             var actual = new GetAvailableProductSubscriptionsRequest(accountType, accountIdentifier);
 
-            actual.GetUrl.Should().Be($"subscriptions/products/{accountIdentifier}?accountType={accountType}");
+            actual.GetUrl.Should().Be($"subscriptions/{accountIdentifier}/products?accountType={accountType}");
         }
     }
 }
