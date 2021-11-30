@@ -1,6 +1,6 @@
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
-namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Requests
+namespace SFA.DAS.Apim.Developer.Domain.Products.Api.Requests
 {
     public class GetProductRequest : IGetApiRequest
     {

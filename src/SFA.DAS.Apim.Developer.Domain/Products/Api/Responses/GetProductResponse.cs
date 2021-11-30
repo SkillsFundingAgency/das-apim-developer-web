@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Responses
+namespace SFA.DAS.Apim.Developer.Domain.Products.Api.Responses
 {
-    public class GetProductSubscriptionResponse
+    public class GetProductResponse
     {
         [JsonProperty("id")]
         public string Id { get; set; }
