@@ -1,0 +1,163 @@
+.govuk-template__body {
+    background: #f3f2f1;
+}
+
+.govuk-header__container {
+    padding-left: 20px;
+}
+
+.govuk-header__logotype-crown {
+    display: inline-block;
+}
+
+.govuk-footer {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.app-documentation-wrap {
+    background-color: #fff;
+}
+
+.app-documentation-width-container {
+    margin: 0 auto;
+    max-width: 1600px;
+}
+
+.sl-text-base {
+    font-size: 16px;
+}
+
+.sl-flex.sl-items-center.sl-px-4.sl-py-3.sl-border-t {
+    display: none;
+}
+
+.sl-prose, 
+.sl-elements {
+    font-size: 16px !important;
+}
+
+.sl-input > input,
+.sl-input > input:hover {
+    background: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    color: #0b0c0c;
+}
+
+.sl-input > input:focus {
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 2px;
+}
+
+.sl-elements .OperationParametersContent {
+    max-height: 100%;
+}
+
+.sl-elements .ParameterGrid {
+    row-gap: 15px;
+    overflow: visible;
+}
+
+.sl-elements .ParameterGrid label {
+    color: #0b0c0c;
+}
+
+.sl-rounded-lg {
+    border-radius: 0;
+}
+
+.sl-panel__content-wrapper,
+.sl-panel__content {
+    color: #0b0c0c;
+}
+
+.SendButtonHolder .sl-button {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.1875;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    width: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-left: 0;
+    padding: 8px 10px 7px;
+    border: 2px solid transparent;
+    border-radius: 0;
+    color: #fff;
+    background-color: #00703c;
+    -webkit-box-shadow: 0 2px 0 #002d18;
+    box-shadow: 0 2px 0 #002d18;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+    -webkit-appearance: none;
+    height: auto;
+}
+
+.sl-button.sl-border-input {
+    background: red;
+}
+
+.sl-button.sl-w-full.sl-h-md.sl-text-base.sl-font-normal.sl-bg-transparent.sl-rounded.sl-border-transparent {
+    background: #fff;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    color: #0b0c0c;
+}
+
+.ElementsTableOfContentsItem {
+    color: #1d70b8;
+}
+
+.sl-bg-primary-tint {
+    background-color: #1d70b8;
+    color: #fff;
+}
+
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-success,
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-primary, 
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-warning {
+    color: #fff;
+}
+
+.token.property {
+    color: #00703c !important;
+}
+
+.token.string {
+    color: #1d70b8 !important;
+}
+
+.sl-code-viewer__scroller {
+    max-height: 600px !important;
+}
+
+:root {
+    --color-text: #0b0c0c;
+    --color-canvas-100: #fff;
+    --color-canvas-200: #f3f2f1;
+    --color-canvas-300: #002d18;
+    --color-success: #00703c;
+    --font-prose: "GDS Transport",arial,sans-serif;
+    --font-ui: "GDS Transport",arial,sans-serif;
+}
+
+:root .sl-inverted {
+    --color-canvas-100: #f3f2f1;
+    --color-canvas-200: #333;
+    --color-canvas-300: #0b0c0c;
+}

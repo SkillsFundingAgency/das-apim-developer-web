@@ -1,49 +1,55 @@
+@model bool
 @{
-    Layout = "_LayoutEmployer";
+    if (Model)
+    {
+        Layout = "_LayoutEmployer";    
+    }
     ViewData["Title"] = "Renew keys for APIs";
 }
-<span class="das-js-back-link"></span>
-<main class="govuk-main-wrapper" id="main-content" role="main">
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <partial name="_PageErrorsOverview" />
-            <form method="post">
-                <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")">
-                    <fieldset class="govuk-fieldset" aria-describedby="confirm-renew-key-hint">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                            <h1 class="govuk-fieldset__heading">
-                                Are you sure you want to renew this key?
-                            </h1>
-                        </legend>
-                        <p class="govuk-hint" id="confirm-renew-key-hint">
-                            Renewing the key will disable the previous key and will stop your API from working until you use the new key   
-                        </p>
-                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("ConfirmRenew"))
-                        {
-                            <span id="confirm-error" class="govuk-error-message">
-                                <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["ConfirmRenew"].Errors.First().ErrorMessage
-                            </span>
-                        }
-                        <div class="govuk-radios">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="ConfirmRenew-yes" name="ConfirmRenew" type="radio" value="true">
-                                <label class="govuk-label govuk-radios__label" for="ConfirmRenew-yes">
-                                    Yes
-                                </label>
-                            </div>
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="ConfirmRenew-no" name="ConfirmRenew" type="radio" value="false">
-                                <label class="govuk-label govuk-radios__label" for="ConfirmRenew-no">
-                                    No
-                                </label>
-                            </div>
+
+@section breadcrumb {
+    <span class="das-js-back-link"></span>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <partial name="_PageErrorsOverview" />
+        <form method="post">
+            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")">
+                <fieldset class="govuk-fieldset" aria-describedby="confirm-renew-key-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            Are you sure you want to renew this key?
+                        </h1>
+                    </legend>
+                    <p class="govuk-hint" id="confirm-renew-key-hint">
+                        Renewing the key will disable the previous key and will stop your API from working until you use the new key   
+                    </p>
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("ConfirmRenew"))
+                    {
+                        <span id="confirm-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["ConfirmRenew"].Errors.First().ErrorMessage
+                        </span>
+                    }
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ConfirmRenew-yes" name="ConfirmRenew" type="radio" value="true">
+                            <label class="govuk-label govuk-radios__label" for="ConfirmRenew-yes">
+                                Yes
+                            </label>
                         </div>
-                    </fieldset>
-                </div>
-                <button type="submit" draggable="false" class="govuk-button">
-                    Continue
-                </button>
-            </form>
-        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ConfirmRenew-no" name="ConfirmRenew" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label" for="ConfirmRenew-no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button type="submit" draggable="false" class="govuk-button">
+                Continue
+            </button>
+        </form>
     </div>
-</main>
+</div>

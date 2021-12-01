@@ -3,8 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
 namespace SFA.DAS.Apim.Developer.Web.Infrastructure
-{   
-    public class ProviderAccountAuthorizationHandler : AuthorizationHandler<ProviderAccountRequirement>
+{
+    public interface IProviderAccountAuthorisationHandler
+    {
+        bool IsProviderAuthorised(AuthorizationHandlerContext context);
+    }
+    public class ProviderAccountAuthorizationHandler : AuthorizationHandler<ProviderAccountRequirement>, IProviderAccountAuthorisationHandler
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -26,7 +30,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
             return Task.CompletedTask;
         }
         
-        private bool IsProviderAuthorised(AuthorizationHandlerContext context)
+        public bool IsProviderAuthorised(AuthorizationHandlerContext context)
         {
             if (!context.User.HasClaim(c => c.Type.Equals(ProviderClaims.ProviderUkprn)))
             {

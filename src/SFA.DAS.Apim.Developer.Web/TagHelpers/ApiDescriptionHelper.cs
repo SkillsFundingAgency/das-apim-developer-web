@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
+using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
 namespace SFA.DAS.Apim.Developer.Web.TagHelpers
 {
@@ -16,30 +18,38 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             _actionContextAccessor = actionContextAccessor;
         }
 
-        public string ProcessApiDescription(string data)
+        public string ProcessApiDescription(string data, string keyName, string apiName, bool showDocumentationUrl = true)
         {
+            if (ApiDescriptionLookup.Descriptions.ContainsKey(keyName))
+            {
+                data = ApiDescriptionLookup.Descriptions[keyName];
+            }
+
+            if (!showDocumentationUrl)
+            {
+                return data;
+            }
+            
             data = data.Replace(".", ".<br>");
             var converted = data;
-            var startLinkIndex = data.IndexOf("{{", StringComparison.Ordinal);
-            var endLinkIndex = data.IndexOf("}}", StringComparison.Ordinal);
-
-            if (startLinkIndex != -1)
+            
+            var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
+            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = apiName});
+            
+            if (!string.IsNullOrEmpty(url))
             {
-                var linkData = data.Substring(startLinkIndex + 2, endLinkIndex - startLinkIndex - 2);
-
-                var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            
-                var url = helper.RouteUrl(linkData.Split("|")[1]);
-            
-                var anchor = $" href='{url}' class='govuk-link govuk-link--no-visited-state'>{linkData.Split("|")[0]}";
-
-                var stringTest = data.Substring(0, startLinkIndex);
-                var stringTest1 = data.Substring(endLinkIndex + 2, data.Length-endLinkIndex - 2);
-
-                converted = stringTest + "<a" + anchor + "</a>" + stringTest1;
+                converted += $"Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             }
             
             return converted;
         }
+    }
+
+    public static class ApiDescriptionLookup
+    {
+        public static Dictionary<string, string> Descriptions => new Dictionary<string, string>
+        {
+            { "VacanciesManageOuterApi-Sandbox", "Test creating an advert on Find an apprenticeship using your existing systems." }
+        };
     }
 }

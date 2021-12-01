@@ -1,0 +1,10 @@
+@model SFA.DAS.Apim.Developer.Web.Models.ApiProductViewModel
+@{
+    Layout = "_LayoutDocumentation";
+    ViewData["Title"] = @Model.DisplayName;
+}
+
+<elements-api
+  apiDescriptionUrl="@Model.Url"
+  router="hash"
+/>
