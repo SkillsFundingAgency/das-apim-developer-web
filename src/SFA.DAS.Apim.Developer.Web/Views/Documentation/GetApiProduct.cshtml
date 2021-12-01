@@ -1,19 +1,11 @@
 @model SFA.DAS.Apim.Developer.Web.Models.ApiProductViewModel
 @{
     Layout = "_LayoutDocumentation";
-    ViewData["Title"] = "Recruitment API documentation";
+    ViewData["Title"] = @Model.DisplayName;
 }
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@Model.DisplayName</title>
-  </head>
-  <body>
+<div class="app-documentation-width-container">
     <elements-api
       apiDescriptionUrl="@Model.Url"
       router="hash"
     />
-  </body>
-</html>
+</div>

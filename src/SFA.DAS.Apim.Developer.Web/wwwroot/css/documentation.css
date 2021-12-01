@@ -15,6 +15,10 @@
     padding-right: 20px;
 }
 
+.app-documentation-width-container {
+    margin: 0 auto;
+}
+
 .sl-text-base {
     font-size: 16px;
 }
