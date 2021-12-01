@@ -10,6 +10,8 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ProviderRecruitInform = "provider-recruit-inform";
         public const string RecruitDocumentation = "recruitment_api_doc";
 
+        public const string Index = "index";
+
         public const string Error403 = "error-403";
     }
 }
