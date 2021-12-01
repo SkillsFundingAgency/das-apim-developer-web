@@ -1,4 +1,4 @@
-@model SFA.DAS.Apim.Developer.Web.Models.SubscriptionsViewModel
+@model SFA.DAS.Apim.Developer.Web.Models.ApiProductViewModel
 @{
     Layout = "_LayoutDocumentation";
     ViewData["Title"] = "Recruitment API documentation";
@@ -8,11 +8,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Recruitment API documentation</title>
+    <title>@Model.DisplayName</title>
   </head>
   <body>
     <elements-api
-      apiDescriptionUrl="https://test-courses-api.apprenticeships.education.gov.uk/swagger/v1/swagger.json"
+      apiDescriptionUrl="@Model.Url"
       router="hash"
     />
   </body>
