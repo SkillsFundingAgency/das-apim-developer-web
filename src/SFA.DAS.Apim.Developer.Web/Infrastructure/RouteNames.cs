@@ -17,6 +17,10 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
         public const string Documentation = "api-doc";
         public const string JsonDocumentation = "api-doc-json";
+        public const string ThirdPartyRegister = "third-party-register";
+        public const string ThirdPartySignIn = "third-party-sign-in";
+        public const string ThirdPartyTermsConditions = "third-party-terms-conditions";
+
 
         public const string Error403 = "error-403";
         
