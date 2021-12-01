@@ -3,11 +3,10 @@ using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
-    [Route("[controller]")]
     public class HomeController : Controller
     {
         [HttpGet]
-        [Route("index", Name = RouteNames.Index)]
+        [Route("",Name = RouteNames.Index)]
 
         public IActionResult Index()
         {
