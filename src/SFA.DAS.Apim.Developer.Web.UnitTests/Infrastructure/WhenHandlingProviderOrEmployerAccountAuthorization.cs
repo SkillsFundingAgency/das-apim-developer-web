@@ -17,7 +17,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
     public class WhenHandlingProviderOrEmployerAccountAuthorization
     {
         [Test, MoqAutoData]
-        public void Then_If_Employer_Calls_EmployerCheck(
+        public void Then_If_Provider_Calls_ProviderCheck(
             int ukprn,
             ProviderOrEmployerAccountRequirement requirement,
             [Frozen] Mock<IProviderAccountAuthorisationHandler> providerAccountAuthorisationHandler,
@@ -40,7 +40,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             
         }
         [Test, MoqAutoData]
-        public void Then_If_Employer_Calls_EmployerCheck_And_Not_Valid_Does_Not_Succeed(
+        public void Then_If_Provider_Calls_ProviderCheck_And_Not_Valid_Does_Not_Succeed(
             int ukprn,
             ProviderOrEmployerAccountRequirement requirement,
             [Frozen] Mock<IProviderAccountAuthorisationHandler> providerAccountAuthorisationHandler,
@@ -63,7 +63,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             
         }
         [Test, MoqAutoData]
-        public void Then_If_Provider_Calls_ProviderCheck(
+        public void Then_If_Employer_Calls_EmployerCheck(
             string accountId,
             ProviderOrEmployerAccountRequirement requirement,
             [Frozen] Mock<IProviderAccountAuthorisationHandler> providerAccountAuthorisationHandler,
@@ -85,8 +85,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
 
             context.HasSucceeded.Should().BeTrue();
         }
+        
         [Test, MoqAutoData]
-        public void Then_If_Provider_Calls_ProviderCheck_And_Not_Valid_Does_Not_Succeed(
+        public void Then_If_Employer_Calls_EmployerCheck_And_Not_Valid_Does_Not_Succeed(
             string accountId,
             ProviderOrEmployerAccountRequirement requirement,
             [Frozen] Mock<IProviderAccountAuthorisationHandler> providerAccountAuthorisationHandler,
