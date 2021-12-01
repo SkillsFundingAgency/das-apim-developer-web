@@ -26,7 +26,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.Subscriptions.Queries
             apiClient.Setup(c =>
                 c.Get<GetAvailableProductSubscriptionsResponse>(
                     It.Is<GetAvailableProductSubscriptionsRequest>(x =>
-                        x.GetUrl.EndsWith($"/{query.AccountIdentifier}?accountType={query.AccountType}"))))
+                        x.GetUrl.EndsWith($"/{query.AccountIdentifier}/products?accountType={query.AccountType}"))))
                 .ReturnsAsync(new ApiResponse<GetAvailableProductSubscriptionsResponse>(apiResponse, HttpStatusCode.OK, ""));
 
             var actual = await handler.Handle(query, CancellationToken.None);
