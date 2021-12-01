@@ -18,7 +18,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             _actionContextAccessor = actionContextAccessor;
         }
 
-        public string ProcessApiDescription(string data, string keyName, bool showDocumentationUrl = true)
+        public string ProcessApiDescription(string data, string keyName, string apiName, bool showDocumentationUrl = true)
         {
             if (ApiDescriptionLookup.Descriptions.ContainsKey(keyName))
             {
@@ -34,7 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             var converted = data;
             
             var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = keyName});
+            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = apiName});
             
             if (!string.IsNullOrEmpty(url))
             {
