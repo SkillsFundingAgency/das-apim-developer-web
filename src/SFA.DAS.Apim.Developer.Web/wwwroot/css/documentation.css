@@ -15,8 +15,13 @@
     padding-right: 20px;
 }
 
+.app-documentation-wrap {
+    background-color: #fff;
+}
+
 .app-documentation-width-container {
     margin: 0 auto;
+    max-width: 1600px;
 }
 
 .sl-text-base {
@@ -27,8 +32,9 @@
     display: none;
 }
 
+.sl-prose, 
 .sl-elements {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 .sl-input > input,
@@ -67,6 +73,7 @@
     border-radius: 0;
 }
 
+.sl-panel__content-wrapper,
 .sl-panel__content {
     color: #0b0c0c;
 }
@@ -110,6 +117,33 @@
     border: 2px solid #0b0c0c;
     border-radius: 0;
     color: #0b0c0c;
+}
+
+.ElementsTableOfContentsItem {
+    color: #1d70b8;
+}
+
+.sl-bg-primary-tint {
+    background-color: #1d70b8;
+    color: #fff;
+}
+
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-success,
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-primary, 
+.ElementsTableOfContentsItem .sl-bg-primary-tint .sl-text-warning {
+    color: #fff;
+}
+
+.token.property {
+    color: #00703c !important;
+}
+
+.token.string {
+    color: #1d70b8 !important;
+}
+
+.sl-code-viewer__scroller {
+    max-height: 600px !important;
 }
 
 :root {
