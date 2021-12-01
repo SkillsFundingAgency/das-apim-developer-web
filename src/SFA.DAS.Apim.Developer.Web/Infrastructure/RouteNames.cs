@@ -20,6 +20,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ThirdPartyRegister = "third-party-register";
         public const string ThirdPartySignIn = "third-party-sign-in";
         public const string ThirdPartyTermsConditions = "third-party-terms-conditions";
+        public const string ThirdPartyConfirmEmail = "third-party-confirm-email";
 
 
         public const string Error403 = "error-403";
