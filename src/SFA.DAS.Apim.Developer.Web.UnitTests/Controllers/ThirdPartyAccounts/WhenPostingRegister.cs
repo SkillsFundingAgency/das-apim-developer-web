@@ -52,7 +52,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
 
             result!.ViewName.Should().Be("Register");
             var model = result.Model as RegisterViewModel;
-            model.Should().NotBeNull();
+            model!.Should().BeEquivalentTo(request);
         }
     }
 }

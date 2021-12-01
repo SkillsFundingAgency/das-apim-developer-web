@@ -1,9 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts;
@@ -38,7 +36,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             }
             catch (ValidationException e)
             {
-                var model = new RegisterViewModel();
+                foreach (var member in e.ValidationResult.MemberNames)
+                {
+                    var memberParts = member.Split('|');
+                    ModelState.AddModelError(memberParts[0], memberParts[1]);
+                }
+                
+                var model = (RegisterViewModel)request;
                 return View("Register", model);
             }
         }
