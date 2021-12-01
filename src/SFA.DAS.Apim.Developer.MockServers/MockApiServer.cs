@@ -33,6 +33,17 @@ namespace SFA.DAS.Apim.Developer.MockServer
                     .WithHeader("Content-Type", "application/json")
                     .WithBodyFromFile("product-subscriptions.json"));
 
+            server.Given(Request.Create()
+                .WithPath(s => Regex.IsMatch(s, "/accountusers/\\d+/accounts"))
+                //http:localhost:5031/accountusers/45464/accounts
+                .UsingGet()
+            ).RespondWith(
+                Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBodyFromFile("user-accounts.json"));
+
+
             return server;
         }
     }
