@@ -3,7 +3,7 @@
 }
 
 .govuk-header__container {
-    padding-left: 20px;
+    
 }
 
 .govuk-header__logotype-crown {
@@ -71,6 +71,16 @@
 
 .sl-rounded-lg {
     border-radius: 0;
+}
+
+.sl-panel__titlebar.sl-bg-canvas-200:not(.sl-cursor-pointer), 
+.sl-panel__titlebar.sl-bg-canvas-300 {
+    background: #0b0c0c;
+    color: #fff !important;
+}
+
+.sl-panel__titlebar.sl-bg-canvas-200 .sl-text-body {
+    color: #fff;
 }
 
 .sl-panel__content-wrapper,
