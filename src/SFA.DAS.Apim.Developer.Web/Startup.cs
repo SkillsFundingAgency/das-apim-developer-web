@@ -97,6 +97,7 @@ namespace SFA.DAS.Apim.Developer.Web
             services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
+            services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
             
