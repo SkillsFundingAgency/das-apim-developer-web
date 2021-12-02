@@ -31,8 +31,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new RegisterCommand());
-                return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail);
+                var result = await _mediator.Send((RegisterCommand)request);
+                return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail, new {result.Id});
             }
             catch (ValidationException e)
             {

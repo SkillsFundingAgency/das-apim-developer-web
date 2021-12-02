@@ -26,13 +26,20 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
         {
             mockMediator
                 .Setup(mediator => mediator.Send(
-                    It.IsAny<RegisterCommand>(), 
+                    It.Is<RegisterCommand>(command => 
+                        command.FirstName == request.FirstName 
+                        && command.LastName == request.LastName
+                        && command.EmailAddress == request.EmailAddress
+                        && command.Password == request.Password
+                        && command.ConfirmPassword == request.ConfirmPassword), 
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(responseFromMediator);
             
             var result = await controller.PostRegister(request) as RedirectToRouteResult;
 
             result!.RouteName.Should().Be(RouteNames.ThirdPartyConfirmEmail);
+            result.RouteValues["id"].Should().NotBeNull();
+            result.RouteValues["id"].Should().Be(responseFromMediator.Id);
         }
         
         [Test, MoqAutoData]
