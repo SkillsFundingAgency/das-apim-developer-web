@@ -30,7 +30,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
                 return data;
             }
             
-            data = data.Replace(".", ".<br>");
+            data = data.Replace(".", ".");
             var converted = data;
             
             var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
@@ -38,7 +38,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             
             if (!string.IsNullOrEmpty(url))
             {
-                converted += $"Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
+                converted += $" Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             }
             
             return converted;
