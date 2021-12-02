@@ -21,7 +21,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
             [Frozen] Mock<IUrlHelperFactory> urlHelperFactory)
         {
             var input = "test data.";
-            var expectedInput = "test data.<br>";
+            var expectedInput = "test data.";
             var mockHttpContextAccessor = new Mock<IActionContextAccessor>();
             mockHttpContextAccessor.Setup(_ => _.ActionContext).Returns(new ActionContext());
             urlHelperFactory.Setup(x => x.GetUrlHelper(It.IsAny<ActionContext>())).Returns(urlHelper.Object);
@@ -42,7 +42,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
             [Frozen] Mock<IUrlHelperFactory> urlHelperFactory)
         {
             var input = "";
-            var expectedInput = $"Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
+            var expectedInput = $" Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             var mockHttpContextAccessor = new Mock<IActionContextAccessor>();
             urlHelper.Setup(x => x.RouteUrl(It.Is<UrlRouteContext>(c=>c.RouteName.Equals(RouteNames.Documentation)
                                                                       && c.Values.ToString() == (new {apiName= apiName}).ToString()))).Returns(url);
@@ -64,7 +64,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
             [Frozen] Mock<IUrlHelperFactory> urlHelperFactory)
         {
             var input = "Test data.";
-            var expectedInput = $"Test data.<br>Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
+            var expectedInput = $"Test data. Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             var mockHttpContextAccessor = new Mock<IActionContextAccessor>();
             urlHelper.Setup(x => x.RouteUrl(It.Is<UrlRouteContext>(c=>c.RouteName.Equals(RouteNames.Documentation)
                                                                       && c.Values.ToString() == (new {apiName= apiName}).ToString()))).Returns(url);
@@ -107,7 +107,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
         {
             var keyName = "VacanciesManageOuterApi-Sandbox";
             var input = "Test data.";
-            var expectedInput = $"Test creating an advert on Find an apprenticeship using your existing systems.<br>Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
+            var expectedInput = $"Test creating an advert on Find an apprenticeship using your existing systems. Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             var mockHttpContextAccessor = new Mock<IActionContextAccessor>();
             urlHelper.Setup(x => x.RouteUrl(It.Is<UrlRouteContext>(c=>c.RouteName.Equals(RouteNames.Documentation) 
                                                                       && c.Values.ToString() == (new {apiName= apiName}).ToString()))).Returns(url);
