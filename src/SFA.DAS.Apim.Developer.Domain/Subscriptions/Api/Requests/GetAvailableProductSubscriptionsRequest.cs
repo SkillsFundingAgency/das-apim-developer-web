@@ -13,6 +13,6 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Requests
             _accountIdentifier = accountIdentifier;
         }
 
-        public string GetUrl => $"subscriptions/products/{_accountIdentifier}?accountType={_accountType}";
+        public string GetUrl => $"subscriptions/{_accountIdentifier}/products?accountType={_accountType}";
     }
 }

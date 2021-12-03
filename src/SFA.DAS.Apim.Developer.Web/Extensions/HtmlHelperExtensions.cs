@@ -16,7 +16,7 @@ namespace SFA.DAS.Apim.Developer.Web.Extensions
             var requestRoot = html.ViewContext.HttpContext.Request.GetRequestUrlRoot();
             var requestPath = html.ViewContext.HttpContext.Request.Path;
             var commitmentsSiteUrl = new Uri(externalLinks?.CommitmentsSiteUrl);
-            var hashedAccountId = html.ViewContext.RouteData.Values["accountId"]?.ToString();
+            var hashedAccountId = html.ViewContext.RouteData.Values["employerAccountId"]?.ToString();
 
             var headerModel = new HeaderViewModel(new HeaderConfiguration
             {
@@ -33,7 +33,7 @@ namespace SFA.DAS.Apim.Developer.Web.Extensions
             new UserContext
             {
                 User = html.ViewContext.HttpContext.User,
-                HashedAccountId = html.ViewContext.RouteData.Values["accountId"]?.ToString()
+                HashedAccountId = html.ViewContext.RouteData.Values["employerAccountId"]?.ToString()
             });
 
             headerModel.SelectMenu("recruitment");
@@ -59,7 +59,7 @@ namespace SFA.DAS.Apim.Developer.Web.Extensions
                 new UserContext
                 {
                     User = html.ViewContext.HttpContext.User,
-                    HashedAccountId = html.ViewContext.RouteData.Values["accountId"]?.ToString()
+                    HashedAccountId = html.ViewContext.RouteData.Values["employerAccountId"]?.ToString()
                 });
         }
 
@@ -76,7 +76,7 @@ namespace SFA.DAS.Apim.Developer.Web.Extensions
                 new UserContext
                 {
                     User = html.ViewContext.HttpContext.User,
-                    HashedAccountId = html.ViewContext.RouteData.Values["accountId"]?.ToString()
+                    HashedAccountId = html.ViewContext.RouteData.Values["employerAccountId"]?.ToString()
                 });
         }
     }

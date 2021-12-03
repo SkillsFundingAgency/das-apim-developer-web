@@ -24,7 +24,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [SetNavigationSection(NavigationSection.Recruit)]
         public IActionResult ProviderIndex([FromRoute]int ukprn)
         {
-            return View();
+            return View("ProviderIndex", ukprn);
         }
     }
 }

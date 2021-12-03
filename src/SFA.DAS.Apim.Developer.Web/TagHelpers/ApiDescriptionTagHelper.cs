@@ -20,12 +20,17 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             _apiDescriptionHelper = apiDescriptionHelper;
         }
         public string Data { get; set; }
+        public string KeyName { get; set; }
+        public bool ShowDocumentationUrl { get; set; } = true;
+        public string TagName { get; set; }
+        public string Class { get; set; }
+        public string ApiName { get; set; }
         public override void Process(TagHelperContext tagHelperContext, TagHelperOutput tagHelperOutput)
         {
             
-            tagHelperOutput.TagName = "p";
-            tagHelperOutput.AddClass("govuk-body",HtmlEncoder.Default);
-            tagHelperOutput.Content.SetHtmlContent(_apiDescriptionHelper.ProcessApiDescription(Data));
+            tagHelperOutput.TagName = TagName;
+            tagHelperOutput.AddClass(Class,HtmlEncoder.Default);
+            tagHelperOutput.Content.SetHtmlContent(_apiDescriptionHelper.ProcessApiDescription(Data, KeyName, ApiName, ShowDocumentationUrl));
             tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
         }
     }
