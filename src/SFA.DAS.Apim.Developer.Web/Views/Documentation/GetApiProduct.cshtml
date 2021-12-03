@@ -1,0 +1,19 @@
+@model SFA.DAS.Apim.Developer.Web.Models.ApiProductViewModel
+@{
+    Layout = "_LayoutDocumentation";
+    ViewData["Title"] = @Model.DisplayName;
+}
+
+<elements-api
+  apiDescriptionUrl="@Model.Url"
+  hideTryIt="true"
+  hideInternal="true"
+  router="hash"
+/>
+
+<noscript>
+  <main class="govuk-main-wrapper">
+    <h1 class="govuk-heading-xl">@Model.DisplayName</h1>
+    You can download the <a href="@Model.Url" class="govuk-link">description of the API</a>
+  </main>
+</noscript>

@@ -37,6 +37,8 @@ resources:
 
 stages:
 - stage: Build
+  variables:
+  - group: ESFA - SonarCloud
   jobs:
   - template: pipeline-templates/job/code-build.yml
     parameters:
@@ -86,4 +88,58 @@ stages:
       ServiceConnection: SFA-DAS-DevTest-ARM
       SolutionBaseName: $(SolutionBaseName)
 
-##TO DO: link PROD das-apim-developer-web variable group to Deploy_PROD stage
+- stage: Deploy_PP
+  dependsOn: Build
+  displayName: Deploy to PP
+  variables:
+  - group: PREPROD Management Resources
+  - group: PREPROD Shared Resources
+  - group: PREPROD das-apim-developer-web
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: PP
+      ServiceConnection: SFA-DIG-PreProd-ARM
+      SolutionBaseName: $(SolutionBaseName)
+
+- stage: Deploy_PROD
+  dependsOn: Build
+  displayName: Deploy to PROD
+  variables:
+  - group: PROD Management Resources
+  - group: PROD Shared Resources
+  - group: PROD das-apim-developer-web
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: PROD
+      ServiceConnection: SFA-DIG-Prod-ARM
+      SolutionBaseName: $(SolutionBaseName)
+
+- stage: Deploy_MO
+  dependsOn: Build
+  displayName: Deploy to MO
+  variables:
+  - group: MO Management Resources
+  - group: MO Shared Resources
+  - group: MO das-apim-developer-web
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: MO
+      ServiceConnection: SFA-ASM-ModelOffice-ARM
+      SolutionBaseName: $(SolutionBaseName)
+
+- stage: Deploy_DEMO
+  dependsOn: Build
+  displayName: Deploy to DEMO
+  variables:
+  - group: DevTest Management Resources
+  - group: DEMO DevTest Shared Resources
+  - group: DEMO das-apim-developer-web
+  jobs:
+  - template: pipeline-templates/job/deploy.yml
+    parameters:
+      Environment: DEMO
+      ServiceConnection: SFA-DAS-DevTest-ARM
+      SolutionBaseName: $(SolutionBaseName)

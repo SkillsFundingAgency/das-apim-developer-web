@@ -1,37 +1,41 @@
 @model string
-@using SFA.DAS.MA.Shared.UI.Models.Links
 @{
     if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase))
     {
         Layout = "_LayoutEmployer";
     }
+    else if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
+    {
+        Layout = "_layoutProvider";
+    }
     
-    ViewData["Title"] = "Get started with the recruitment API";
+    ViewData["Title"] = "Error";
 }
-<main class="govuk-main-wrapper " id="main-content" role="main">
+
+@section breadcrumb {
+    <span class="das-js-back-link"></span>
+}
+
     <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-xl">Access denied</h1>
-
             @if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
             {
-                <p class="govuk-body">You don’t have permission to access the Apprenticeship Service.</p>
-                <h2 class="govuk-heading-m">Help</h2>
-                <p class="govuk-body">You can contact the Apprenticeship Service for advice or help on how to use the service.</p>
-                <h3 class="govuk-heading-m">Apprenticeship Service</h3>
-                <p class="govuk-body">Telephone: 0800 015 0600 <a class="govuk-link" href="https://www.gov.uk/call-charges" target="_blank">Find out about call charges</a></p>
+                <h1 class="govuk-heading-xl">You do not have permission to access this page</h1>
+                <p class="govuk-body">If you think you should have permission to access this page or want to confirm what permissions you have, contact an IdAMS super user.</p>
+                <p class="govuk-body">
+                    <a href="@Model" role="button" draggable="false" class="govuk-link govuk-link--no-visited-state" >Go back to home page</a>
+                </p>
 
             }
             else
             {
+                <h1 class="govuk-heading-xl">Access denied</h1>
                 <p class="govuk-body">If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.</p>
                 <p class="govuk-body">
                     <a href="@Model" role="button" draggable="false" class="govuk-button" >Go back to the service home page</a>
                 </p>
             }
-
         </div>
     </div>
-</main>
