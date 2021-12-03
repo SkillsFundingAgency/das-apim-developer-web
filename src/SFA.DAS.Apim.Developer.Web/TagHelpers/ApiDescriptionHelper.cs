@@ -18,7 +18,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             _actionContextAccessor = actionContextAccessor;
         }
 
-        public string ProcessApiDescription(string data, string keyName, bool showDocumentationUrl = true)
+        public string ProcessApiDescription(string data, string keyName, string apiName, bool showDocumentationUrl = true)
         {
             if (ApiDescriptionLookup.Descriptions.ContainsKey(keyName))
             {
@@ -30,15 +30,15 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
                 return data;
             }
             
-            data = data.Replace(".", ".<br>");
+            data = data.Replace(".", ".");
             var converted = data;
             
             var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = keyName});
+            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = apiName});
             
             if (!string.IsNullOrEmpty(url))
             {
-                converted += $"Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
+                converted += $" Give the API key and <a href='{url}' class='govuk-link govuk-link--no-visited-state'>this link to the API page</a> to your developer.";
             }
             
             return converted;

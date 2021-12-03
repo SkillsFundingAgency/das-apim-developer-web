@@ -24,12 +24,13 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
         public bool ShowDocumentationUrl { get; set; } = true;
         public string TagName { get; set; }
         public string Class { get; set; }
+        public string ApiName { get; set; }
         public override void Process(TagHelperContext tagHelperContext, TagHelperOutput tagHelperOutput)
         {
             
             tagHelperOutput.TagName = TagName;
             tagHelperOutput.AddClass(Class,HtmlEncoder.Default);
-            tagHelperOutput.Content.SetHtmlContent(_apiDescriptionHelper.ProcessApiDescription(Data, KeyName, ShowDocumentationUrl));
+            tagHelperOutput.Content.SetHtmlContent(_apiDescriptionHelper.ProcessApiDescription(Data, KeyName, ApiName, ShowDocumentationUrl));
             tagHelperOutput.TagMode = TagMode.StartTagAndEndTag;
         }
     }

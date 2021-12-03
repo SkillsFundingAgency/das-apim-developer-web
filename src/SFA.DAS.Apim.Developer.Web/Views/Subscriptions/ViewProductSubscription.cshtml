@@ -36,7 +36,7 @@
                 <h3 class="govuk-heading-s app-summary-card__heading">@Model.Product.DisplayName</h3>
             </header>
             <div class="app-summary-card__content">
-                <api-description class="govuk-body" tag-name="p" key-name="@Model.Product.Id" data="@Model.Product.Description"/>
+                <api-description class="govuk-body" tag-name="p" api-name="@Model.Product.Name" key-name="@Model.Product.Id" data="@Model.Product.Description"/>
                 <dl class="govuk-summary-list govuk-summary-list__m">
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__key">
