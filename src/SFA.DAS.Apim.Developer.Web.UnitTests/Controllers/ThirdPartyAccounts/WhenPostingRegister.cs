@@ -35,7 +35,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             UrlRouteContext confirmEmailRouteValues = null;
             mockUrlHelper
                 .Setup(helper => helper.RouteUrl(It.Is<UrlRouteContext>(context =>
-                    context.RouteName == RouteNames.ThirdPartyConfirmEmail)))
+                    context.RouteName == RouteNames.ThirdPartyRegisterComplete)))
                 .Returns(confirmUrl)
                 .Callback<UrlRouteContext>(context => confirmEmailRouteValues = context);
             mockDataProtector
@@ -61,7 +61,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             
             var result = await controller.PostRegister(request) as RedirectToRouteResult;
 
-            result!.RouteName.Should().Be(RouteNames.ThirdPartyConfirmEmail);
+            result!.RouteName.Should().Be(RouteNames.ThirdPartyAwaitingConfirmEmail);
             confirmEmailRouteValues.Values.Should().BeEquivalentTo(new {id = encodedUserId});
         }
         

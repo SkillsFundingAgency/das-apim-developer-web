@@ -39,7 +39,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 var userId = Guid.NewGuid();
                 var encodedId = _dataProtector.EncodedData(userId);
                 var confirmEmailUrl = Url.RouteUrl(
-                    RouteNames.ThirdPartyConfirmEmail,
+                    RouteNames.ThirdPartyRegisterComplete,
                     new {id = encodedId},
                     Request.Scheme,
                     Request.Host.Host);
@@ -47,9 +47,9 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 var command = (RegisterCommand) request;
                 command.Id = userId;
                 command.ConfirmUrl = confirmEmailUrl;
-                var result = await _mediator.Send(command);
+                await _mediator.Send(command);
                 
-                return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail, new {result.Id});
+                return RedirectToRoute(RouteNames.ThirdPartyAwaitingConfirmEmail);
             }
             catch (ValidationException e)
             {
@@ -62,6 +62,20 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 var model = (RegisterViewModel)request;
                 return View("Register", model);
             }
+        }
+        
+        [HttpGet]
+        [Route("register/awaiting-confirmation", Name = RouteNames.ThirdPartyAwaitingConfirmEmail)]
+        public IActionResult RegisterAwaitingConfirmEmail()
+        {
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("register/{id}/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
+        public IActionResult RegisterComplete(string id)
+        {
+            return View();
         }
     }
 }
