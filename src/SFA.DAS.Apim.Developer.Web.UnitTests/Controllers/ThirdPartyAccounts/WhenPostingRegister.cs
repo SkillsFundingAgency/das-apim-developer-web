@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
@@ -27,7 +28,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             mockMediator
                 .Setup(mediator => mediator.Send(
                     It.Is<RegisterCommand>(command => 
-                        command.FirstName == request.FirstName 
+                        command.Id != Guid.Empty
+                        && command.FirstName == request.FirstName 
                         && command.LastName == request.LastName
                         && command.EmailAddress == request.EmailAddress
                         && command.Password == request.Password

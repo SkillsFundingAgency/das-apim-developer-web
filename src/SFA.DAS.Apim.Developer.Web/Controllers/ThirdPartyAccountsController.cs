@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,9 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             try
             {
-                var result = await _mediator.Send((RegisterCommand)request);
+                var command = (RegisterCommand) request;
+                command.Id = Guid.NewGuid();
+                var result = await _mediator.Send(command);
                 return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail, new {result.Id});
             }
             catch (ValidationException e)
