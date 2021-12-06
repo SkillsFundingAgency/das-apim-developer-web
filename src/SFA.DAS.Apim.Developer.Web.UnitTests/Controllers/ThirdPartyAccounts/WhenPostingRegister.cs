@@ -25,7 +25,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             RegisterRequest request,
             string confirmUrl,
             string encodedUserId,
-            RegisterCommandResult responseFromMediator,
             [Frozen] Mock<IDataProtectorService> mockDataProtector,
             [Frozen] Mock<IUrlHelper> mockUrlHelper,
             [Frozen] Mock<IMediator> mockMediator,
@@ -57,7 +56,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
                         && command.ConfirmPassword == request.ConfirmPassword
                         && command.ConfirmUrl == confirmUrl), 
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(responseFromMediator);
+                .ReturnsAsync(Unit.Value);
             
             //act
             var result = await controller.PostRegister(request) as RedirectToRouteResult;
