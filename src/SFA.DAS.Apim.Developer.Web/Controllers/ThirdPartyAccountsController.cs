@@ -12,10 +12,14 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     [Route("third-party-accounts")]
     public class ThirdPartyAccountsController : Controller
     {
+        private readonly IDataProtectorService _dataProtector;
         private readonly IMediator _mediator;
 
-        public ThirdPartyAccountsController(IMediator mediator)
+        public ThirdPartyAccountsController(
+            IDataProtectorService dataProtector,
+            IMediator mediator)
         {
+            _dataProtector = dataProtector;
             _mediator = mediator;
         }
         
@@ -32,9 +36,19 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             try
             {
+                var userId = Guid.NewGuid();
+                var encodedId = _dataProtector.EncodedData(userId);
+                var confirmEmailUrl = Url.RouteUrl(
+                    RouteNames.ThirdPartyConfirmEmail,
+                    new {id = encodedId},
+                    Request.Scheme,
+                    Request.Host.Host);
+                
                 var command = (RegisterCommand) request;
-                command.Id = Guid.NewGuid();
+                command.Id = userId;
+                command.ConfirmUrl = confirmEmailUrl;
                 var result = await _mediator.Send(command);
+                
                 return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail, new {result.Id});
             }
             catch (ValidationException e)
