@@ -59,8 +59,10 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(responseFromMediator);
             
+            //act
             var result = await controller.PostRegister(request) as RedirectToRouteResult;
 
+            //assert
             result!.RouteName.Should().Be(RouteNames.ThirdPartyAwaitingConfirmEmail);
             confirmEmailRouteValues.Values.Should().BeEquivalentTo(new {id = encodedUserId});
         }
@@ -73,6 +75,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             [Frozen] Mock<IUrlHelper> mockUrlHelper,
             [Greedy] ThirdPartyAccountsController controller)
         {
+            //arrange
             controller.Url = mockUrlHelper.Object;
             controller.ControllerContext = new ControllerContext
             {
@@ -84,8 +87,10 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(responseFromMediator);
             
+            //act
             var result = await controller.PostRegister(request) as ViewResult;
 
+            //assert
             result!.ViewName.Should().Be("Register");
             var model = result.Model as RegisterViewModel;
             model!.Should().BeEquivalentTo(request);
