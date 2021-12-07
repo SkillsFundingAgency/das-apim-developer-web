@@ -67,9 +67,9 @@ namespace SFA.DAS.Apim.Developer.Infrastructure.Api
                 responseBody = JsonConvert.DeserializeObject<TResponse>(json);
             }
 
-            var getWithResponseCode = new ApiResponse<TResponse>(responseBody, response.StatusCode, errorContent);
+            var apiResponse = new ApiResponse<TResponse>(responseBody, response.StatusCode, errorContent);
             
-            return getWithResponseCode;
+            return apiResponse;
         }
     }
 }

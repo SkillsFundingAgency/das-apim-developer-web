@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -30,7 +31,10 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Registe
             }
 
             var data = new PostRegisterThirdPartyAccountData(request);
-            await _apiClient.Post<string>(new PostRegisterThirdPartyAccountRequest(data));
+            var apiResponse = await _apiClient.Post<string>(new PostRegisterThirdPartyAccountRequest(data));
+
+            if (!string.IsNullOrEmpty(apiResponse.ErrorContent))
+                throw new Exception(apiResponse.ErrorContent);
             
             return Unit.Value;
         }

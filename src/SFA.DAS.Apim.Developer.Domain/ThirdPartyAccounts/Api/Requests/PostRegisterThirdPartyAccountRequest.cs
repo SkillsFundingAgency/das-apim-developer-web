@@ -23,16 +23,16 @@ namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Api.Requests
             Id = source.Id;
             FirstName = source.FirstName;
             LastName = source.LastName;
-            EmailAddress = source.EmailAddress;
+            Email = source.EmailAddress;
             Password = source.Password;
-            ConfirmUrl = source.ConfirmUrl;
+            ConfirmationEmailLink = source.ConfirmUrl;
         }
         
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
-        public string ConfirmUrl { get; set; }
+        public string ConfirmationEmailLink { get; set; }
     }
 }

@@ -53,7 +53,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
             mockApiClient
                 .Setup(client => client.Post<string>(It.Is<PostRegisterThirdPartyAccountRequest>(request =>
                     request.PostUrl.Equals(expectedPostRequest.PostUrl))))
-                .ReturnsAsync(new ApiResponse<string>(null, HttpStatusCode.NoContent, ""));
+                .ReturnsAsync(new ApiResponse<string>(null, HttpStatusCode.Created, ""));
 
             var actual = await handler.Handle(command, CancellationToken.None);
 
@@ -62,6 +62,30 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
                     It.Is<PostRegisterThirdPartyAccountRequest>(x =>
                         x.PostUrl.Equals(expectedPostRequest.PostUrl))),
                 Times.Once);
+        }
+        
+        [Test, MoqAutoData]
+        public void And_Error_From_Api_Then_Throws_Exception(
+            RegisterCommand command,
+            string errorContent,
+            [Frozen] Mock<IValidator<RegisterCommand>> mockValidator,
+            [Frozen] Mock<IApiClient> mockApiClient,
+            RegisterCommandHandler handler)
+        {
+            var data = new PostRegisterThirdPartyAccountData(command);
+            var expectedPostRequest = new PostRegisterThirdPartyAccountRequest(data);
+            mockValidator
+                .Setup(validator => validator.ValidateAsync(command))
+                .ReturnsAsync(new ValidationResult());
+            mockApiClient
+                .Setup(client => client.Post<string>(It.Is<PostRegisterThirdPartyAccountRequest>(request =>
+                    request.PostUrl.Equals(expectedPostRequest.PostUrl))))
+                .ReturnsAsync(new ApiResponse<string>(null, HttpStatusCode.InternalServerError, errorContent));
+
+            var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
+
+            act.Should().Throw<Exception>()
+                .WithMessage($"*{errorContent}*");
         }
     }
 }
