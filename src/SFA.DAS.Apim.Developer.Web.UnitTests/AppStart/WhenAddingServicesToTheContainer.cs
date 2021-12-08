@@ -22,6 +22,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         [TestCase(typeof(IApiClient))]
         [TestCase(typeof(IEmployerAccountAuthorisationHandler))]
         [TestCase(typeof(IProviderAccountAuthorisationHandler))]
+        [TestCase(typeof(IExternalAccountAuthorizationHandler))]
         [TestCase(typeof(IApiDescriptionHelper))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {
@@ -44,10 +45,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
             
             Assert.IsNotNull(type);
-            type.Count.Should().Be(4);
+            type.Count.Should().Be(5);
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerViewerAuthorizationHandler));
+            type.Should().ContainSingle(c => c.GetType() == typeof(ExternalAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderOrEmployerAccountAuthorizationHandler));
         }
         
@@ -75,6 +77,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             serviceCollection.AddMediatRValidation();
             serviceCollection.AddEmployerAuthenticationServices();
             serviceCollection.AddProviderAuthenticationServices();
+            serviceCollection.AddExternalAuthenticationServices();
             serviceCollection.AddSharedAuthenticationServices();
         }
         
