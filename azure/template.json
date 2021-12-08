@@ -258,6 +258,10 @@
         "ProvidersAppServiceName": {
             "type": "string",
             "value": "[concat(variables('resourceNamePrefix'), '-prv-as')]"
+        },
+        "ExternalAppServiceName": {
+            "type": "string",
+            "value": "[concat(variables('resourceNamePrefix'), '-ext-as')]"
         }
     }
 }
