@@ -91,3 +91,22 @@ jobs:
             ServiceConnection: ${{ parameters.ServiceConnection }}
             AppServiceName: $(ProvidersAppServiceName)
             DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
+
+- deployment: DeployExternalApp
+  dependsOn: DeployResources
+  displayName: Deploy APIM Dev Providers App
+  environment: ${{ parameters.Environment }}
+  pool:
+    name: DAS - Continuous Deployment Agents
+  variables:
+    ResourceGroupName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ResourceGroupName'] ]
+    ExternalAppServiceName: $[ dependencies.DeployResources.outputs['DeployResources.ArmOutputs${{ parameters.Environment }}.ExternalAppServiceName'] ]
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(ExternalAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.zip
