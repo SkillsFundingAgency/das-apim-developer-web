@@ -180,11 +180,9 @@ namespace SFA.DAS.Apim.Developer.Web
             
             app.UseEndpoints(builder =>
             {
-                builder.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                builder.MapDefaultControllerRoute();
             });
-            
+
         }
     }
 }
