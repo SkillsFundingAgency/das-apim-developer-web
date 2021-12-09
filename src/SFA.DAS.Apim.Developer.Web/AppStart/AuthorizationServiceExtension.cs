@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
@@ -42,6 +43,12 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.Requirements.Add(new ProviderAccountRequirement());
                         policy.RequireAuthenticatedUser();
                     });
+                options.AddPolicy(PolicyNames.HasExternalAccount, policy =>
+                {
+                    policy.RequireClaim(ExternalUserClaims.Id);
+                    policy.Requirements.Add(new ExternalAccountRequirement());
+                    policy.RequireAuthenticatedUser();
+                });
                 options.AddPolicy(
                     PolicyNames.HasProviderOrEmployerAdminAccount,
                     policy =>
