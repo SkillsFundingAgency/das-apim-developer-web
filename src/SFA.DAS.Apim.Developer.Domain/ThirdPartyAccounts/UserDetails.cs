@@ -4,7 +4,7 @@ namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts
 {
     public class UserDetails
     {
-        public static implicit operator UserDetails(PostAuthenticateUserResponse source)
+        public static implicit operator UserDetails(PostAuthenticateUserResponseItem source)
         {
             return new UserDetails
             {

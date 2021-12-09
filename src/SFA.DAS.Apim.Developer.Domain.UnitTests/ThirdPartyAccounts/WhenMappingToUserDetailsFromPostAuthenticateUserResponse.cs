@@ -9,7 +9,7 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.ThirdPartyAccounts
     public class WhenMappingToUserDetailsFromPostAuthenticateUserResponse
     {
         [Test, AutoData]
-        public void Then_The_Fields_Are_Mapped(PostAuthenticateUserResponse source)
+        public void Then_The_Fields_Are_Mapped(PostAuthenticateUserResponseItem source)
         {
             //Act
             var actual = (UserDetails)source;

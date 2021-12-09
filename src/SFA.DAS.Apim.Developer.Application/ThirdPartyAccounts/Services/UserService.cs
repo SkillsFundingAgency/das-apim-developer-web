@@ -28,20 +28,22 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             var authenticateResult =
                 await _apiClient.Post<PostAuthenticateUserResponse>(new PostAuthenticateUserRequest(email, password));
 
-            if (!authenticateResult.Body.Authenticated)
+            if (!authenticateResult.Body.User.Authenticated)
             {
                 return null;
             }
             
+            var userDetails = (UserDetails)authenticateResult.Body.User;
+            
             var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {
-                new Claim(ExternalUserClaims.Id, authenticateResult.Body.Id),
-                new Claim(ClaimTypes.Name, $"{authenticateResult.Body.FirstName} {authenticateResult.Body.LastName}")
-            });
+                new Claim(ExternalUserClaims.Id, userDetails.Id),
+                new Claim(ClaimTypes.Name, $"{userDetails.FirstName} {userDetails.LastName}")
+            }, CookieAuthenticationDefaults.AuthenticationScheme);
+
             await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity));
-
-            var userDetails = (UserDetails)authenticateResult.Body;
+            
             return userDetails;
         }
     }

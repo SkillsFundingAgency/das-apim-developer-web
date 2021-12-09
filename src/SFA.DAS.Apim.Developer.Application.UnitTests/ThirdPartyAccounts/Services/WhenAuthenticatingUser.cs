@@ -35,7 +35,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
             UserService userService)
         {
             //Arrange
-            apiResponse.Authenticated = true;
+            apiResponse.User.Authenticated = true;
             serviceProvider.Setup(x => x.GetService(typeof(IAuthenticationService)))
                 .Returns(authenticationService.Object);
             apiClient.Setup(x => x.Post<PostAuthenticateUserResponse>(It.Is<PostAuthenticateUserRequest>(c =>
@@ -46,9 +46,9 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
             var actual = await userService.AuthenticateUser(email, password);
             
             //Assert
-            actual.Should().BeEquivalentTo(apiResponse);
+            actual.Should().BeEquivalentTo(apiResponse.User);
             authenticationService.Verify(x=>x.SignInAsync(It.IsAny<HttpContext>(), CookieAuthenticationDefaults.AuthenticationScheme, 
-                It.Is<ClaimsPrincipal>(c=>c.HasClaim(ExternalUserClaims.Id,apiResponse.Id)), It.IsAny<AuthenticationProperties>()), Times.Once);
+                It.Is<ClaimsPrincipal>(c=>c.HasClaim(ExternalUserClaims.Id,apiResponse.User.Id)), It.IsAny<AuthenticationProperties>()), Times.Once);
         }
 
         [Test, MoqAutoData]
@@ -63,7 +63,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
             UserService userService)
         {
             //Arrange
-            apiResponse.Authenticated = false;
+            apiResponse.User.Authenticated = false;
             serviceProvider.Setup(x => x.GetService(typeof(IAuthenticationService)))
                 .Returns(authenticationService.Object);
             apiClient.Setup(x => x.Post<PostAuthenticateUserResponse>(It.Is<PostAuthenticateUserRequest>(c =>

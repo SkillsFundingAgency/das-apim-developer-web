@@ -2,7 +2,7 @@
 @model SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts.LoginViewModel
 @{
     ViewBag.Title = "Create an account";
-    Layout = "_LayoutDocumentation";
+    Layout = "_LayoutGeneric";
 }
 
 
@@ -36,14 +36,13 @@
                         <label asp-for="Password" class="govuk-label">
                             Password
                         </label>
-                        <div class="govuk-hint">Password requires upper and lowercase letters, a number and at least 8 characters.</div>
                         @if (passwordInvalid)
                         {
                             <span class="govuk-error-message" id="password-error">
                                 <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.Password)].Errors.First().ErrorMessage
                             </span>
                         }
-                        <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="new-password"/>
+                        <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="password"/>
                     </div>
                 </form>
             </div>
