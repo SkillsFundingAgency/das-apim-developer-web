@@ -12,7 +12,7 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.ThirdPartyAccounts.Requests
         {
             var actual = new PostAuthenticateUserRequest(email, password);
 
-            actual.PostUrl.Should().Be("api/users/authenticate");
+            actual.PostUrl.Should().Be("users/authenticate");
             ((PostAuthenticateUserRequestData)actual.Data).Email.Should().Be(email);
             ((PostAuthenticateUserRequestData)actual.Data).Password.Should().Be(password);
         }

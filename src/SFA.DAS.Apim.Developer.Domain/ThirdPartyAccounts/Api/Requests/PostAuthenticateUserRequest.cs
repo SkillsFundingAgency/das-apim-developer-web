@@ -14,7 +14,7 @@ namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Api.Requests
             };
         }
 
-        public string PostUrl => "api/users/authenticate";
+        public string PostUrl => "users/authenticate";
         public object Data { get; set; }
 
     }
