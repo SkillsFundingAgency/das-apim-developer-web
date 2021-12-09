@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,14 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     [Route("third-party-accounts")]
     public class ThirdPartyAccountsController : Controller
     {
+        private readonly IDataProtectorService _dataProtector;
         private readonly IMediator _mediator;
 
-        public ThirdPartyAccountsController(IMediator mediator)
+        public ThirdPartyAccountsController(
+            IDataProtectorService dataProtector,
+            IMediator mediator)
         {
+            _dataProtector = dataProtector;
             _mediator = mediator;
         }
         
@@ -31,8 +36,20 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             try
             {
-                var result = await _mediator.Send((RegisterCommand)request);
-                return RedirectToRoute(RouteNames.ThirdPartyConfirmEmail, new {result.Id});
+                var userId = Guid.NewGuid();
+                var encodedId = _dataProtector.EncodedData(userId);
+                var confirmEmailUrl = Url.RouteUrl(
+                    RouteNames.ThirdPartyRegisterComplete,
+                    new {id = encodedId},
+                    Request.Scheme,
+                    Request.Host.Host);
+                
+                var command = (RegisterCommand) request;
+                command.Id = userId;
+                command.ConfirmUrl = confirmEmailUrl;
+                await _mediator.Send(command);
+                
+                return RedirectToRoute(RouteNames.ThirdPartyAwaitingConfirmEmail);
             }
             catch (ValidationException e)
             {
@@ -45,6 +62,20 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 var model = (RegisterViewModel)request;
                 return View("Register", model);
             }
+        }
+        
+        [HttpGet]
+        [Route("register/awaiting-confirmation", Name = RouteNames.ThirdPartyAwaitingConfirmEmail)]
+        public IActionResult RegisterAwaitingConfirmEmail()
+        {
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("register/{id}/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
+        public IActionResult RegisterComplete(string id)
+        {
+            return View();
         }
     }
 }
