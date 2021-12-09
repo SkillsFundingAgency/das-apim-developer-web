@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Testing.AutoFixture;
 

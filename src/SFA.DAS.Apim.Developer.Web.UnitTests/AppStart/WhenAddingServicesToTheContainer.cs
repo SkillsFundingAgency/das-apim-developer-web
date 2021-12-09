@@ -24,6 +24,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         [TestCase(typeof(IProviderAccountAuthorisationHandler))]
         [TestCase(typeof(IExternalAccountAuthorizationHandler))]
         [TestCase(typeof(IApiDescriptionHelper))]
+        [TestCase(typeof(IUserService))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {
             var serviceCollection = new ServiceCollection();
