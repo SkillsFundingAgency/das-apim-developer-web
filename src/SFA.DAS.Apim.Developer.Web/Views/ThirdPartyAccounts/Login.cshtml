@@ -1,18 +1,18 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
 @model SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts.LoginViewModel
 @{
-    ViewBag.Title = "Create an account";
+    ViewBag.Title = "Sign in";
     Layout = "_LayoutGeneric";
 }
 
 
 <div class="govuk-width-container">
-    <span class="das-js-back-link"></span>
     <main class="govuk-main-wrapper " id="main-content" role="main">
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
                 <partial name="_pageErrorsOverview" />
-                <h1 class="govuk-heading-xl">Create an account</h1>
+                <h1 class="govuk-heading-xl">Sign in</h1>
+                <p>Sign in or <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account</a> to subscribe to APIs and get API keys.</p>
                 <form method="POST" asp-route="@RouteNames.ThirdPartySignIn" novalidate>
                     @{ 
                         var emailInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any();
@@ -44,6 +44,7 @@
                         }
                         <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="password"/>
                     </div>
+                    <button id="continue" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Sign in</button>
                 </form>
             </div>
         </div>
