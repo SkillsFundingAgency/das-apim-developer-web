@@ -20,6 +20,10 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ThirdPartyRegisterComplete = "third-party-register-complete";
         public const string ThirdPartySignIn = "third-party-sign-in";
         public const string ThirdPartyTermsConditions = "third-party-terms-conditions";
+        public const string ExternalApiHub = "external-api-hub";
+        public const string ExternalViewSubscription = "external-view-subscription";
+        public const string ExternalCreateKey = "external-create-key";
+        public const string ExternalRenewKey = "external-renew-key";
 
         public const string Documentation = "api-doc";
         public const string JsonDocumentation = "api-doc-json";
@@ -27,6 +31,5 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string Index = "index";
 
         public const string Error403 = "error-403";
-        
     }
 }

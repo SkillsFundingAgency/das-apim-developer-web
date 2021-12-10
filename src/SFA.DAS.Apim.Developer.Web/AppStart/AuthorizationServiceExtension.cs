@@ -50,7 +50,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                     policy.RequireAuthenticatedUser();
                 });
                 options.AddPolicy(
-                    PolicyNames.HasProviderOrEmployerAdminAccount,
+                    PolicyNames.HasProviderEmployerAdminOrExternalAccount,
                     policy =>
                     {
                         if (serviceParametersAuthenticationType is AuthenticationType.Employer)
@@ -61,6 +61,10 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         {
                             policy.RequireClaim(ProviderClaims.ProviderUkprn);
                             policy.RequireClaim(ProviderClaims.Service, ProviderDaa);
+                        }
+                        else if (serviceParametersAuthenticationType is AuthenticationType.External)
+                        {
+                            policy.RequireClaim(ExternalUserClaims.Id);
                         }
                         policy.Requirements.Add(new ProviderEmployerExternalAccountRequirement());
                         policy.RequireAuthenticatedUser();
