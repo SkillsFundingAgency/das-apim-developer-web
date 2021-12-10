@@ -100,7 +100,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             {
                 var userResponse = await _mediator.Send(new AuthenticateUserCommand
                 {
-                    Email = model.EmailAddress,
+                    EmailAddress = model.EmailAddress,
                     Password = model.Password
                 });
 

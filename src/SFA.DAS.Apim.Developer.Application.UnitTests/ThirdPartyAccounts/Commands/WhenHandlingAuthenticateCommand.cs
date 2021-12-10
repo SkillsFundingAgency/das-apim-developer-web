@@ -26,7 +26,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
         {
             //Arrange
             mockValidator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult { });
-            userService.Setup(x => x.AuthenticateUser(command.Email, command.Password)).ReturnsAsync(userDetails);
+            userService.Setup(x => x.AuthenticateUser(command.EmailAddress, command.Password)).ReturnsAsync(userDetails);
             
             //Act
             var actual = await handler.Handle(command, CancellationToken.None);

@@ -14,15 +14,15 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Authent
 
             try
             {
-                var emailAddress = new MailAddress(item.Email);
-                if (!emailAddress.Address.Equals(item.Email, StringComparison.CurrentCultureIgnoreCase))
+                var emailAddress = new MailAddress(item.EmailAddress);
+                if (!emailAddress.Address.Equals(item.EmailAddress, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    validationResult.AddError(nameof(item.Email),"Enter an email address in the correct format, like name@example.com");
+                    validationResult.AddError(nameof(item.EmailAddress),"Enter an email address in the correct format, like name@example.com");
                 }
             }
             catch (FormatException)
             {
-                validationResult.AddError(nameof(item.Email),"Enter an email address in the correct format, like name@example.com");
+                validationResult.AddError(nameof(item.EmailAddress),"Enter an email address in the correct format, like name@example.com");
             }
             
             return Task.FromResult(validationResult);

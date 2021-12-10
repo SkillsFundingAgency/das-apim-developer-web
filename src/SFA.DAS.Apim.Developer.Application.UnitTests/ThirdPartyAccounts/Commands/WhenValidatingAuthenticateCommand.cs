@@ -14,11 +14,11 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
 
             var actual = await validator.ValidateAsync(new AuthenticateUserCommand
             {
-                Email = "test"
+                EmailAddress = "test"
             });
 
             actual.IsValid().Should().BeFalse();
-            actual.ValidationDictionary[nameof(AuthenticateUserCommand.Email)].Should().Be("Enter an email address in the correct format, like name@example.com");
+            actual.ValidationDictionary[nameof(AuthenticateUserCommand.EmailAddress)].Should().Be("Enter an email address in the correct format, like name@example.com");
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
 
             var actual = await validator.ValidateAsync(new AuthenticateUserCommand
             {
-                Email = "test@test.com"
+                EmailAddress = "test@test.com"
             });
 
             actual.IsValid().Should().BeTrue();

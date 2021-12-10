@@ -4,7 +4,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Authent
 {
     public class AuthenticateUserCommand : IRequest<AuthenticateUserCommandResponse>
     {
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
         public string Password { get; set; }
     }
 }

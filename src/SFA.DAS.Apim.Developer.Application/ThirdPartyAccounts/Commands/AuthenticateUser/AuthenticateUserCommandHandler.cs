@@ -26,7 +26,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Authent
                 throw new ValidationException(validationResult.DataAnnotationResult,null, null);
             }
             
-            var user = await _userService.AuthenticateUser(request.Email, request.Password);
+            var user = await _userService.AuthenticateUser(request.EmailAddress, request.Password);
 
             return new AuthenticateUserCommandResponse
             {
