@@ -1,9 +1,11 @@
 ﻿@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
 @model SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts.RegisterViewModel
 
 @{
     ViewBag.Title = "Create an account";
     Layout = "_LayoutDocumentation";
+    ViewData["CustomOrder"] = RegisterViewModel.BuildPropertyOrderDictionary();
 }
 
 <div class="govuk-width-container">
