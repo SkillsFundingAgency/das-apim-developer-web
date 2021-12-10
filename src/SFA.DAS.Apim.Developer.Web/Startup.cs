@@ -71,6 +71,10 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 serviceParameters.AuthenticationType = AuthenticationType.Provider;
             }
+            else if (_configuration["AuthType"].Equals("External", StringComparison.CurrentCultureIgnoreCase))
+            {
+                serviceParameters.AuthenticationType = AuthenticationType.External;
+            }
 
             services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
             

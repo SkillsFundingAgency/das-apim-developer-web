@@ -12,6 +12,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         [Description("Employers")]
         Employer,
         [Description("Providers")]
-        Provider
+        Provider,
+        [Description("External")]
+        External
     }
 }
