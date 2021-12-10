@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -28,7 +29,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             var authenticateResult =
                 await _apiClient.Post<PostAuthenticateUserResponse>(new PostAuthenticateUserRequest(email, password));
 
-            if (!authenticateResult.Body.User.Authenticated)
+            if (authenticateResult.StatusCode == HttpStatusCode.Unauthorized || !authenticateResult.Body.User.Authenticated)
             {
                 return null;
             }
