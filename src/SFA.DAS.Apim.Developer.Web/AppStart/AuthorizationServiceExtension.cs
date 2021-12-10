@@ -62,7 +62,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                             policy.RequireClaim(ProviderClaims.ProviderUkprn);
                             policy.RequireClaim(ProviderClaims.Service, ProviderDaa);
                         }
-                        policy.Requirements.Add(new ProviderOrEmployerAccountRequirement());
+                        policy.Requirements.Add(new ProviderEmployerExternalAccountRequirement());
                         policy.RequireAuthenticatedUser();
                     });
             });

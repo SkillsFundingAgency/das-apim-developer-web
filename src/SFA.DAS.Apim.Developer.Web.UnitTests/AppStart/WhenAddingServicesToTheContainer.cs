@@ -51,7 +51,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerViewerAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ExternalAccountAuthorizationHandler));
-            type.Should().ContainSingle(c => c.GetType() == typeof(ProviderOrEmployerAccountAuthorizationHandler));
+            type.Should().ContainSingle(c => c.GetType() == typeof(ProviderEmployerExternalAccountAuthorizationHandler));
         }
         
         [Test]
