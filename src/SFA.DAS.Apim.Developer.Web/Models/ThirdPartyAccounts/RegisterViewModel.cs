@@ -1,4 +1,7 @@
-﻿namespace SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
 {
     public class RegisterViewModel
     {
@@ -18,6 +21,17 @@
                 Password = source.Password,
                 ConfirmPassword = source.ConfirmPassword
             };
+        }
+
+        public static Dictionary<string, int> BuildPropertyOrderDictionary()
+        {
+            var itemCount = 0;
+            var propertyOrderDictionary = typeof(RegisterViewModel).GetProperties().Select(c => new
+            {
+                Order = itemCount++,
+                c.Name
+            }).ToDictionary(key => key.Name, value => value.Order);
+            return propertyOrderDictionary;
         }
     }
 }
