@@ -45,7 +45,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             mediator.Setup(x =>
                 x.Send(
                     It.Is<AuthenticateUserCommand>(c =>
-                        c.Email.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
+                        c.EmailAddress.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
                     CancellationToken.None)).ReturnsAsync(response);
             
             var actual = await controller.PostLogin(viewModel) as RedirectToRouteResult;
@@ -65,7 +65,28 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             mediator.Setup(x =>
                 x.Send(
                     It.Is<AuthenticateUserCommand>(c =>
-                        c.Email.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
+                        c.EmailAddress.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
+                    CancellationToken.None)).ReturnsAsync(response);
+            
+            var actual = await controller.PostLogin(viewModel)  as ViewResult;
+            
+            actual.ViewName.Should().Be("Login");
+            actual.Model.Should().BeAssignableTo<LoginViewModel>();
+            controller.ModelState.IsValid.Should().BeFalse();
+        }
+        
+        [Test, MoqAutoData]
+        public async Task Then_If_Model_Is_Valid_And_Command_Handler_Returns_Null_Error_Shown(
+            LoginViewModel viewModel,
+            AuthenticateUserCommandResponse response,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] ThirdPartyAccountsController controller)
+        {
+            response.UserDetails = null;
+            mediator.Setup(x =>
+                x.Send(
+                    It.Is<AuthenticateUserCommand>(c =>
+                        c.EmailAddress.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
                     CancellationToken.None)).ReturnsAsync(response);
             
             var actual = await controller.PostLogin(viewModel)  as ViewResult;
@@ -92,7 +113,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             mediator.Setup(x =>
                 x.Send(
                     It.Is<AuthenticateUserCommand>(c =>
-                        c.Email.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
+                        c.EmailAddress.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
                     CancellationToken.None)).ThrowsAsync(new ValidationException(validationResult.DataAnnotationResult,null, null));
             
             var actual = await controller.PostLogin(viewModel)  as ViewResult;

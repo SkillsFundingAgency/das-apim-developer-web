@@ -104,7 +104,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     Password = model.Password
                 });
 
-                if (!userResponse.UserDetails.Authenticated)
+                if (!(userResponse.UserDetails is { Authenticated: true }))
                 {
                     ModelState.AddModelError("","Invalid credentials");
                     return View("Login", model);
