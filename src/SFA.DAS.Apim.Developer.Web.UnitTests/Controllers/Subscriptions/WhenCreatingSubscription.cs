@@ -21,13 +21,14 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
         public async Task Then_The_Data_Is_Returned_From_Mediator_And_Redirected_To_View_Subscription_For_Employer(
             string id, 
             string employerAccountId,
+            string externalId,
             [Frozen] Mock<ServiceParameters> serviceParameters, 
             [Frozen] Mock<IMediator> mediator)
         {
             serviceParameters.Object.AuthenticationType = AuthenticationType.Employer;
             var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
             
-            var actual = await controller.CreateSubscription(employerAccountId, id, null) as RedirectToRouteResult;
+            var actual = await controller.CreateSubscription(employerAccountId, id, null, externalId) as RedirectToRouteResult;
             
             Assert.IsNotNull(actual);
             actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
@@ -45,13 +46,14 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
         public async Task Then_The_Data_Is_Returned_From_Mediator_And_Redirected_To_View_Subscription_For_Provider(
             string id, 
             int ukprn,
+            string externalId,
             [Frozen] Mock<ServiceParameters> serviceParameters, 
             [Frozen] Mock<IMediator> mediator)
         {
             serviceParameters.Object.AuthenticationType = AuthenticationType.Provider;
             var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
             
-            var actual = await controller.CreateSubscription("", id, ukprn) as RedirectToRouteResult;
+            var actual = await controller.CreateSubscription("", id, ukprn, externalId) as RedirectToRouteResult;
             
             Assert.IsNotNull(actual);
             actual.RouteName.Should().Be(RouteNames.ProviderViewSubscription);
@@ -61,6 +63,31 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
                 x.Send(It.Is<CreateSubscriptionKeyCommand>(c => 
                     c.AccountIdentifier.Equals(ukprn.ToString())
                     && c.AccountType.Equals(AuthenticationType.Provider.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None), Times.Once);
+        }
+        
+        [Test, MoqAutoData]
+        public async Task Then_The_Data_Is_Returned_From_Mediator_And_Redirected_To_View_Subscription_For_External(
+            string id, 
+            int ukprn,
+            string externalId,
+            [Frozen] Mock<ServiceParameters> serviceParameters, 
+            [Frozen] Mock<IMediator> mediator)
+        {
+            serviceParameters.Object.AuthenticationType = AuthenticationType.External;
+            var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
+            
+            var actual = await controller.CreateSubscription("", id, ukprn, externalId) as RedirectToRouteResult;
+            
+            Assert.IsNotNull(actual);
+            actual.RouteName.Should().Be(RouteNames.ExternalViewSubscription);
+            actual.RouteValues["externalId"].Should().Be(externalId);
+            actual.RouteValues["id"].Should().Be(id);
+            mediator.Verify(x =>
+                x.Send(It.Is<CreateSubscriptionKeyCommand>(c => 
+                    c.AccountIdentifier.Equals(externalId)
+                    && c.AccountType.Equals(AuthenticationType.External.GetDescription())
                     && c.ProductId.Equals(id)
                 ), CancellationToken.None), Times.Once);
         }

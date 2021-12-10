@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,66 +26,72 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
         
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
-        [Route("{ukprn}/subscriptions", Name = RouteNames.ProviderApiHub)]
-        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn)
+        [Route("{ukprn:int}/subscriptions", Name = RouteNames.ProviderApiHub)]
+        [Route("{externalId}/subscriptions", Name = RouteNames.ExternalApiHub)]
+        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null)
         {
+            var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
+            
             var result = await _mediator.Send(new GetAvailableProductsQuery
             {
                 AccountType = _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = _serviceParameters.AuthenticationType == AuthenticationType.Employer ? 
-                    employerAccountId : ukprn.ToString()
+                AccountIdentifier = subscriptionRouteModel.AccountIdentifier
             });
             
             var model = (SubscriptionsViewModel)result;
             model.EmployerAccountId = employerAccountId;
             model.Ukprn = ukprn;
-            model.CreateKeyRouteName = _serviceParameters.AuthenticationType == AuthenticationType.Employer
-                ? RouteNames.EmployerCreateKey
-                : RouteNames.ProviderCreateKey;
-            model.ViewKeyRouteName = _serviceParameters.AuthenticationType == AuthenticationType.Employer
-                ? RouteNames.EmployerViewSubscription
-                : RouteNames.ProviderViewSubscription;
+            model.ExternalId = externalId;
+            model.CreateKeyRouteName = subscriptionRouteModel.CreateKeyRouteName;
+            model.ViewKeyRouteName = subscriptionRouteModel.ViewSubscriptionRouteName;
+            model.AuthenticationType = _serviceParameters.AuthenticationType;
             return View(model);
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
-        [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
-        public IActionResult ConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
+        [Route("{ukprn:int}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
+        [Route("{externalId}/subscriptions/{id}/confirm-renew", Name = RouteNames.ExternalRenewKey)]
+        public IActionResult ConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn, [FromRoute]string externalId)
         {
-            return View(_serviceParameters.AuthenticationType == AuthenticationType.Employer);
+            return View(_serviceParameters.AuthenticationType);
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/create", Name = RouteNames.EmployerCreateKey)]
-        [Route("{ukprn}/subscriptions/{id}/create", Name = RouteNames.ProviderCreateKey)]
-        public async Task<IActionResult> CreateSubscription([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn)
+        [Route("{ukprn:int}/subscriptions/{id}/create", Name = RouteNames.ProviderCreateKey)]
+        [Route("{externalId}/subscriptions/{id}/create", Name = RouteNames.ExternalCreateKey)]
+        public async Task<IActionResult> CreateSubscription([FromRoute]string employerAccountId, [FromRoute]string id, [FromRoute]int? ukprn, [FromRoute]string externalId)
         {
+            var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
+            
             await _mediator.Send(new CreateSubscriptionKeyCommand
             {
                 AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
+                AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
                 ProductId = id
             });
 
-            var employerViewSubscription = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? RouteNames.EmployerViewSubscription : RouteNames.ProviderViewSubscription;
-            return RedirectToRoute(employerViewSubscription, new { employerAccountId, id, ukprn });
+            return RedirectToRoute(subscriptionRouteModel.ViewSubscriptionRouteName, new { employerAccountId, id, ukprn, externalId });
         }
 
         [HttpGet]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}", Name = RouteNames.EmployerViewSubscription)]
-        [Route("{ukprn}/subscriptions/{id}", Name = RouteNames.ProviderViewSubscription)]
-        public async Task<IActionResult> ViewProductSubscription([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, [FromQuery]bool? keyRenewed = null)
+        [Route("{ukprn:int}/subscriptions/{id}", Name = RouteNames.ProviderViewSubscription)]
+        [Route("{externalId}/subscriptions/{id}", Name = RouteNames.ExternalViewSubscription)]
+        public async Task<IActionResult> ViewProductSubscription([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, [FromQuery]bool? keyRenewed = null, [FromRoute]string externalId = null)
         {
+            var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
+            
             var result = await _mediator.Send(new GetSubscriptionQuery
             {
                 AccountType =  _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
+                AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
                 ProductId = id
             });
 
@@ -96,38 +101,40 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 Product = result.Product,
                 EmployerAccountId = employerAccountId,
                 Ukprn = ukprn,
+                ExternalId = externalId,
                 ShowRenewedBanner = keyRenewed != null && keyRenewed.Value,
-                RenewKeyRouteName = _serviceParameters.AuthenticationType is AuthenticationType.Employer ?RouteNames.EmployerRenewKey : RouteNames.ProviderRenewKey
+                RenewKeyRouteName = subscriptionRouteModel.RenewKeyRouteName,
+                AuthenticationType = _serviceParameters.AuthenticationType
             };
 
             return View(model);
         }
 
         [HttpPost]
-        [Authorize(Policy = nameof(PolicyNames.HasProviderOrEmployerAdminAccount))]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-renew", Name = RouteNames.EmployerRenewKey)]
-        [Route("{ukprn}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
-        public async Task<IActionResult> PostConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn, RenewKeyViewModel viewModel)
+        [Route("{ukprn:int}/subscriptions/{id}/confirm-renew", Name = RouteNames.ProviderRenewKey)]
+        [Route("{externalId}/subscriptions/{id}/confirm-renew", Name = RouteNames.ExternalRenewKey)]
+        public async Task<IActionResult> PostConfirmRenewKey([FromRoute]string employerAccountId, [FromRoute]string id,[FromRoute]int? ukprn,[FromRoute]string externalId, RenewKeyViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                return View("ConfirmRenewKey", _serviceParameters.AuthenticationType is AuthenticationType.Employer);
+                return View("ConfirmRenewKey", _serviceParameters.AuthenticationType);
             }
-
-            var routeName = _serviceParameters.AuthenticationType is AuthenticationType.Employer 
-                ? RouteNames.EmployerViewSubscription : RouteNames.ProviderViewSubscription;
+            
+            var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
             
             if (viewModel.ConfirmRenew.HasValue && viewModel.ConfirmRenew.Value)
             {
                 var renewCommand = new RenewSubscriptionKeyCommand
                 {
-                    AccountIdentifier = _serviceParameters.AuthenticationType is AuthenticationType.Employer ? employerAccountId : ukprn.ToString(),
+                    AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
                     ProductId = id
                 };
                 await _mediator.Send(renewCommand);
-                return RedirectToRoute(routeName, new { employerAccountId, id, ukprn, keyRenewed = true });    
+                return RedirectToRoute(subscriptionRouteModel.ViewSubscriptionRouteName, new { employerAccountId, id, ukprn, keyRenewed = true, externalId });    
             }
-            return RedirectToRoute(routeName, new { employerAccountId, ukprn, id });
+            return RedirectToRoute(subscriptionRouteModel.ViewSubscriptionRouteName, new { employerAccountId, ukprn, id, externalId });
         }
     }
 }

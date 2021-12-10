@@ -46,6 +46,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             actualModel.RenewKeyRouteName.Should().Be(RouteNames.EmployerRenewKey);
             
         }
+        
         [Test, MoqAutoData]
         public async Task Then_The_Data_Is_Returned_From_Mediator_And_View_Subscription_Shown_For_Provider(
             string id, 
@@ -74,6 +75,36 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             actualModel.ShowRenewedBanner.Should().BeTrue();
             actualModel.RenewKeyRouteName.Should().Be(RouteNames.ProviderRenewKey);
 
+        }
+        
+        [Test, MoqAutoData]
+        public async Task Then_The_Data_Is_Returned_From_Mediator_And_View_Subscription_Shown_For_External(
+            string id, 
+            string employerAccountId,
+            string externalId,
+            int ukprn,
+            GetSubscriptionQueryResult mediatorResult,
+            [Frozen] Mock<ServiceParameters> serviceParameters, 
+            [Frozen] Mock<IMediator> mediator)
+        {
+            mediator.Setup(x =>
+                x.Send(It.Is<GetSubscriptionQuery>(c => 
+                    c.AccountIdentifier.Equals(externalId)
+                    && c.AccountType.Equals(AuthenticationType.External.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None)).ReturnsAsync(mediatorResult);
+            serviceParameters.Object.AuthenticationType = AuthenticationType.External;
+            var controller = new SubscriptionsController(mediator.Object, serviceParameters.Object);
+            
+            var actual = await controller.ViewProductSubscription(employerAccountId, id,ukprn, true, externalId) as ViewResult;
+            
+            Assert.IsNotNull(actual);
+            var actualModel = actual.Model as SubscriptionViewModel;
+            Assert.IsNotNull(actualModel);
+            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
+            actualModel.Ukprn.Should().Be(ukprn);
+            actualModel.ShowRenewedBanner.Should().BeTrue();
+            actualModel.RenewKeyRouteName.Should().Be(RouteNames.ExternalRenewKey);
         }
     }
 }
