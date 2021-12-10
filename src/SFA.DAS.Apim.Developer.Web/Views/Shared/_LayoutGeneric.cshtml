@@ -21,7 +21,7 @@
     <meta property="og:image" content="assets/images/govuk-opengraph-image.png">
 </head>
 
-<body class="govuk-template__body ">
+<body class="govuk-template__body">
     <header class="govuk-header das-header--no-border" role="banner" data-module="header">
         <div class="govuk-header__container govuk-width-container">
             <div class="govuk-header__logo">
@@ -42,7 +42,10 @@
     </header>
 
     <div class="govuk-width-container">
-        @RenderBody()
+        @RenderSection("breadcrumb", required: false)
+        <main class="govuk-main-wrapper " id="main-content" role="main">
+            @RenderBody()
+        </main>
     </div>
 
     <footer class="govuk-footer" role="contentinfo">
