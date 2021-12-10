@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Subscriptions;
+using SFA.DAS.Apim.Developer.Web.AppStart;
 
 namespace SFA.DAS.Apim.Developer.Web.Models
 {
@@ -13,6 +14,8 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public string ViewKeyRouteName { get; set; }
         public string CreateKeyRouteName { get; set; }
         public int? Ukprn { get ; set ; }
+        public string ExternalId { get ; set ; }
+        public AuthenticationType? AuthenticationType { get ; set ; }
 
         public static implicit operator SubscriptionsViewModel(GetAvailableProductsQueryResult source)
         {

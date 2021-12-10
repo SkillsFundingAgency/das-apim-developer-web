@@ -1,14 +1,23 @@
-@model bool
+@using SFA.DAS.Apim.Developer.Web.AppStart
+@model SFA.DAS.Apim.Developer.Web.AppStart.AuthenticationType?
 @{
-    if (Model)
+    if (Model == AuthenticationType.Employer)
     {
         Layout = "_LayoutEmployer";    
+    }
+    else if (Model == AuthenticationType.External)
+    {
+        Layout = "_LayoutGeneric";
     }
     ViewData["Title"] = "Renew keys for APIs";
 }
 
-@section breadcrumb {
-    <span class="das-js-back-link"></span>
+@* ReSharper disable once Razor.SectionNotResolved *@
+@if (Model != AuthenticationType.External)
+{
+    @section breadcrumb {
+        <span class="das-js-back-link"></span>
+    }    
 }
 
 <div class="govuk-grid-row">

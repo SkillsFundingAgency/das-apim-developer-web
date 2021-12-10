@@ -1,15 +1,24 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.AppStart
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionViewModel
 @{
-    if (Model.Ukprn == null)
+    if (Model.AuthenticationType == AuthenticationType.Employer)
     {
         Layout = "_LayoutEmployer";    
+    }
+    else if (Model.AuthenticationType == AuthenticationType.External)
+    {
+        Layout = "_LayoutGeneric";
     }
     ViewData["Title"] = "Key for API";
 }
 
-@section breadcrumb {
-    <span class="das-js-back-link"></span>
+@* ReSharper disable once Razor.SectionNotResolved *@
+@if (Model.AuthenticationType != AuthenticationType.External)
+{
+    @section breadcrumb {
+        <span class="das-js-back-link"></span>
+    }
 }
 
 <div class="govuk-grid-row">
@@ -57,7 +66,7 @@
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
+                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
                     </div>
                 </details>
             </div>
