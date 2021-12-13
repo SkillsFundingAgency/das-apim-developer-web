@@ -1,8 +1,10 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
 @model SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts.LoginViewModel
 @{
     ViewBag.Title = "Sign in";
     Layout = "_LayoutGeneric";
+    ViewData["CustomOrder"] = LoginViewModel.BuildPropertyOrderDictionary();
 }
 
 
