@@ -74,8 +74,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
         
         [HttpGet]
-        [Route("register/{id}/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
-        public IActionResult RegisterComplete(string id)
+        [Route("register/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
+        public IActionResult RegisterComplete([FromQuery]string id)
         {
             return View();
         }
