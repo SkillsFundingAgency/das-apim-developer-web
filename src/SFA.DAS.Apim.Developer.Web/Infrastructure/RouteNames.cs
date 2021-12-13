@@ -14,6 +14,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ProviderCreateKey = "provider-create-key";
         public const string ProviderViewSubscription = "provider-view-subscription";
         public const string ProviderRenewKey = "provider-renew-key";
+        public const string ProviderSignOut = "provider-signout";
 
         public const string ThirdPartyRegister = "third-party-register";
         public const string ThirdPartyAwaitingConfirmEmail = "third-party-awaiting-confirm-email";
