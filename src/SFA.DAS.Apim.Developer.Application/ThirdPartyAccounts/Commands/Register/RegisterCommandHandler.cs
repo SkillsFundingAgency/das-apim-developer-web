@@ -34,7 +34,10 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Registe
             var apiResponse = await _apiClient.Post<string>(new PostRegisterThirdPartyAccountRequest(data));
 
             if (!string.IsNullOrEmpty(apiResponse.ErrorContent))
-                throw new Exception(apiResponse.ErrorContent);
+            {
+                validationResult.AddError("Error", "There was a problem creating your account. If you have already registered then check for a confirmation email or sign in.");
+                throw new ValidationException(validationResult.DataAnnotationResult,null, null);
+            }
             
             return Unit.Value;
         }
