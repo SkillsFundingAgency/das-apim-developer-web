@@ -1,4 +1,5 @@
-
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@model SFA.DAS.Apim.Developer.Web.Models.HomePageViewModel
 @{
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Apprenticeship services";
@@ -7,15 +8,13 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Get started</h1>
         <h2 class="govuk-heading-l">About the Recruitment and Display adverts APIs</h2>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Recruitment API</a>
-        </p>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Recruitment API sandbox</a>
-        </p>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Display adverts API</a>
-        </p>
+        
+        @foreach(var apiProduct in Model.ApiProducts)
+        {
+            <p class="govuk-body">
+                <a asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
+            </p>    
+        }
         
         <p class="govuk-body">Apprenticeship Service APIs are RESTful. In a RESTful style of API, data resources are given unique URLs and are manipulated through standard HTTP verbs such as:</p>
         <ul class="govuk-list govuk-list--bullet">
@@ -70,8 +69,12 @@
 
         <h2 class="govuk-heading-l" id ="independent-api-info">Using our display adverts API if you are working independently</h2>
         <p class="govuk-body">If you are not working with an employer or training provider, you can use the Display adverts API to show adverts from Find apprenticeship training on any website.</p>
-        <p class="govuk-body"> You will need to <a href="#" class="govuk-link">get an API key</a> to use the display advert API.</p>
-        <p class="govuk-body">You can <a href="#" class="govuk-link">view the API</a>, but you will need a key before you can call the API.</p>
+        @{
+            var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
+        }
+        
+        <p class="govuk-body"> You will need to <a  asp-route="@RouteNames.ApiList" class="govuk-link">get an API key</a> to use the display advert API.</p>
+        <p class="govuk-body">You can <a asp-route="@RouteNames.Documentation" asp-route-apiName="@vacanciesOuterApi?.Name" class="govuk-link">view the API</a>, but you will need a key before you can call the API.</p>
         
         <h2 class="govuk-heading-l">API Rate Limiting</h2>
         <p class="govuk-body">

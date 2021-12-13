@@ -26,6 +26,8 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ExternalCreateKey = "external-create-key";
         public const string ExternalRenewKey = "external-renew-key";
 
+        public const string ApiList = "api-list";
+
         public const string Documentation = "api-doc";
         public const string JsonDocumentation = "api-doc-json";
 
