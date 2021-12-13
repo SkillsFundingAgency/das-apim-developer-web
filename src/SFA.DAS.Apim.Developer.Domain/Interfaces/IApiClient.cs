@@ -7,5 +7,6 @@ namespace SFA.DAS.Apim.Developer.Domain.Interfaces
     {
         Task<ApiResponse<TResponse>> Get<TResponse>(IGetApiRequest request);
         Task<ApiResponse<TResponse>> Post<TResponse>(IPostApiRequest request);
+        Task<ApiResponse<TResponse>> Put<TResponse>(IPutApiRequest request);
     }
 }
