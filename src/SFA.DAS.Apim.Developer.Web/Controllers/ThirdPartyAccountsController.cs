@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.AuthenticateUser;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.VerifyRegistration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts;
 
@@ -16,13 +18,16 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     {
         private readonly IDataProtectorService _dataProtector;
         private readonly IMediator _mediator;
+        private readonly ILogger<ThirdPartyAccountsController> _logger;
 
         public ThirdPartyAccountsController(
             IDataProtectorService dataProtector,
-            IMediator mediator)
+            IMediator mediator,
+            ILogger<ThirdPartyAccountsController> logger)
         {
             _dataProtector = dataProtector;
             _mediator = mediator;
+            _logger = logger;
         }
         
         [HttpGet]
@@ -74,10 +79,25 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
         
         [HttpGet]
-        [Route("register/{id}/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
-        public IActionResult RegisterComplete(string id)
+        [Route("register/complete", Name = RouteNames.ThirdPartyRegisterComplete)]
+        public async Task<IActionResult> RegisterComplete([FromQuery]string id)
         {
-            return View();
+            var decodedId = _dataProtector.DecodeData(id);
+            if (!decodedId.HasValue)
+            {
+                return RedirectToRoute(RouteNames.ThirdPartyRegister);
+            }
+
+            try
+            {
+                await _mediator.Send(new VerifyRegistrationCommand {Id = decodedId.Value});
+                return View(decodedId.Value);
+            }
+            catch (InvalidOperationException e)
+            {
+                _logger.LogError(e, e.Message);
+                return RedirectToRoute(RouteNames.ThirdPartyRegister);
+            }
         }
 
         [HttpGet]
@@ -122,7 +142,6 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 
                 return View("Login", model);
             }
-
         }
     }
 }

@@ -44,6 +44,19 @@ namespace SFA.DAS.Apim.Developer.Infrastructure.Api
 
             return await ProcessResponse<TResponse>(response);
         }
+        
+        public async Task<ApiResponse<TResponse>> Put<TResponse>(IPutApiRequest request)
+        {
+            var stringContent = request.Data != null ? new StringContent(JsonConvert.SerializeObject(request.Data), Encoding.UTF8, "application/json") : null;
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Put, request.PutUrl);
+            requestMessage.Content = stringContent;
+            AddAuthenticationHeader(requestMessage);
+            
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            return await ProcessResponse<TResponse>(response);
+        }
 
         private void AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
         {
