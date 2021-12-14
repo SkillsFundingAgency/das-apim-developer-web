@@ -1,7 +1,4 @@
-@using Microsoft.Extensions.Options
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
-@using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration
-@inject IOptions<ExternalLinksConfiguration> linksConfig
 @model string
 @{
     Layout = "_LayoutEmployer";
@@ -15,17 +12,19 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Get started with the recruitment APIs</h1>
-        <h2 class="govuk-heading-l">What does the API do?</h2>
-        <p>APIs (Application Programming Interfaces) let applications share information and data with each other. </p>
-        <p>If you connect using the Recruitment API, you can use your own systems to publish to <a href="@linksConfig.Value.FindAnApprenticeshipSiteUrl" class="govuk-link">Find an apprenticeship</a>.</p>
-        <p>You can also use the Display adverts API to retrieve adverts from Find an Apprenticeship and display on your websites.</p>
-        <h2 class="govuk-heading-l">How do I use the API?</h2>
+        <h2 class="govuk-heading-l">What do our APIs do?</h2>
+        <p class="govuk-body">APIs (Application Programming Interfaces) let applications share information and data with each other.</p>
+        <p class="govuk-body">We have two APIs you can use:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li><strong>Recruitment API</strong> – our Recruitment API allows you to create adverts on Find an apprenticeship using your own systems</li>
+            <li><strong>Display adverts API</strong> – our Display adverts API allows you to display adverts from Find an apprenticeship on your own websites</li>
+        </ul>
+        <h2 class="govuk-heading-l">How do I use the APIs?</h2>
         <div class="govuk-inset-text">You'll need someone with technical knowledge to connect your system with the API, for example a software developer.</div>
-        <p>You can share the <a asp-route="@RouteNames.Index" class="govuk-link">developer get started page</a> with the person who is going to connect your system with the API, they can access the API from there. </p>
-        <p>It can take a while to connect using an API, so leave enough time to integrate it.</p>
-        <h2 class="govuk-heading-l">How do I access the API?</h2>
-        <p>If you have owner permissions you can access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API keys</a>.</p>
-        <p>Your developer will be able to try out the API using the sandbox provided.</p>
-        <p>You will need to <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">provide your developer with a key</a> and <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">the developer get started page</a> so they can use the APIs.</p>    
+        <p class="govuk-body">You can share this <a asp-route="@RouteNames.Index" class="govuk-link">developer get started page</a> with the person who is going to connect your system with the API, they can access the API from there.</p>
+        <p class="govuk-body">You will need to give your developer API keys. The keys give your developer permission to connect to the API on your behalf.</p>
+        <p class="govuk-body">Your developer will be also able to try out the API using the sandbox provided.</p>
+        <h2 class="govuk-heading-l">Where do I access the API?</h2>
+        <p class="govuk-body">If you have owner permissions you can access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API keys here</a>.</p>
     </div>
 </div>
