@@ -13,12 +13,10 @@
 }
 
 @* ReSharper disable once Razor.SectionNotResolved *@
-@if (Model != AuthenticationType.External)
-{
-    @section breadcrumb {
-        <span class="das-js-back-link"></span>
-    }    
-}
+
+@section breadcrumb {
+    <span class="das-js-back-link"></span>
+}    
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -28,11 +26,11 @@
                 <fieldset class="govuk-fieldset" aria-describedby="confirm-renew-key-hint">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">
-                            Are you sure you want to renew this key?
+                            Are you sure you want to renew this API key?
                         </h1>
                     </legend>
                     <p class="govuk-hint" id="confirm-renew-key-hint">
-                        Renewing the key will disable the previous key and will stop your API from working until you use the new key   
+                        Renewing the API key will disable the previous key and will stop your API from working until you use the new key   
                     </p>
                     @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("ConfirmRenew"))
                     {
