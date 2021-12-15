@@ -25,6 +25,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ExternalViewSubscription = "external-view-subscription";
         public const string ExternalCreateKey = "external-create-key";
         public const string ExternalRenewKey = "external-renew-key";
+        public const string ExternalLogout = "external-signout";
 
         public const string ApiList = "api-list";
 

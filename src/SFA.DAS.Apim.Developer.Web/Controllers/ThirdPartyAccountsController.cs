@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -142,6 +143,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 
                 return View("Login", model);
             }
+        }
+        
+        [Route("logout", Name = RouteNames.ExternalLogout)]
+        public IActionResult ExternalSignOut()
+        {
+            HttpContext.SignOutAsync();
+            return RedirectToRoute(RouteNames.Index);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿@using SFA.DAS.Apim.Developer.Web.Extensions
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
 <head>
@@ -43,10 +45,13 @@
     </header>
 
 
-
+@if (User.HasClaim(c => c.Type.Equals(ExternalUserClaims.Id)))
+{
     <div class="app-user-header govuk-width-container">
-        <a href="#" class="govuk-link govuk-link--no-visited-state app-user-header__link">Sign out</a>
+        <a asp-route="@RouteNames.ExternalLogout" class="govuk-link govuk-link--no-visited-state app-user-header__link">Sign out</a>
     </div>
+}
+    
 
     <div class="govuk-width-container">
         @RenderSection("breadcrumb", required: false)
