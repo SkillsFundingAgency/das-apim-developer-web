@@ -5,7 +5,7 @@ using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
-    public class AccountController : Controller
+    public class EmployerAccountController : Controller
     {
         [Route("{employerAccountId}/signout", Name = RouteNames.EmployerSignOut)]
         public IActionResult SignOutEmployer()

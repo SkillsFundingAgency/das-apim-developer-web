@@ -22,10 +22,16 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton<IAuthorizationHandler, ProviderAccountAuthorizationHandler>();
         }
 
+        public static void AddExternalAuthenticationServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IAuthorizationHandler, ExternalAccountAuthorizationHandler>();
+        }
+
         public static void AddSharedAuthenticationServices(this IServiceCollection services)
         {
             services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
             services.AddTransient<IProviderAccountAuthorisationHandler, ProviderAccountAuthorizationHandler>();
+            services.AddTransient<IExternalAccountAuthorizationHandler, ExternalAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ProviderOrEmployerAccountAuthorizationHandler>();
         }
     }

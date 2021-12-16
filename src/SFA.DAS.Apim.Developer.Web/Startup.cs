@@ -71,6 +71,10 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 serviceParameters.AuthenticationType = AuthenticationType.Provider;
             }
+            else if (_configuration["AuthType"].Equals("External", StringComparison.CurrentCultureIgnoreCase))
+            {
+                serviceParameters.AuthenticationType = AuthenticationType.External;
+            }
 
             services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
             
@@ -86,8 +90,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
-
-            if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
+            else if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
@@ -95,10 +98,17 @@ namespace SFA.DAS.Apim.Developer.Web
                     .GetSection(nameof(ProviderIdams))
                     .Get<ProviderIdams>());    
             }
+            else if (serviceParameters.AuthenticationType == AuthenticationType.External)
+            {
+                services.AddExternalAuthenticationServices();
+                services.AddSingleton(new ProviderSharedUIConfiguration());
+            }
+            
             services.AddSharedAuthenticationServices();
             services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
+            services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
             
