@@ -1,17 +1,26 @@
-@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.AppStart
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionsViewModel
 @{
-    if (Model.Ukprn == null)
+    if (Model.AuthenticationType == AuthenticationType.Employer)
     {
         Layout = "_LayoutEmployer";    
+    } else if (Model.AuthenticationType == AuthenticationType.External)
+    {
+        Layout = "_LayoutGeneric";
     }
     
     ViewData["Title"] = "API list";
 }
 
-@section breadcrumb {
-    <span class="das-js-back-link"></span>
+
+@if (Model.AuthenticationType != AuthenticationType.External)
+{
+    @* ReSharper disable once Razor.SectionNotResolved *@
+    @section breadcrumb {
+        <span class="das-js-back-link"></span>
+    }    
 }
+
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -35,13 +44,13 @@
                     <td class="govuk-table__cell">
                         @if (!string.IsNullOrEmpty(subscriptionItem.Key))
                         {
-                            <a asp-route="@Model.ViewKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link govuk-link--no-visited-state">
+                            <a asp-route="@Model.ViewKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">
                                 View key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                             </a>    
                         }
                         else
                         {
-                            <form method="post" asp-route="@Model.CreateKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId">
+                            <form method="post" asp-route="@Model.CreateKeyRouteName" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId">
                                 <button type="submit" draggable="false" class="das-button--inline-link">
                                     Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                                 </button>

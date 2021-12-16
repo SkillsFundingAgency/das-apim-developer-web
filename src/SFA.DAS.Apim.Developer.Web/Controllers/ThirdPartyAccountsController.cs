@@ -2,7 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.AuthenticateUser;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts;
@@ -76,6 +78,51 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         public IActionResult RegisterComplete(string id)
         {
             return View();
+        }
+
+        [HttpGet]
+        [Route("sign-in", Name=RouteNames.ThirdPartySignIn)]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("sign-in", Name = RouteNames.ThirdPartySignIn)]
+        public async Task<IActionResult> PostLogin(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", model);
+            }
+
+            try
+            {
+                var userResponse = await _mediator.Send(new AuthenticateUserCommand
+                {
+                    EmailAddress = model.EmailAddress,
+                    Password = model.Password
+                });
+
+                if (!(userResponse.UserDetails is { Authenticated: true }))
+                {
+                    ModelState.AddModelError("","Invalid credentials");
+                    return View("Login", model);
+                }
+            
+                return RedirectToRoute(RouteNames.ExternalApiHub, new { externalId = userResponse.UserDetails.Id });
+            }
+            catch (ValidationException e)
+            {
+                foreach (var member in e.ValidationResult.MemberNames)
+                {
+                    var memberParts = member.Split('|');
+                    ModelState.AddModelError(memberParts[0], memberParts[1]);
+                }
+                
+                return View("Login", model);
+            }
+
         }
     }
 }

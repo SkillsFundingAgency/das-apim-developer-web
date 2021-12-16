@@ -84,8 +84,8 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
 
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
 
-            act.Should().Throw<Exception>()
-                .WithMessage($"*{errorContent}*");
+            act.Should().Throw<ValidationException>()
+                .WithMessage($"*Error|There was a problem creating your account. If you have already registered then check for a confirmation email or sign in.*");
         }
     }
 }

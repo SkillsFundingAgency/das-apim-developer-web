@@ -10,6 +10,10 @@
 
     <ItemGroup>
       <PackageReference Include="MediatR" Version="8.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+      
     </ItemGroup>
 
 </Project>

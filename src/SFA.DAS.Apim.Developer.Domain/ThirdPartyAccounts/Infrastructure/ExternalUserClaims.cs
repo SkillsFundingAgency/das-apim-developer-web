@@ -1,4 +1,4 @@
-namespace SFA.DAS.Apim.Developer.Web.Infrastructure
+namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure
 {
     public static class ExternalUserClaims
     {

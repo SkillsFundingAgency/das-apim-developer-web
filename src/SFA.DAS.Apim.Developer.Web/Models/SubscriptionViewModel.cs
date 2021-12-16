@@ -1,3 +1,5 @@
+using SFA.DAS.Apim.Developer.Web.AppStart;
+
 namespace SFA.DAS.Apim.Developer.Web.Models
 {
     public class SubscriptionViewModel
@@ -7,5 +9,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public bool ShowRenewedBanner { get ; set ; }
         public int? Ukprn { get ; set ; }
         public string RenewKeyRouteName { get ; set ; }
+        public AuthenticationType? AuthenticationType { get ; set ; }
+        public string ExternalId { get ; set ; }
     }
 }

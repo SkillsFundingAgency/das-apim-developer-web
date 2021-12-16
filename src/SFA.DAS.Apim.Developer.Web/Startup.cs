@@ -101,6 +101,7 @@ namespace SFA.DAS.Apim.Developer.Web
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
                 services.AddExternalAuthenticationServices();
+                services.AddAndConfigureExternalUserAuthentication();
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
             

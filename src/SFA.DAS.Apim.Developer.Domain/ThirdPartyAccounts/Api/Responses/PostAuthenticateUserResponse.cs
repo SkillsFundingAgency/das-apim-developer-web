@@ -4,6 +4,10 @@ namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Api.Responses
 {
     public class PostAuthenticateUserResponse
     {
+        public PostAuthenticateUserResponseItem User { get; set; }
+    }
+    public class PostAuthenticateUserResponseItem
+    {
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("firstName")]

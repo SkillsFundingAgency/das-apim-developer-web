@@ -19,6 +19,10 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
+                if (serviceParametersAuthenticationType == AuthenticationType.External)
+                {
+                    options.LoginPath = "/third-party-accounts/sign-in";    
+                }
             });
         }
     }

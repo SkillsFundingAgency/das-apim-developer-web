@@ -32,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
             services.AddTransient<IProviderAccountAuthorisationHandler, ProviderAccountAuthorizationHandler>();
             services.AddTransient<IExternalAccountAuthorizationHandler, ExternalAccountAuthorizationHandler>();
-            services.AddSingleton<IAuthorizationHandler, ProviderOrEmployerAccountAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ProviderEmployerExternalAccountAuthorizationHandler>();
         }
     }
 }
