@@ -14,8 +14,16 @@
                      var errorStringBuilder = new StringBuilder();
                      
                      var customErrorKeys = ViewData["CustomErrorKeys"] as Dictionary<string, string>;
+                     var customOrder = ViewData["CustomOrder"] as Dictionary<string, int>;
 
-                     foreach (var error in ViewData.ModelState.OrderBy(c=>c.Key))
+                     foreach (var error in ViewData.ModelState.GroupJoin(customOrder ?? new Dictionary<string, int>(),c=>c.Key, x=> x.Key,
+                         (errorValue, propertyOrder) => new
+                         {
+                             errorValue.Key,
+                             errorValue.Value,
+                             Order = propertyOrder.SingleOrDefault(c=>c.Key.Equals(errorValue.Key)).Value
+                         })
+                         .OrderBy(c=>c.Order).ToList())
                      {
                          if (error.Value.ValidationState == ModelValidationState.Invalid)
                          {
@@ -29,7 +37,6 @@
                              var errorMessage = error.Value.Errors.FirstOrDefault()?.ErrorMessage;
 
                              errorStringBuilder.Append($"<li><a href=\"#{errorKey}\">{errorMessage}</a></li>");
-                             
                          }
                      }
                  }
