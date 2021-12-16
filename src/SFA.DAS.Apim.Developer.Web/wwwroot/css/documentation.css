@@ -195,6 +195,33 @@
 }
 
 
+.sl-button.sl-w-full.sl-h-sm.sl-text-base.sl-font-normal.sl-bg-transparent.sl-rounded.sl-border-transparent {
+    border: 1px solid #ccc;
+}
+
+.sl-stack.sl-stack--vertical.sl-stack--8.sl-flex.sl-flex-col.sl-items-stretch.sl-w-full {
+    display: block;
+    flex-direction: unset;
+}
+
+.sl-stack.sl-stack--vertical.sl-stack--8.sl-flex.sl-flex-col.sl-items-stretch.sl-w-full > .sl-flex {
+    display: block;
+}
+
+.sl-stack.sl-stack--vertical.sl-stack--8.sl-flex.sl-flex-col.sl-items-stretch.sl-w-full .sl-flex-1.sl-w-0 {
+    width: auto;
+}
+
+.sl-relative.sl-w-2\/5.sl-ml-16 {
+    max-width: 100% !important;
+    padding-left: 0;
+    margin-left: 0;
+    margin-top: 50px;
+    width: 100% !important;
+}
+
+
+
 :root {
     --color-text: #0b0c0c;
     --color-canvas-100: #fff;
