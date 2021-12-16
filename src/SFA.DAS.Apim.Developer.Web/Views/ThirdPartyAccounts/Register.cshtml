@@ -4,104 +4,101 @@
 
 @{
     ViewBag.Title = "Create an account";
-    Layout = "_LayoutDocumentation";
     ViewData["CustomOrder"] = RegisterViewModel.BuildPropertyOrderDictionary();
+    Layout = "_LayoutGeneric";
 }
-
-<div class="govuk-width-container">
-    <span class="das-js-back-link"></span>
-    <main class="govuk-main-wrapper " id="main-content" role="main">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <partial name="_pageErrorsOverview" />
-                <h1 class="govuk-heading-xl">Create an account</h1>
-                <p class="govuk-body">Create an account to access the Display advert API key.</p>
-                <p class="govuk-body">If you have an account, <a asp-route="@RouteNames.ThirdPartySignIn" class="govuk-link govuk-link--no-visited-state">sign in</a>.</p>
-                <form method="POST" asp-route="@RouteNames.ThirdPartyRegister" novalidate>
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-three-quarters">
-                            @{ 
-                                var firstNameInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any();
+<span class="das-js-back-link"></span>
+<main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <partial name="_pageErrorsOverview" />
+            <h1 class="govuk-heading-xl">Create an account</h1>
+            <p class="govuk-body">Create an account to access the Display advert API key.</p>
+            <p class="govuk-body">If you have an account, <a asp-route="@RouteNames.ThirdPartySignIn" class="govuk-link govuk-link--no-visited-state">sign in</a>.</p>
+            <form method="POST" asp-route="@RouteNames.ThirdPartyRegister" novalidate>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-three-quarters">
+                        @{ 
+                            var firstNameInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.FirstName)].Errors.Any();
+                        }
+                        <div class="govuk-form-group @(firstNameInvalid ? "govuk-form-group--error" : "")">
+                            <label asp-for="FirstName" class="govuk-label">
+                                First name
+                            </label>
+                            @if (firstNameInvalid)
+                            {
+                                <span class="govuk-error-message" id="first-name-error">
+                                    <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.FirstName)].Errors.First().ErrorMessage
+                                </span>
                             }
-                            <div class="govuk-form-group @(firstNameInvalid ? "govuk-form-group--error" : "")">
-                                <label asp-for="FirstName" class="govuk-label">
-                                    First name
-                                </label>
-                                @if (firstNameInvalid)
-                                {
-                                    <span class="govuk-error-message" id="first-name-error">
-                                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.FirstName)].Errors.First().ErrorMessage
-                                    </span>
-                                }
-                                <input asp-for="FirstName" class="govuk-input @(firstNameInvalid ? "govuk-input--error" : "")" type="text" autocomplete="given-name" autofocus />
-                            </div>
-                            @{ 
-                                var lastNameInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.LastName)].Errors.Any();
+                            <input asp-for="FirstName" class="govuk-input @(firstNameInvalid ? "govuk-input--error" : "")" type="text" autocomplete="given-name" autofocus />
+                        </div>
+                        @{ 
+                            var lastNameInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.LastName)].Errors.Any();
+                        }
+                        <div class="govuk-form-group @(lastNameInvalid ? "govuk-form-group--error" : "")">
+                            <label asp-for="LastName" class="govuk-label">
+                                Last name
+                            </label>
+                            @if (lastNameInvalid)
+                            {
+                                <span class="govuk-error-message" id="last-name-error">
+                                    <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.LastName)].Errors.First().ErrorMessage
+                                </span>
                             }
-                            <div class="govuk-form-group @(lastNameInvalid ? "govuk-form-group--error" : "")">
-                                <label asp-for="LastName" class="govuk-label">
-                                    Last name
-                                </label>
-                                @if (lastNameInvalid)
-                                {
-                                    <span class="govuk-error-message" id="last-name-error">
-                                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.LastName)].Errors.First().ErrorMessage
-                                    </span>
-                                }
-                                <input asp-for="LastName" class="govuk-input @(lastNameInvalid ? "govuk-input--error" : "")" type="text" autocomplete="family-name" />
-                            </div>
-                            @{ 
-                                var emailInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any();
+                            <input asp-for="LastName" class="govuk-input @(lastNameInvalid ? "govuk-input--error" : "")" type="text" autocomplete="family-name" />
+                        </div>
+                        @{ 
+                            var emailInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any();
+                        }
+                        <div class="govuk-form-group @(emailInvalid ? "govuk-form-group--error" : "")">
+                            <label asp-for="EmailAddress" class="govuk-label">
+                                Email address
+                            </label>
+                            @if (emailInvalid)
+                            {
+                                <span class="govuk-error-message" id="email-error">
+                                    <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.EmailAddress)].Errors.First().ErrorMessage
+                                </span>
                             }
-                            <div class="govuk-form-group @(emailInvalid ? "govuk-form-group--error" : "")">
-                                <label asp-for="EmailAddress" class="govuk-label">
-                                    Email address
-                                </label>
-                                @if (emailInvalid)
-                                {
-                                    <span class="govuk-error-message" id="email-error">
-                                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.EmailAddress)].Errors.First().ErrorMessage
-                                    </span>
-                                }
-                                <input asp-for="EmailAddress" class="govuk-input @(emailInvalid ? "govuk-input--error" : "")" type="email" autocomplete="email"/>
-                            </div>
-                            @{ 
-                                var passwordInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.Password)].Errors.Any();
+                            <input asp-for="EmailAddress" class="govuk-input @(emailInvalid ? "govuk-input--error" : "")" type="email" autocomplete="email"/>
+                        </div>
+                        @{ 
+                            var passwordInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.Password)].Errors.Any();
+                        }
+                        <div class="govuk-form-group @(passwordInvalid ? "govuk-form-group--error" : "")">
+                            <label asp-for="Password" class="govuk-label">
+                                Password
+                            </label>
+                            <div class="govuk-hint">Password requires upper and lowercase letters, a number and at least 8 characters.</div>
+                            @if (passwordInvalid)
+                            {
+                                <span class="govuk-error-message" id="password-error">
+                                    <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.Password)].Errors.First().ErrorMessage
+                                </span>
                             }
-                            <div class="govuk-form-group @(passwordInvalid ? "govuk-form-group--error" : "")">
-                                <label asp-for="Password" class="govuk-label">
-                                    Password
-                                </label>
-                                <div class="govuk-hint">Password requires upper and lowercase letters, a number and at least 8 characters.</div>
-                                @if (passwordInvalid)
-                                {
-                                    <span class="govuk-error-message" id="password-error">
-                                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.Password)].Errors.First().ErrorMessage
-                                    </span>
-                                }
-                                <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="new-password"/>
-                            </div>
-                            @{ 
-                                var confirmPasswordInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.ConfirmPassword)].Errors.Any();
+                            <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="new-password"/>
+                        </div>
+                        @{ 
+                            var confirmPasswordInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.ConfirmPassword)].Errors.Any();
+                        }
+                        <div class="govuk-form-group @(confirmPasswordInvalid ? "govuk-form-group--error" : "")">
+                            <label asp-for="ConfirmPassword" class="govuk-label">
+                                Confirm password
+                            </label>
+                            @if (confirmPasswordInvalid)
+                            {
+                                <span class="govuk-error-message" id="confirm-password-error">
+                                    <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.ConfirmPassword)].Errors.First().ErrorMessage
+                                </span>
                             }
-                            <div class="govuk-form-group @(confirmPasswordInvalid ? "govuk-form-group--error" : "")">
-                                <label asp-for="ConfirmPassword" class="govuk-label">
-                                    Confirm password
-                                </label>
-                                @if (confirmPasswordInvalid)
-                                {
-                                    <span class="govuk-error-message" id="confirm-password-error">
-                                        <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.ConfirmPassword)].Errors.First().ErrorMessage
-                                    </span>
-                                }
-                                <input asp-for="ConfirmPassword" class="govuk-input @(confirmPasswordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="new-password"/>
-                            </div>
+                            <input asp-for="ConfirmPassword" class="govuk-input @(confirmPasswordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="new-password"/>
                         </div>
                     </div>
-                    <p class="govuk-body">By continuing you accept the <a asp-route="@RouteNames.ThirdPartyTermsConditions" class="govuk-link govuk-link--no-visited-state">terms and conditions</a>.</p>
-                    <button id="continue" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Create account</button>
-                </form>
-            </div>
+                </div>
+                <p class="govuk-body">By continuing you accept the <a asp-route="@RouteNames.ThirdPartyTermsConditions" class="govuk-link govuk-link--no-visited-state">terms and conditions</a>.</p>
+                <button id="continue" class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Create account</button>
+            </form>
         </div>
-    </main>
-</div>
+    </div>
+</main>

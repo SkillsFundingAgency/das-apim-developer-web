@@ -90,8 +90,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
-
-            if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
+            else if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
@@ -99,6 +98,12 @@ namespace SFA.DAS.Apim.Developer.Web
                     .GetSection(nameof(ProviderIdams))
                     .Get<ProviderIdams>());    
             }
+            else if (serviceParameters.AuthenticationType == AuthenticationType.External)
+            {
+                services.AddExternalAuthenticationServices();
+                services.AddSingleton(new ProviderSharedUIConfiguration());
+            }
+            
             services.AddSharedAuthenticationServices();
             services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
@@ -175,11 +180,9 @@ namespace SFA.DAS.Apim.Developer.Web
             
             app.UseEndpoints(builder =>
             {
-                builder.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                builder.MapDefaultControllerRoute();
             });
-            
+
         }
     }
 }
