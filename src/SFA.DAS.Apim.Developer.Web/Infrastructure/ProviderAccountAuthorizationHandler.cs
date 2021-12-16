@@ -45,7 +45,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 return ukPrn.Equals(ukPrnFromUrl);    
             }
 
-            return false;
+            return true;
         }
     }
 }

@@ -1,12 +1,17 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.CreateSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.RenewSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetSubscription;
+using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Extensions;
+using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models;
@@ -24,6 +29,27 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             _mediator = mediator;
             _serviceParameters = serviceParameters;
         }
+        
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
+        [Route("subscriptions/api-list", Name = RouteNames.ApiList)]
+        public IActionResult ApiList()
+        {
+            if(_serviceParameters.AuthenticationType == AuthenticationType.Provider)
+            {
+                var ukprn = HttpContext.User.FindFirst(c => c.Type.Equals(ProviderClaims.ProviderUkprn)).Value;
+                return new RedirectToRouteResult(RouteNames.ProviderApiHub, new {ukprn});
+            }
+            if(_serviceParameters.AuthenticationType == AuthenticationType.Employer)
+            {    
+                var employerAccountClaim = HttpContext.User.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
+                var accounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim);
+                return new RedirectToRouteResult(RouteNames.EmployerApiHub, new {employerAccountId = accounts.FirstOrDefault().Key});
+            }
+            var externalId = HttpContext.User.FindFirst(c => c.Type.Equals(ExternalUserClaims.Id)).Value;
+            return new RedirectToRouteResult(RouteNames.ExternalApiHub, new {externalId});
+        }
+        
         
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]

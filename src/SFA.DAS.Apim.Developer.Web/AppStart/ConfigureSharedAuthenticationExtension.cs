@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                 options.CookieManager = new ChunkingCookieManager { ChunkSize = 3000 };
                 if (serviceParametersAuthenticationType == AuthenticationType.External)
                 {
-                    options.LoginPath = "/third-party-accounts/sign-in";    
+                    options.LoginPath = "/third-party-accounts/sign-in";
+                    options.LogoutPath = "";
                 }
             });
         }

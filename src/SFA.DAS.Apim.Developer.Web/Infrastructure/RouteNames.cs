@@ -14,6 +14,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ProviderCreateKey = "provider-create-key";
         public const string ProviderViewSubscription = "provider-view-subscription";
         public const string ProviderRenewKey = "provider-renew-key";
+        public const string ProviderSignOut = "provider-signout";
 
         public const string ThirdPartyRegister = "third-party-register";
         public const string ThirdPartyAwaitingConfirmEmail = "third-party-awaiting-confirm-email";
@@ -24,6 +25,9 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ExternalViewSubscription = "external-view-subscription";
         public const string ExternalCreateKey = "external-create-key";
         public const string ExternalRenewKey = "external-renew-key";
+        public const string ExternalLogout = "external-signout";
+
+        public const string ApiList = "api-list";
 
         public const string Documentation = "api-doc";
         public const string JsonDocumentation = "api-doc-json";

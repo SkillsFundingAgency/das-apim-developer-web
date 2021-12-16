@@ -29,7 +29,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                 {
                     options.MetadataAddress = configuration.MetadataAddress;
                     options.Wtrealm = configuration.Wtrealm;
-                    options.CallbackPath = "/{ukprn}/inform";
+                    options.CallbackPath = "/{ukprn}/recruitment/api";
                     options.Events.OnSecurityTokenValidated = async (ctx) =>
                     {
                         await PopulateProviderClaims(ctx.HttpContext, ctx.Principal);

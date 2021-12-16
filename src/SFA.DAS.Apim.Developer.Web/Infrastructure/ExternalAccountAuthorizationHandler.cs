@@ -46,7 +46,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 return externalId.Equals(externalIdFromUrl);    
             }
 
-            return false;
+            return true;
         }
     }
 }

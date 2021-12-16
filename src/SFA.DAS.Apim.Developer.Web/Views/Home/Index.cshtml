@@ -1,4 +1,5 @@
-﻿
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@model SFA.DAS.Apim.Developer.Web.Models.HomePageViewModel
 @{
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Apprenticeship services";
@@ -7,26 +8,14 @@
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Get started</h1>
         <h2 class="govuk-heading-l">About the Recruitment and Display adverts APIs</h2>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Recruitment API</a>
-        </p>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Recruitment API sandbox</a>
-        </p>
-        <p class="govuk-body">
-            <a href="#" class="govuk-link">Display adverts API</a>
-        </p>
-        <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs if you are working with an employer or training provider</h2>
-        <p class="govuk-body">You need the employer or provider to give you an API key. They can do this for the Recruitment API and the Display adverts API using their Apprenticeship service account.</p>
-        <p class="govuk-body">The API key the employer or training provider will send to you is linked to their account and provides additional functionality, so use that one. </p>
-        <p class="govuk-body">You can view the API documentation now, using the links at the top of the page. You can read the documentation but will not be able to call the API until the employer or provider gives you an API key.</p>
-
-        <h2 class="govuk-heading-l" id ="independent-api-info">Using our display adverts API if you are working independently</h2>
-        <p class="govuk-body">If you are not working with an employer or training provider, you can use the Display adverts API to show adverts from Find apprenticeship training on any website.</p>
-        <p class="govuk-body"> You will need to <a href="#" class="govuk-link">get an API key</a> to use the display advert API.</p>
-        <p class="govuk-body">You can <a href="#" class="govuk-link">view the API</a>, but you will need a key before you can call the API.</p>
-
-        <h2 class="govuk-heading-l">RESTful APIs</h2>
+        
+        @foreach(var apiProduct in Model.ApiProducts)
+        {
+            <p class="govuk-body">
+                <a asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
+            </p>    
+        }
+        
         <p class="govuk-body">Apprenticeship Service APIs are RESTful. In a RESTful style of API, data resources are given unique URLs and are manipulated through standard HTTP verbs such as:</p>
         <ul class="govuk-list govuk-list--bullet">
             <li><code class="das-!-color-green">GET</code> to request a resource</li>
@@ -73,15 +62,29 @@
             <li>the version specified does not exist</li>
         </ul>
         <p class="govuk-body">The apprenticeship maintains the current version of an API, as well as the previous version for a limited period of time. <code class="das-!-color-red">X</code> months after the release of a new version of an API, the previous version will be decommissioned, so you will need to update to the latest version within <code class="das-!-color-red">X</code> months of the new one becoming available.</p>
+        <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs if you are working with an employer or training provider</h2>
+        <p class="govuk-body">You need the employer or provider to give you an API key. They can do this for the Recruitment API and the Display adverts API using their Apprenticeship service account.</p>
+        <p class="govuk-body">The API key the employer or training provider will send to you is linked to their account and provides additional functionality, so use that one. </p>
+        <p class="govuk-body">You can view the API documentation now, using the links at the top of the page. You can read the documentation but will not be able to call the API until the employer or provider gives you an API key.</p>
 
+        <h2 class="govuk-heading-l" id ="independent-api-info">Using our display adverts API if you are working independently</h2>
+        <p class="govuk-body">If you are not working with an employer or training provider, you can use the Display adverts API to show adverts from Find apprenticeship training on any website.</p>
+        @{
+            var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
+        }
+        
+        <p class="govuk-body"> You will need to <a  asp-route="@RouteNames.ApiList" class="govuk-link">get an API key</a> to use the display advert API.</p>
+        <p class="govuk-body">You can <a asp-route="@RouteNames.Documentation" asp-route-apiName="@vacanciesOuterApi?.Name" class="govuk-link">view the API</a>, but you will need a key before you can call the API.</p>
+        
         <h2 class="govuk-heading-l">API Rate Limiting</h2>
         <p class="govuk-body">
             Rate limiting is applied to the Apprenticeship Service APIs to ensure a high quality service is delivered for all users.<br><br>
-            You can make up to <code class="das-!-color-red">XXXX</code> requests within a <code class="das-!-color-red">X</code>  minute period. If you exceed this limit, you will receive a <code class="das-!-color-green">429 Too Many Requests</code> HTTP status code for each request made within the rest of the <code class="das-!-color-red">X</code>  minute timeframe. At the end of the time period, your rate limit will reset back to <code class="das-!-color-red">XXXX</code> requests.
+            You can make up to <code class="das-!-color-red">150</code> requests within a <code class="das-!-color-red">5</code> minute period. If you exceed this limit, you will receive a <code class="das-!-color-green">429 Too Many Requests</code> HTTP status code for each request made within the rest of the <code class="das-!-color-red">5</code> minute timeframe. At the end of the time period, your rate limit will reset back to <code class="das-!-color-red">150</code> requests.
         </p>
 
         <h2 class="govuk-heading-l">API Key Security</h2>
         <p class="govuk-body">It is important to keep your API keys secure. This will prevent them from being discovered, your account from being compromised and your rate-limit quota from being exceeded.</p>
+        
         <h2 class="govuk-heading-l">Do not embed API keys in your code</h2>
         <p class="govuk-body">Storing subscription keys in your application code increases the risk that they will be discovered, particularly if any of your source code is made public or it can be viewed by people who should not have access to the API key. Instead, you should consider storing them inside environment variables or configuration.</p>
 
