@@ -119,7 +119,8 @@ namespace SFA.DAS.Apim.Developer.Web
             }).AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
             services.AddApplicationInsightsTelemetry(_configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
