@@ -125,7 +125,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
         [InlineAutoData("ABCABC123", false)]
         [InlineAutoData("abcabc123", false)]
         [InlineAutoData("abcABCabc", false)]
-        [InlineAutoData("abcABC123!", false)]
+        [InlineAutoData("abcABC123!", true)]
         public async Task And_Password_Rules_Enforced(
             string password,
             bool isValid,
@@ -135,6 +135,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
             //Arrange
             SetupCommandHappyPath(command);
             command.Password = password;
+            command.ConfirmPassword = password;
 
             //Act
             var actual = await validator.ValidateAsync(command);

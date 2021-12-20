@@ -46,7 +46,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Registe
             }
             else
             {
-                var regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?!.*[\\W]).{8,}$";//contains lowercase, uppercase, number, no special characters except '_'
+                var regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
                 if (!Regex.IsMatch(item.Password, regex))
                 {
                     validationResult.AddError(nameof(item.Password),"Password must contain upper and lowercase letters, a number and at least 8 characters");
