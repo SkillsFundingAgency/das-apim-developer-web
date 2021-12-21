@@ -1,0 +1,54 @@
+@using SFA.DAS.Apim.Developer.Web.Infrastructure
+@using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
+@model SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts.LoginViewModel
+@{
+    ViewBag.Title = "Sign in";
+    Layout = "_LayoutGeneric";
+    ViewData["CustomOrder"] = LoginViewModel.BuildPropertyOrderDictionary();
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <partial name="_pageErrorsOverview" />
+        <h1 class="govuk-heading-xl">Sign in</h1>
+        <p>Sign in or <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account</a> to subscribe to APIs and get API keys.</p>
+        <form method="POST" asp-route="@RouteNames.ThirdPartySignIn" novalidate>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                    @{ 
+                        var emailInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.EmailAddress)].Errors.Any();
+                    }
+                    <div class="govuk-form-group @(emailInvalid ? "govuk-form-group--error" : "")">
+                        <label asp-for="EmailAddress" class="govuk-label">
+                            Email address
+                        </label>
+                        @if (emailInvalid)
+                        {
+                            <span class="govuk-error-message" id="email-error">
+                                <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.EmailAddress)].Errors.First().ErrorMessage
+                            </span>
+                        }
+                        <input asp-for="EmailAddress" class="govuk-input @(emailInvalid ? "govuk-input--error" : "")" type="email" autocomplete="email"/>
+                    </div>
+                    @{ 
+                        var passwordInvalid = !ViewData.ModelState.IsValid && ViewData.ModelState[nameof(Model.Password)].Errors.Any();
+                    }
+                    <div class="govuk-form-group @(passwordInvalid ? "govuk-form-group--error" : "")">
+                        <label asp-for="Password" class="govuk-label">
+                            Password
+                        </label>
+                        @if (passwordInvalid)
+                        {
+                            <span class="govuk-error-message" id="password-error">
+                                <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState[nameof(Model.Password)].Errors.First().ErrorMessage
+                            </span>
+                        }
+                        <input asp-for="Password" class="govuk-input @(passwordInvalid ? "govuk-input--error" : "")" type="password" autocomplete="password"/>
+                    </div>
+                    <button id="button-signin" class="govuk-button" data-module="govuk-button">Sign in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

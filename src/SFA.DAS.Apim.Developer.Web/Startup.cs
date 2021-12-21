@@ -15,6 +15,7 @@ using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
 
 namespace SFA.DAS.Apim.Developer.Web
@@ -70,10 +71,14 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 serviceParameters.AuthenticationType = AuthenticationType.Provider;
             }
+            else if (_configuration["AuthType"].Equals("External", StringComparison.CurrentCultureIgnoreCase))
+            {
+                serviceParameters.AuthenticationType = AuthenticationType.External;
+            }
 
             services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
             
-
+            
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
                 services.AddEmployerAuthenticationServices();
@@ -83,9 +88,9 @@ namespace SFA.DAS.Apim.Developer.Web
                         .Get<IdentityServerConfiguration>());
                 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
+                services.AddSingleton(new ProviderSharedUIConfiguration());
             }
-
-            if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
+            else if (serviceParameters.AuthenticationType == AuthenticationType.Provider)
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
@@ -93,10 +98,18 @@ namespace SFA.DAS.Apim.Developer.Web
                     .GetSection(nameof(ProviderIdams))
                     .Get<ProviderIdams>());    
             }
+            else if (serviceParameters.AuthenticationType == AuthenticationType.External)
+            {
+                services.AddExternalAuthenticationServices();
+                services.AddAndConfigureExternalUserAuthentication();
+                services.AddSingleton(new ProviderSharedUIConfiguration());
+            }
             
+            services.AddSharedAuthenticationServices();
             services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
+            services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
             
@@ -106,8 +119,9 @@ namespace SFA.DAS.Apim.Developer.Web
             }).AddMvc(options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            services.AddAuthorizationService();
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .EnableGoogleAnalytics();
+            services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
             services.AddApplicationInsightsTelemetry(_configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
 
@@ -168,11 +182,9 @@ namespace SFA.DAS.Apim.Developer.Web
             
             app.UseEndpoints(builder =>
             {
-                builder.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                builder.MapDefaultControllerRoute();
             });
-            
+
         }
     }
 }

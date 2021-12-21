@@ -1,0 +1,47 @@
+@using System.Text
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+
+
+@if (!ViewData.ModelState.IsValid)
+ {
+     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary">
+         <h2 class="govuk-error-summary__title" id="error-summary-title">
+             There is a problem
+         </h2>
+         <div class="govuk-error-summary__body">
+             <ul class="govuk-list govuk-error-summary__list">
+                 @{
+                     var errorStringBuilder = new StringBuilder();
+                     
+                     var customErrorKeys = ViewData["CustomErrorKeys"] as Dictionary<string, string>;
+                     var customOrder = ViewData["CustomOrder"] as Dictionary<string, int>;
+
+                     foreach (var error in ViewData.ModelState.GroupJoin(customOrder ?? new Dictionary<string, int>(),c=>c.Key, x=> x.Key,
+                         (errorValue, propertyOrder) => new
+                         {
+                             errorValue.Key,
+                             errorValue.Value,
+                             Order = propertyOrder.SingleOrDefault(c=>c.Key.Equals(errorValue.Key)).Value
+                         })
+                         .OrderBy(c=>c.Order).ToList())
+                     {
+                         if (error.Value.ValidationState == ModelValidationState.Invalid)
+                         {
+                             var errorKey = $"{error.Key}";
+                             
+                             if (customErrorKeys != null && customErrorKeys.ContainsKey(error.Key))
+                             {
+                                 errorKey = customErrorKeys[error.Key];
+                             }
+
+                             var errorMessage = error.Value.Errors.FirstOrDefault()?.ErrorMessage;
+
+                             errorStringBuilder.Append($"<li><a href=\"#{errorKey}\">{errorMessage}</a></li>");
+                         }
+                     }
+                 }
+                 @Html.Raw(errorStringBuilder.ToString())
+             </ul>
+         </div>
+     </div>
+ }

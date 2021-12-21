@@ -12,7 +12,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         public static void AddEmployerAuthenticationServices(
             this IServiceCollection services)
         {
-            services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
+            
             services.AddSingleton<IAuthorizationHandler, EmployerAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, EmployerViewerAuthorizationHandler>();
         }
@@ -20,6 +20,19 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         public static void AddProviderAuthenticationServices(this IServiceCollection services)
         {
             services.AddSingleton<IAuthorizationHandler, ProviderAccountAuthorizationHandler>();
+        }
+
+        public static void AddExternalAuthenticationServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IAuthorizationHandler, ExternalAccountAuthorizationHandler>();
+        }
+
+        public static void AddSharedAuthenticationServices(this IServiceCollection services)
+        {
+            services.AddTransient<IEmployerAccountAuthorisationHandler, EmployerAccountAuthorizationHandler>();
+            services.AddTransient<IProviderAccountAuthorisationHandler, ProviderAccountAuthorizationHandler>();
+            services.AddTransient<IExternalAccountAuthorizationHandler, ExternalAccountAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ProviderEmployerExternalAccountAuthorizationHandler>();
         }
     }
 }

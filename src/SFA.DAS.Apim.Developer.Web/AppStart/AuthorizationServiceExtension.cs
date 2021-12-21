@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
@@ -10,7 +11,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         private const string ProviderDac = "DAC";
         private const string ProviderDav = "DAV";
         
-        public static void AddAuthorizationService(this IServiceCollection services)
+        public static void AddAuthorizationService(this IServiceCollection services,
+            AuthenticationType? serviceParametersAuthenticationType)
         {
             services.AddAuthorization(options =>
             {
@@ -39,6 +41,32 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireClaim(ProviderClaims.ProviderUkprn);
                         policy.RequireClaim(ProviderClaims.Service, ProviderDaa, ProviderDab, ProviderDac, ProviderDav);
                         policy.Requirements.Add(new ProviderAccountRequirement());
+                        policy.RequireAuthenticatedUser();
+                    });
+                options.AddPolicy(PolicyNames.HasExternalAccount, policy =>
+                {
+                    policy.RequireClaim(ExternalUserClaims.Id);
+                    policy.Requirements.Add(new ExternalAccountRequirement());
+                    policy.RequireAuthenticatedUser();
+                });
+                options.AddPolicy(
+                    PolicyNames.HasProviderEmployerAdminOrExternalAccount,
+                    policy =>
+                    {
+                        if (serviceParametersAuthenticationType is AuthenticationType.Employer)
+                        {
+                            policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                        }
+                        else if (serviceParametersAuthenticationType is AuthenticationType.Provider)
+                        {
+                            policy.RequireClaim(ProviderClaims.ProviderUkprn);
+                            policy.RequireClaim(ProviderClaims.Service, ProviderDaa);
+                        }
+                        else if (serviceParametersAuthenticationType is AuthenticationType.External)
+                        {
+                            policy.RequireClaim(ExternalUserClaims.Id);
+                        }
+                        policy.Requirements.Add(new ProviderEmployerExternalAccountRequirement());
                         policy.RequireAuthenticatedUser();
                     });
             });

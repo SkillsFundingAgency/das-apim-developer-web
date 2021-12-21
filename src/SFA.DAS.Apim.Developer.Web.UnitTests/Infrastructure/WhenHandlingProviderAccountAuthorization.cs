@@ -74,7 +74,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         }
         
         [Test, MoqAutoData]
-        public void Then_Returns_False_If_Route_Does_Not_Have_Ukprn(
+        public void Then_Returns_True_If_Route_Does_Not_Have_Ukprn(
             int ukprn,
             ProviderAccountRequirement requirement,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
@@ -83,10 +83,12 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var claim = new Claim(ProviderClaims.ProviderUkprn, ukprn.ToString());
             var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {claim})});
             var context = new AuthorizationHandlerContext(new [] {requirement}, claimsPrinciple, null);
+            var httpContext = new DefaultHttpContext(new FeatureCollection());
+            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
             
             authorizationHandler.HandleAsync(context);
 
-            context.HasSucceeded.Should().BeFalse();
+            context.HasSucceeded.Should().BeTrue();
         }
     }
 }
