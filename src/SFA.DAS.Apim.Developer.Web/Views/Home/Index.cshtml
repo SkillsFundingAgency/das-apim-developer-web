@@ -12,7 +12,7 @@
         @foreach(var apiProduct in Model.ApiProducts)
         {
             <p class="govuk-body">
-                <a asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
+                <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
             </p>    
         }
         
