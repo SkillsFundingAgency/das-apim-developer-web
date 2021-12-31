@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Options;
+using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 
@@ -12,10 +14,13 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
     {
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IActionContextAccessor _actionContextAccessor;
-        public ApiDescriptionHelper (IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
+        private readonly ApimDeveloperWeb _configuration;
+
+        public ApiDescriptionHelper (IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor, IOptions<ApimDeveloperWeb> configuration)
         {
             _urlHelperFactory = urlHelperFactory;
             _actionContextAccessor = actionContextAccessor;
+            _configuration = configuration.Value;
         }
 
         public string ProcessApiDescription(string data, string keyName, string apiName, bool showDocumentationUrl = true)
@@ -34,7 +39,8 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             var converted = data;
             
             var helper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            var url = helper.RouteUrl(RouteNames.Documentation, new {apiName = apiName});
+            
+            var url = helper.RouteUrl(RouteNames.Documentation, new { apiName }, "https", _configuration.DocumentationBaseUrl);
             
             if (!string.IsNullOrEmpty(url))
             {
