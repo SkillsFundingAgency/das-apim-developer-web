@@ -35,13 +35,6 @@ CopyTarget.prototype.copyTargetAction = function(e) {
     e.preventDefault()
 }
 
-CopyTarget.prototype.showBanner = function() {
-    var banner = document.getElementById('copy-confirmation-banner')
-    if (banner) {
-        banner.style.display = "block"
-    }
-}
-
 
 // nodeListForEach
 
