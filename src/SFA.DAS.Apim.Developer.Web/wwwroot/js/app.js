@@ -35,6 +35,12 @@ CopyTarget.prototype.copyTargetAction = function(e) {
     e.preventDefault()
 }
 
+CopyTarget.prototype.showBanner = function() {
+    var banner = document.getElementById('renew-confirmation-banner')
+    if (banner) {
+        banner.style.display = "none"
+    }
+}
 
 // nodeListForEach
 
