@@ -52,7 +52,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
         }
 
         [Test, MoqAutoData]
-        public async Task Then_If_The_Request_Is_Valid_And_Not_Authenticated_Then_Null_Returned_And_Not_Signed_In(
+        public async Task Then_If_The_Request_Is_Valid_And_Not_Authenticated_Then_Response_Returned_And_Not_Signed_In(
             string email, 
             string password,
             PostAuthenticateUserResponse apiResponse,
@@ -74,7 +74,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
             var actual = await userService.AuthenticateUser(email, password);
             
             //Assert
-            actual.Should().BeNull();
+            actual.Should().BeEquivalentTo(apiResponse.User);
             authenticationService.Verify(x=>x.SignInAsync(It.IsAny<HttpContext>(), CookieAuthenticationDefaults.AuthenticationScheme, 
                 It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()), Times.Never);
         }

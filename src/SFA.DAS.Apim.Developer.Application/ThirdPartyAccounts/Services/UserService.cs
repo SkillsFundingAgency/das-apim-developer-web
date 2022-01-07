@@ -29,12 +29,17 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             var authenticateResult =
                 await _apiClient.Post<PostAuthenticateUserResponse>(new PostAuthenticateUserRequest(email, password));
 
-            if (authenticateResult.StatusCode == HttpStatusCode.Unauthorized || !authenticateResult.Body.User.Authenticated)
+            if (authenticateResult.StatusCode == HttpStatusCode.Unauthorized)
             {
                 return null;
             }
             
             var userDetails = (UserDetails)authenticateResult.Body.User;
+
+            if (!userDetails.Authenticated)
+            {
+                return userDetails;
+            }
             
             var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {

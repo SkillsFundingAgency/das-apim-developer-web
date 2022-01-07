@@ -105,7 +105,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("sign-in", Name=RouteNames.ThirdPartySignIn)]
         public IActionResult Login()
         {
-            return View();
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
