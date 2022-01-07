@@ -12,9 +12,13 @@
     <div class="govuk-grid-column-two-thirds">
         @if (Model.AccountIsLocked)
         {
-            <div class="govuk-!-margin-bottom-9" style="padding:20px; border:#00703C solid 4px;">
-                <h1 class="bold-large">Account locked</h1>
-                <p>Your account is now locked, please try again in 10 minutes.</p>
+            <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__content">
+                    <h2 class="govuk-notification-banner__heading" id="govuk-notification-banner-title">
+                        Account locked
+                    </h2>
+                    <p class="govuk-body">Your account is now locked, please try again in 10 minutes.</p>
+                </div>
             </div>
         }
         <partial name="_pageErrorsOverview" />
