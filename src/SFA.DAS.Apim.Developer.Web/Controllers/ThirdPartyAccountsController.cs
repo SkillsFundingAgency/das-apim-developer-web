@@ -124,6 +124,12 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     EmailAddress = model.EmailAddress,
                     Password = model.Password
                 });
+                
+                if (userResponse.UserDetails is { State: "blocked" })
+                {
+                    model.AccountIsLocked = true;
+                    return View("Login", model);
+                }
 
                 if (!(userResponse.UserDetails is { Authenticated: true }))
                 {

@@ -76,6 +76,30 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
         }
         
         [Test, MoqAutoData]
+        public async Task Then_If_Model_Is_Valid_And_Command_Handler_Returns_Locked_Then_Locked_Message_Shown(
+            LoginViewModel viewModel,
+            AuthenticateUserCommandResponse response,
+            [Frozen] Mock<IMediator> mediator,
+            [Greedy] ThirdPartyAccountsController controller)
+        {
+            response.UserDetails.Authenticated = false;
+            response.UserDetails.State = "blocked";
+            mediator.Setup(x =>
+                x.Send(
+                    It.Is<AuthenticateUserCommand>(c =>
+                        c.EmailAddress.Equals(viewModel.EmailAddress) && c.Password.Equals(viewModel.Password)),
+                    CancellationToken.None))
+                .ReturnsAsync(response);
+            
+            var actual = await controller.PostLogin(viewModel)  as ViewResult;
+            
+            actual.ViewName.Should().Be("Login");
+            actual.Model.Should().BeAssignableTo<LoginViewModel>();
+            ((LoginViewModel) actual.Model).AccountIsLocked.Should().BeTrue();
+            controller.ModelState.IsValid.Should().BeTrue();
+        }
+        
+        [Test, MoqAutoData]
         public async Task Then_If_Model_Is_Valid_And_Command_Handler_Returns_Null_Error_Shown(
             LoginViewModel viewModel,
             AuthenticateUserCommandResponse response,
