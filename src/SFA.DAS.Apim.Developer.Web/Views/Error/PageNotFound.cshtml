@@ -1,0 +1,45 @@
+﻿@using System.Security.Cryptography
+@model string
+@{
+    if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase))
+    {
+        Layout = "_LayoutEmployer";
+    }
+    else if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
+    {
+        Layout = "_layoutProvider";
+    }
+    else if (Configuration["AuthType"].Equals("external", StringComparison.CurrentCultureIgnoreCase))
+    {
+        Layout = "_LayoutGeneric";
+    }
+
+    else 
+        ViewData["Title"] = "Error";
+}
+
+@section breadcrumb {
+    <span class="das-js-back-link"></span>
+}
+
+    <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-two-thirds">
+            @if (Configuration["AuthType"].Equals("Employer", StringComparison.CurrentCultureIgnoreCase))
+            {
+                <h1 class="govuk-heading-xl">Page not found</h1>
+                <p class="govuk-body">If you typed the web address, check it is correct.</p>
+                <p class="govuk-body">If you pasted the web address, check you copied the entire address.</p>
+                <p class="govuk-body">
+                    If the web address is correct or you selected a link or button you can
+                    <a href="@Model" role="button" draggable="false" class="govuk-button">return to the home page</a>
+                </p>
+            }
+
+            else
+            {
+                <h1 class="govuk-heading-xl">Page not found</h1>
+                <p class="govuk-body">The page you requested could not be found.</p>
+            }
+        </div>
+    </div>
