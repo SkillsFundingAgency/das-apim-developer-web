@@ -36,12 +36,11 @@ CopyTarget.prototype.copyTargetAction = function(e) {
 }
 
 CopyTarget.prototype.showBanner = function() {
-    var banner = document.getElementById('copy-confirmation-banner')
+    var banner = document.getElementById('renew-confirmation-banner')
     if (banner) {
-        banner.style.display = "block"
+        banner.style.display = "none"
     }
 }
-
 
 // nodeListForEach
 
