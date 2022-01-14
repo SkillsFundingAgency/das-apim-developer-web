@@ -22,7 +22,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/code-coverage
+    ref: refs/heads/code-coverage-2
     endpoint: SkillsFundingAgency
   - repository: das-platform-automation
     type: github
