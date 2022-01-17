@@ -85,10 +85,19 @@ namespace SFA.DAS.Apim.Developer.Web
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
                 services.AddEmployerAuthenticationServices();
-                services.AddAndConfigureEmployerAuthentication(
-                    _configuration
-                        .GetSection("Identity")
-                        .Get<IdentityServerConfiguration>());
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddEmployerStubAuthentication();    
+                }
+                else
+                {
+                    services.AddAndConfigureEmployerAuthentication(
+                        _configuration
+                            .GetSection("Identity")
+                            .Get<IdentityServerConfiguration>());
+                }
+                
                 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
@@ -97,7 +106,7 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
-                if (_configuration["StubProviderAuth"] != null && _configuration["StubProviderAuth"]
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddProviderStubAuthentication();
