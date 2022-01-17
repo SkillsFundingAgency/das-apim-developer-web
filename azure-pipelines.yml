@@ -22,7 +22,7 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/code-coverage
+    ref: FAI-224-add_acceptance_test_coverlet_support
     endpoint: SkillsFundingAgency
   - repository: das-platform-automation
     type: github
