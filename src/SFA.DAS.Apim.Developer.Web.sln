@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MockServer", "MockServer", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apim.Developer.MockServer", "SFA.DAS.Apim.Developer.MockServers\SFA.DAS.Apim.Developer.MockServer.csproj", "{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apim.Developer.Web.AcceptanceTests", "SFA.DAS.Apim.Developer.Web.AcceptanceTests\SFA.DAS.Apim.Developer.Web.AcceptanceTests.csproj", "{EE450C7F-C816-430C-9193-0F10D723C9BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +83,7 @@ Global
 		{F04B3023-B700-4DF3-A763-E0678302B82E} = {7299CD5B-514B-4C48-B139-FF20415328E1}
 		{70F7734B-B62C-40E1-BA7F-6BA46A59D49D} = {7299CD5B-514B-4C48-B139-FF20415328E1}
 		{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE} = {A12EAD56-F69D-4679-9332-C5825A85138B}
+		{EE450C7F-C816-430C-9193-0F10D723C9BB} = {7299CD5B-514B-4C48-B139-FF20415328E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5F23F36-4EC0-4C94-ACCE-3FB29BD134B9}

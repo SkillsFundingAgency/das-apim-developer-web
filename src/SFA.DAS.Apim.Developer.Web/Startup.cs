@@ -31,13 +31,16 @@ namespace SFA.DAS.Apim.Developer.Web
             _environment = environment;
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Directory.GetCurrentDirectory());
 #if DEBUG
-                .AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", true)
+            if (!configuration.IsDev())
+            {
+                config.AddJsonFile("appsettings.json", false)
+                    .AddJsonFile("appsettings.Development.json", true);
+            }
 #endif
-                .AddEnvironmentVariables();
-
+            
+            config.AddEnvironmentVariables();
             if (!configuration.IsDev())
             {
                 config.AddAzureTableStorage(options =>
@@ -49,7 +52,6 @@ namespace SFA.DAS.Apim.Developer.Web
                     }
                 );
             }
-
             _configuration = config.Build();
         }
 
