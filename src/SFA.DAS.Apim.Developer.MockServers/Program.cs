@@ -6,7 +6,7 @@ namespace SFA.DAS.Apim.Developer.MockServer
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Mock Server starting on http://localhost:5010");
+            Console.WriteLine("Mock Server starting on http://localhost:5031");
 
             MockApiServer.Start();
 
