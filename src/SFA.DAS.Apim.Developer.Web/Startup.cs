@@ -14,6 +14,7 @@ using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
+using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -37,7 +38,7 @@ namespace SFA.DAS.Apim.Developer.Web
 #endif
                 .AddEnvironmentVariables();
 
-            if (!configuration["Environment"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+            if (!configuration.IsDev())
             {
                 config.AddAzureTableStorage(options =>
                     {
@@ -94,9 +95,18 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
-                services.AddAndConfigureProviderAuthentication(_configuration
-                    .GetSection(nameof(ProviderIdams))
-                    .Get<ProviderIdams>());    
+                if (_configuration["StubProviderAuth"] != null && _configuration["StubProviderAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddProviderStubAuthentication();
+                }
+                else
+                {
+                    services.AddAndConfigureProviderAuthentication(_configuration
+                        .GetSection(nameof(ProviderIdams))
+                        .Get<ProviderIdams>());    
+                }
+                    
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
@@ -118,7 +128,11 @@ namespace SFA.DAS.Apim.Developer.Web
                 
             }).AddMvc(options =>
                 {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    if (!_configuration.IsDev())
+                    {
+                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());    
+                    }
+                    
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
