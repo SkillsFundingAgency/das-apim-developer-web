@@ -1,16 +1,15 @@
-﻿using System;
-using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Api.Requests;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.Apim.Developer.Domain.UnitTests.ThirdPartyAccounts.Requests
 {
     public class WhenBuildingPostRegisterThirdPartyUserRequest
     {
-        [Test, AutoData]
+        [Test, MoqAutoData]
         public void Then_The_Url_Is_Correctly_Constructed(
             Mock<IRegisterThirdPartyAccountData> mockData)
         {
