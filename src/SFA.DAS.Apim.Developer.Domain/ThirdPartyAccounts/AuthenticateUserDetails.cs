@@ -2,11 +2,11 @@ using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Api.Responses;
 
 namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts
 {
-    public class UserDetails
+    public class AuthenticateUserDetails
     {
-        public static implicit operator UserDetails(PostAuthenticateUserResponseItem source)
+        public static implicit operator AuthenticateUserDetails(PostAuthenticateUserResponseItem source)
         {
-            return new UserDetails
+            return new AuthenticateUserDetails
             {
                 Id = source.Id,
                 Authenticated = source.Authenticated,

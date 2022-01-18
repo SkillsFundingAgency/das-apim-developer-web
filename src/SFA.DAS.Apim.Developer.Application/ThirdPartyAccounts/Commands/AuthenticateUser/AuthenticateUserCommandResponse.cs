@@ -4,6 +4,6 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Authent
 {
     public class AuthenticateUserCommandResponse
     {
-        public UserDetails UserDetails { get; set; }
+        public AuthenticateUserDetails UserDetails { get; set; }
     }
 }

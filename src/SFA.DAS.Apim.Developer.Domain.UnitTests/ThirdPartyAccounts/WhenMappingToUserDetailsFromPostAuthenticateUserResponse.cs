@@ -12,7 +12,7 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.ThirdPartyAccounts
         public void Then_The_Fields_Are_Mapped(PostAuthenticateUserResponseItem source)
         {
             //Act
-            var actual = (UserDetails)source;
+            var actual = (AuthenticateUserDetails)source;
             
             //Assert
             actual.Should().BeEquivalentTo(source);
