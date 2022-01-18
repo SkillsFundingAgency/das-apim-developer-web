@@ -17,6 +17,7 @@ jobs:
     parameters:
       SonarCloud: true
       SonarCloudProjectKey: SkillsFundingAgency_das-apim-developer-web
+      RunAcceptanceTests: true
 
   - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 

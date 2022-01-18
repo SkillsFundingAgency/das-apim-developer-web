@@ -122,7 +122,16 @@ namespace SFA.DAS.Apim.Developer.Web
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
                 services.AddExternalAuthenticationServices();
-                services.AddAndConfigureExternalUserAuthentication();
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddExternalStubAuthentication();
+                }
+                else
+                {
+                    services.AddAndConfigureExternalUserAuthentication();    
+                }
+                
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
             
