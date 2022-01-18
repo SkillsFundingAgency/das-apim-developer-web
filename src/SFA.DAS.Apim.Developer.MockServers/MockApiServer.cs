@@ -25,7 +25,7 @@ namespace SFA.DAS.Apim.Developer.MockServer
             var server = StandAloneApp.Start(settings);
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/subscriptions/\\d+/products"))
+                .WithPath(s => Regex.IsMatch(s, "/subscriptions/([A-Za-z0-9-])+/products"))
                 .UsingGet()
             ).RespondWith(
                 Response.Create()
@@ -34,7 +34,7 @@ namespace SFA.DAS.Apim.Developer.MockServer
                     .WithBodyFromFile("product-subscriptions.json"));
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/accountusers/\\d+/accounts"))
+                .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-])+/accounts"))
                 //http:localhost:5031/accountusers/45464/accounts
                 .UsingGet()
             ).RespondWith(
