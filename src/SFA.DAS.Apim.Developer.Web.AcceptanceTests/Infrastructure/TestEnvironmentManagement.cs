@@ -33,6 +33,12 @@ namespace SFA.DAS.Apim.Developer.Web.AcceptanceTests.Infrastructure
         {
             _authType = "Employer";
         }
+        
+        [BeforeScenario("External",Order = 0)]
+        public void StartWebAppExternal()
+        {
+            _authType = "External";
+        }
 
         [BeforeScenario("WireMockServer", Order = 1)]
         public void StartWebApp()
