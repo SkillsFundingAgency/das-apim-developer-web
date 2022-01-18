@@ -10,6 +10,17 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @if (Model.AccountIsLocked)
+        {
+            <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+                <div class="govuk-notification-banner__content">
+                    <h2 class="govuk-notification-banner__heading" id="govuk-notification-banner-title">
+                        Account locked
+                    </h2>
+                    <p class="govuk-body">Your account is now locked, please try again in 10 minutes.</p>
+                </div>
+            </div>
+        }
         <partial name="_pageErrorsOverview" />
         <h1 class="govuk-heading-xl">Sign in</h1>
         <p>Sign in or <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account</a> to subscribe to APIs and get API keys.</p>

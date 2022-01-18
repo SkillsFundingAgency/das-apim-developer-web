@@ -10,6 +10,8 @@ namespace SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts
         public string EmailAddress { get; set; }
         [Required(ErrorMessage = "Please enter your password")]
         public string Password { get; set; }
+
+        public bool AccountIsLocked { get; set; }
         
         public static Dictionary<string, int> BuildPropertyOrderDictionary()
         {
