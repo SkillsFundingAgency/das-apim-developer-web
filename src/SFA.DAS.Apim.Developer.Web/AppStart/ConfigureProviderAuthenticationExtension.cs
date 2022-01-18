@@ -1,7 +1,7 @@
-using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Http;
@@ -45,6 +45,16 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             principal.Identities.First().AddClaim(new Claim(ClaimsIdentity.DefaultNameClaimType, providerId));
             principal.Identities.First().AddClaim(new Claim(ProviderClaims.DisplayName, displayName));
             return Task.CompletedTask;
+        }
+    }
+    
+    public static class ConfigureProviderStubAuthentication
+    {
+        public static void AddProviderStubAuthentication(this IServiceCollection services)
+        {
+            services.AddAuthentication("Provider-stub").AddScheme<AuthenticationSchemeOptions, ProviderStubAuthHandler>(
+                "Provider-stub",
+                options => { });
         }
     }
 }

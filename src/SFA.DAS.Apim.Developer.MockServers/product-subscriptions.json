@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": "VacanciesManageOuterApi",
+      "description": "Create an advert on Find an apprenticeship using your existing systems.",
+      "displayName": "Recruitment API",
+      "name": "Recruitment-API-v1",
+      "key": "154d2b581dae4ed1bb586fbbd8ec1069"
+    },
+    {
+      "id": "VacanciesManageOuterApi-Sandbox",
+      "description": "Create an advert on Find an apprenticeship using your existing systems.",
+      "displayName": "Recruitment API Sandbox",
+      "name": "Recruitment-API-Sandbox-v1",
+      "key": ""
+    },
+    {
+      "id": "VacanciesOuterApi",
+      "description": "Display recruitment adverts from Find an apprenticeship.",
+      "displayName": "Display advert API",
+      "name": "Display-Advert-API-v1",
+      "key": "0e4dd5e702eb4644bc2dd9e6bd84b481"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
+using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
@@ -30,14 +31,17 @@ namespace SFA.DAS.Apim.Developer.Web
             _environment = environment;
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
-                .SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(Directory.GetCurrentDirectory());
 #if DEBUG
-                .AddJsonFile("appsettings.json", false)
-                .AddJsonFile("appsettings.Development.json", true)
+            if (!configuration.IsDev())
+            {
+                config.AddJsonFile("appsettings.json", false)
+                    .AddJsonFile("appsettings.Development.json", true);
+            }
 #endif
-                .AddEnvironmentVariables();
-
-            if (!configuration["Environment"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
+            
+            config.AddEnvironmentVariables();
+            if (!configuration.IsDev())
             {
                 config.AddAzureTableStorage(options =>
                     {
@@ -48,7 +52,6 @@ namespace SFA.DAS.Apim.Developer.Web
                     }
                 );
             }
-
             _configuration = config.Build();
         }
 
@@ -82,10 +85,19 @@ namespace SFA.DAS.Apim.Developer.Web
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
                 services.AddEmployerAuthenticationServices();
-                services.AddAndConfigureEmployerAuthentication(
-                    _configuration
-                        .GetSection("Identity")
-                        .Get<IdentityServerConfiguration>());
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddEmployerStubAuthentication();    
+                }
+                else
+                {
+                    services.AddAndConfigureEmployerAuthentication(
+                        _configuration
+                            .GetSection("Identity")
+                            .Get<IdentityServerConfiguration>());
+                }
+                
                 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
@@ -94,14 +106,32 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
-                services.AddAndConfigureProviderAuthentication(_configuration
-                    .GetSection(nameof(ProviderIdams))
-                    .Get<ProviderIdams>());    
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddProviderStubAuthentication();
+                }
+                else
+                {
+                    services.AddAndConfigureProviderAuthentication(_configuration
+                        .GetSection(nameof(ProviderIdams))
+                        .Get<ProviderIdams>());    
+                }
+                    
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
                 services.AddExternalAuthenticationServices();
-                services.AddAndConfigureExternalUserAuthentication();
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddExternalStubAuthentication();
+                }
+                else
+                {
+                    services.AddAndConfigureExternalUserAuthentication();    
+                }
+                
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
             
@@ -118,7 +148,11 @@ namespace SFA.DAS.Apim.Developer.Web
                 
             }).AddMvc(options =>
                 {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    if (!_configuration.IsDev())
+                    {
+                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());    
+                    }
+                    
                 }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
