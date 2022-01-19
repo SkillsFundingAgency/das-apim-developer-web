@@ -21,6 +21,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ThirdPartyRegisterComplete = "third-party-register-complete";
         public const string ThirdPartySignIn = "third-party-sign-in";
         public const string ThirdPartyTermsConditions = "third-party-terms-conditions";
+        public const string ThirdPartyForgottenPassword = "third-party-forgotten-password";
         public const string ExternalApiHub = "external-api-hub";
         public const string ExternalViewSubscription = "external-view-subscription";
         public const string ExternalCreateKey = "external-create-key";

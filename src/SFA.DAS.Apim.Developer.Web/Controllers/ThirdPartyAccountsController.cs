@@ -157,5 +157,12 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             HttpContext.SignOutAsync();
             return RedirectToRoute(RouteNames.Index);
         }
+        
+        [HttpGet]
+        [Route("forgotten-password", Name = RouteNames.ThirdPartyForgottenPassword)]
+        public IActionResult ForgottenPassword()
+        {
+            return View();
+        }
     }
 }
