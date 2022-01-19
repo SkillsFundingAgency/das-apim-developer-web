@@ -7,5 +7,6 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.ChangeP
     {
         public Guid Id { get; set; }
         public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

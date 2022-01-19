@@ -24,6 +24,17 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.ChangeP
                     validationResult.AddError(nameof(item.Password),"Password must contain upper and lowercase letters, a number and at least 8 characters");
                 }
             }
+            if (string.IsNullOrEmpty(item.ConfirmPassword))
+            {
+                validationResult.AddError(nameof(item.ConfirmPassword), "Re-type password");
+            }
+            else
+            {
+                if (item.Password != item.ConfirmPassword)
+                {
+                    validationResult.AddError(nameof(item.ConfirmPassword), "Passwords do not match");
+                }
+            }
             
             return Task.FromResult(validationResult);
         }
