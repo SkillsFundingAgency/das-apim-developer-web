@@ -30,13 +30,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("404", Name = RouteNames.Error404)]
         public IActionResult PageNotFound()
         {
-            return View("PageNotFound", _serviceParameters.AuthenticationType == AuthenticationType.Employer ? _configuration.ManageApprenticeshipSiteUrl : _providerConfiguration.DashboardUrl + "/account");
+            return View();
         }
 
         [Route("500", Name = RouteNames.Error500)]
         public IActionResult Error()
         {
-            return View("Error", _serviceParameters.AuthenticationType == AuthenticationType.Employer ? _configuration.ManageApprenticeshipSiteUrl : _providerConfiguration.DashboardUrl + "/account");
+            return View();
         }
     }
 }
