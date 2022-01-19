@@ -21,11 +21,11 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser
         
         public async Task<GetUserResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var apiResponse = await _apiClient.Get<GetUserResponse>(new GetUserRequest(request.Email));
+            var apiResponse = await _apiClient.Get<GetUserResponse>(new GetUserRequest(request.EmailAddress));
             
             if (!string.IsNullOrEmpty(apiResponse.ErrorContent))
             {
-                _logger.LogInformation($"Failed to get user for email:[{request.Email}]");
+                _logger.LogInformation($"Failed to get user for email:[{request.EmailAddress}]");
                 return new GetUserResponse();
             }
 

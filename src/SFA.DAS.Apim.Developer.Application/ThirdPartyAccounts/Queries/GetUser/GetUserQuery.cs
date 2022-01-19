@@ -5,6 +5,6 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser
 {
     public class GetUserQuery : IRequest<GetUserResponse>
     {
-        public string Email { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

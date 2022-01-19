@@ -26,7 +26,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Querie
             [Frozen] Mock<IApiClient> mockApiClient,
             GetUserQueryHandler handler)
         {
-            var expectedGetUserRequest = new GetUserRequest(command.Email);
+            var expectedGetUserRequest = new GetUserRequest(command.EmailAddress);
             mockApiClient
                 .Setup(client => client.Get<GetUserResponse>(It.Is<GetUserRequest>(request =>
                     request.GetUrl.Equals(expectedGetUserRequest.GetUrl))))

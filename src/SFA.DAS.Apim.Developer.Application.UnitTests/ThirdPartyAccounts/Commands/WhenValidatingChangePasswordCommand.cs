@@ -9,6 +9,21 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
     public class WhenValidatingChangePasswordCommand
     {
         [Test, AutoData]
+        public async Task And_All_Fields_Present_Then_Valid(
+            ChangePasswordCommand command,
+            ChangePasswordCommandValidator validator)
+        {
+            //Arrange
+            SetupCommandHappyPath(command);
+            
+            //Act
+            var actual = await validator.ValidateAsync(command);
+
+            //Assert
+            actual.IsValid().Should().BeTrue();
+        }
+        
+        [Test, AutoData]
         public async Task And_No_Password_Then_Not_Valid(
             ChangePasswordCommand command,
             ChangePasswordCommandValidator validator)
