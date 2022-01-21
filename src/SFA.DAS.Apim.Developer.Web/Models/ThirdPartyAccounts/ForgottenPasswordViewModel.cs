@@ -4,4 +4,10 @@
     {
         public string EmailAddress { get; set; }
     }
+    
+    public class ChangePasswordViewModel
+    {
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+    }
 }
