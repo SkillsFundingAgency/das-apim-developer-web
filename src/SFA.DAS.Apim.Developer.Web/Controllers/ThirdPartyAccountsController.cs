@@ -221,7 +221,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("change-password", Name = RouteNames.ThirdPartyChangePassword)]
         public IActionResult ChangePassword([FromQuery]string id)
         {
-            return View();
+            var decodedId = _dataProtector.DecodeData(id);
+            if (!decodedId.HasValue)
+            {
+                return RedirectToRoute(RouteNames.ThirdPartyRegister);
+            }
+
+            return View(new ChangePasswordViewModel {Id = decodedId.Value});
         }
         
         [HttpGet]
