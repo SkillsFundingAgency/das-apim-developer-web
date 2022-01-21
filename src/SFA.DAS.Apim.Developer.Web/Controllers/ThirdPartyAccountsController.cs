@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.AuthenticateUser;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.SendChangePasswordEmail;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.VerifyRegistration;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models.ThirdPartyAccounts;
 
@@ -161,6 +163,63 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Route("forgotten-password", Name = RouteNames.ThirdPartyForgottenPassword)]
         public IActionResult ForgottenPassword()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        [Route("forgotten-password", Name = RouteNames.ThirdPartyForgottenPassword)]
+        public async Task<IActionResult> PostForgottenPassword(ForgottenPasswordViewModel viewModel)
+        {
+            try
+            {
+                var user = await _mediator.Send(new GetUserQuery {EmailAddress = viewModel.EmailAddress});
+
+                if (user.User == null)
+                {
+                    return RedirectToRoute(RouteNames.ThirdPartyForgottenPasswordComplete);
+                }
+                
+                var encodedId = _dataProtector.EncodedData(Guid.Parse(user.User.Id));
+                var changePasswordUrl = Url.RouteUrl(
+                    RouteNames.ThirdPartyChangePassword,
+                    new {id = encodedId},
+                    Request.Scheme,
+                    Request.Host.Host);
+
+                await _mediator.Send(new SendChangePasswordEmailCommand
+                {
+                    Id = Guid.Parse(user.User.Id),
+                    FirstName = user.User.FirstName,
+                    LastName = user.User.LastName,
+                    Email = user.User.Email,
+                    ChangePasswordUrl = changePasswordUrl
+                });
+
+                return RedirectToRoute(RouteNames.ThirdPartyForgottenPasswordComplete);
+            }
+            catch (ValidationException e)
+            {
+                foreach (var member in e.ValidationResult.MemberNames)
+                {
+                    var memberParts = member.Split('|');
+                    ModelState.AddModelError(memberParts[0], memberParts[1]);
+                }
+                
+                return View("ForgottenPassword", viewModel);
+            }
+        }
+        
+        [HttpGet]
+        [Route("forgotten-password/complete", Name = RouteNames.ThirdPartyForgottenPasswordComplete)]
+        public IActionResult ForgottenPasswordComplete()
+        {
+            return View();
+        }
+        
+        [HttpGet]
+        [Route("change-password", Name = RouteNames.ThirdPartyChangePassword)]
+        public IActionResult ChangePassword([FromQuery]string id)
         {
             return View();
         }

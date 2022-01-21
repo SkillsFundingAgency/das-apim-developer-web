@@ -22,6 +22,9 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ThirdPartySignIn = "third-party-sign-in";
         public const string ThirdPartyTermsConditions = "third-party-terms-conditions";
         public const string ThirdPartyForgottenPassword = "third-party-forgotten-password";
+        public const string ThirdPartyForgottenPasswordComplete = "third-party-forgotten-password-complete";
+        public const string ThirdPartyChangePassword = "third-party-change-password";
+        public const string ThirdPartyChangePasswordComplete = "third-party-change-password-complete";
         public const string ExternalApiHub = "external-api-hub";
         public const string ExternalViewSubscription = "external-view-subscription";
         public const string ExternalCreateKey = "external-create-key";
