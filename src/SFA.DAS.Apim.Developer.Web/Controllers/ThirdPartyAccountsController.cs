@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.AuthenticateUser;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.ChangePassword;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.SendChangePasswordEmail;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.VerifyRegistration;
@@ -169,11 +170,11 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         
         [HttpPost]
         [Route("forgotten-password", Name = RouteNames.ThirdPartyForgottenPassword)]
-        public async Task<IActionResult> PostForgottenPassword(ForgottenPasswordViewModel viewModel)
+        public async Task<IActionResult> PostForgottenPassword(ForgottenPasswordViewModel model)
         {
             try
             {
-                var user = await _mediator.Send(new GetUserQuery {EmailAddress = viewModel.EmailAddress});
+                var user = await _mediator.Send(new GetUserQuery {EmailAddress = model.EmailAddress});
 
                 if (user.User == null)
                 {
@@ -206,7 +207,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     ModelState.AddModelError(memberParts[0], memberParts[1]);
                 }
                 
-                return View("ForgottenPassword", viewModel);
+                return View("ForgottenPassword", model);
             }
         }
         
@@ -228,6 +229,33 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             }
 
             return View(new ChangePasswordViewModel {Id = decodedId.Value});
+        }
+        
+        [HttpPost]
+        [Route("change-password", Name = RouteNames.ThirdPartyChangePassword)]
+        public async Task<IActionResult> PostChangePassword(ChangePasswordViewModel model)
+        {
+            try
+            {
+                await _mediator.Send(new ChangePasswordCommand
+                {
+                    Id = model.Id,
+                    Password = model.Password,
+                    ConfirmPassword = model.ConfirmPassword
+                });
+
+                return RedirectToRoute(RouteNames.ThirdPartyChangePasswordComplete);
+            }
+            catch (ValidationException e)
+            {
+                foreach (var member in e.ValidationResult.MemberNames)
+                {
+                    var memberParts = member.Split('|');
+                    ModelState.AddModelError(memberParts[0], memberParts[1]);
+                }
+                
+                return View("ChangePassword", model);
+            }
         }
         
         [HttpGet]
