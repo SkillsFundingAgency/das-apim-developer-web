@@ -223,5 +223,12 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             return View();
         }
+        
+        [HttpGet]
+        [Route("change-password/complete", Name = RouteNames.ThirdPartyChangePasswordComplete)]
+        public IActionResult ChangePasswordComplete()
+        {
+            return View();
+        }
     }
 }

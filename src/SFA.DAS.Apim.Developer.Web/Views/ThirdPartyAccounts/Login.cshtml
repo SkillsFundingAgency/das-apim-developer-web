@@ -23,7 +23,7 @@
         }
         <partial name="_pageErrorsOverview" />
         <h1 class="govuk-heading-xl">Sign in</h1>
-        <p>Sign in or <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account</a> to subscribe to APIs and get API keys.</p>
+        <p class="govuk-body">Sign in or <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account</a> to subscribe to APIs and get API keys.</p>
         <form method="POST" asp-route="@RouteNames.ThirdPartySignIn" novalidate>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-three-quarters">
@@ -61,5 +61,6 @@
                 </div>
             </div>
         </form>
+        <p class="govuk-body"><a asp-route="@RouteNames.ThirdPartyForgottenPassword" class="govuk-link govuk-link--no-visited-state">Forgotten your password?</a></p>
     </div>
 </div>
