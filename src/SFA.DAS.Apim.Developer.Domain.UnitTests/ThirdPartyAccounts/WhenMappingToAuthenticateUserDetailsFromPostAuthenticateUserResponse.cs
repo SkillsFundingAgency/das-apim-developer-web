@@ -17,5 +17,17 @@ namespace SFA.DAS.Apim.Developer.Domain.UnitTests.ThirdPartyAccounts
             //Assert
             actual.Should().BeEquivalentTo(source);
         }
+        
+        [Test, AutoData]
+        public void And_Source_Null_Then_Returns_Null()
+        {
+            //arrange
+            PostAuthenticateUserResponseItem source = null;
+            //Act
+            var actual = (AuthenticateUserDetails)source;
+            
+            //Assert
+            actual.Should().BeNull();
+        }
     }
 }

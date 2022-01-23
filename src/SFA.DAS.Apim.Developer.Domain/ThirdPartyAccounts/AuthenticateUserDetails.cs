@@ -6,6 +6,8 @@ namespace SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts
     {
         public static implicit operator AuthenticateUserDetails(PostAuthenticateUserResponseItem source)
         {
+            if (source == null) return null;
+            
             return new AuthenticateUserDetails
             {
                 Id = source.Id,

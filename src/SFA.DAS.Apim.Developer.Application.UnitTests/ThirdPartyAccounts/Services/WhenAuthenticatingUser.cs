@@ -104,5 +104,33 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Servic
             authenticationService.Verify(x=>x.SignInAsync(It.IsAny<HttpContext>(), CookieAuthenticationDefaults.AuthenticationScheme, 
                 It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()), Times.Never);
         }
+        
+        [Test, MoqAutoData]
+        public async Task Then_If_Returns_Other_Unsuccessful_HttpStatusCode_Then_Not_Signed_In(
+            string email, 
+            string password,
+            [Frozen] Mock<IServiceProvider> serviceProvider,
+            [Frozen] Mock<IAuthenticationService> authenticationService,
+            [Frozen] Mock<IApiClient> apiClient,
+            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
+            UserService userService)
+        {
+            //Arrange
+            serviceProvider
+                .Setup(x => x.GetService(typeof(IAuthenticationService)))
+                .Returns(authenticationService.Object);
+            apiClient
+                .Setup(x => x.Post<PostAuthenticateUserResponse>(It.Is<PostAuthenticateUserRequest>(c =>
+                    ((PostAuthenticateUserRequestData)c.Data).Email.Equals(email))))
+                .ReturnsAsync(new ApiResponse<PostAuthenticateUserResponse>(null, HttpStatusCode.InternalServerError, ""));
+            
+            //Act
+            var actual = await userService.AuthenticateUser(email, password);
+            
+            //Assert
+            actual.Authenticated.Should().BeFalse();
+            authenticationService.Verify(x=>x.SignInAsync(It.IsAny<HttpContext>(), CookieAuthenticationDefaults.AuthenticationScheme, 
+                It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()), Times.Never);
+        }
     }
 }

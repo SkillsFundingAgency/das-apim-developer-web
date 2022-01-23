@@ -19,7 +19,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.SendCha
         public async Task<Unit> Handle(SendChangePasswordEmailCommand request, CancellationToken cancellationToken)
         {
             var data = new PostSendChangePasswordEmailRequestData(request);
-            var apiResponse = await _apiClient.Post<string>(new PostSendChangePasswordEmailRequest(data));
+            var apiResponse = await _apiClient.Post<object>(new PostSendChangePasswordEmailRequest(data));
             
             if (!string.IsNullOrEmpty(apiResponse.ErrorContent))
             {

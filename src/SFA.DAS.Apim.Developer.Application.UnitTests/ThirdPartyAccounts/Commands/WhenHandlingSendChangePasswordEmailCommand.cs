@@ -6,6 +6,7 @@ using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
 using Moq;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.SendChangePasswordEmail;
 using SFA.DAS.Apim.Developer.Domain.Api;
@@ -26,14 +27,14 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
             var data = new PostSendChangePasswordEmailRequestData(command);
             var expectedPostRequest = new PostSendChangePasswordEmailRequest(data);
             mockApiClient
-                .Setup(client => client.Post<string>(It.Is<PostSendChangePasswordEmailRequest>(request =>
+                .Setup(client => client.Post<object>(It.Is<PostSendChangePasswordEmailRequest>(request =>
                     request.PostUrl.Equals(expectedPostRequest.PostUrl))))
-                .ReturnsAsync(new ApiResponse<string>(null, HttpStatusCode.NoContent, ""));
+                .ReturnsAsync(new ApiResponse<object>(null, HttpStatusCode.NoContent, ""));
 
             var actual = await handler.Handle(command, CancellationToken.None);
 
             actual.Should().Be(Unit.Value);
-            mockApiClient.Verify(client => client.Post<string>(
+            mockApiClient.Verify(client => client.Post<object>(
                     It.Is<PostSendChangePasswordEmailRequest>(x =>
                         x.PostUrl.Equals(expectedPostRequest.PostUrl))),
                 Times.Once);
@@ -47,8 +48,8 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
             SendChangePasswordEmailCommandHandler handler)
         {
             mockApiClient
-                .Setup(client => client.Post<string>(It.IsAny<PostSendChangePasswordEmailRequest>()))
-                .ReturnsAsync(new ApiResponse<string>(null, HttpStatusCode.InternalServerError, errorContent));
+                .Setup(client => client.Post<object>(It.IsAny<PostSendChangePasswordEmailRequest>()))
+                .ReturnsAsync(new ApiResponse<object>(new JObject(), HttpStatusCode.InternalServerError, errorContent));
 
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
 

@@ -33,8 +33,8 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             {
                 return null;
             }
-            
-            var userDetails = (AuthenticateUserDetails)authenticateResult.Body.User;
+
+            var userDetails = (AuthenticateUserDetails)authenticateResult.Body?.User ?? new AuthenticateUserDetails{Authenticated = false};
 
             if (!userDetails.Authenticated)
             {
