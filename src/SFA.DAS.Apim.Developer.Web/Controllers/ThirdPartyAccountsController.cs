@@ -227,7 +227,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 return RedirectToRoute(RouteNames.ThirdPartyRegister);
             }
 
-            return View(new ChangePasswordViewModel {Id = decodedId.Value});
+            return View(new ChangePasswordViewModel {UserId = decodedId.Value});
         }
         
         [HttpPost]
@@ -238,7 +238,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             {
                 await _mediator.Send(new ChangePasswordCommand
                 {
-                    Id = model.Id,
+                    Id = model.UserId,
                     Password = model.Password,
                     ConfirmPassword = model.ConfirmPassword
                 });

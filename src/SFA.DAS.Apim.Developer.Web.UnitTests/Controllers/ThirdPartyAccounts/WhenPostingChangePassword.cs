@@ -49,7 +49,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             mockMediator
                 .Setup(mediator => mediator.Send(
                     It.Is<ChangePasswordCommand>(command => 
-                        command.Id == request.Id
+                        command.Id == request.UserId
                         && command.Password == request.Password
                         && command.ConfirmPassword == request.ConfirmPassword), 
                     It.IsAny<CancellationToken>()))

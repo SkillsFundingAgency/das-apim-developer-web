@@ -51,7 +51,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.ThirdPartyAccounts
             var result = controller.ChangePassword(encodedUserId) as ViewResult;
 
             //assert
-            result!.Model.As<ChangePasswordViewModel>().Id.Should().Be(decodedUserId);
+            result!.Model.As<ChangePasswordViewModel>().UserId.Should().Be(decodedUserId);
         }
     }
 }
