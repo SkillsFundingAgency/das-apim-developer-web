@@ -25,6 +25,18 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         public IActionResult AccessDenied()
         {
             return View("AccessDenied", _serviceParameters.AuthenticationType == AuthenticationType.Employer ? _configuration.ManageApprenticeshipSiteUrl : _providerConfiguration.DashboardUrl + "/account");
-        }   
+        }
+        
+        [Route("404", Name = RouteNames.Error404)]
+        public IActionResult PageNotFound()
+        {
+            return View();
+        }
+
+        [Route("500", Name = RouteNames.Error500)]
+        public IActionResult Error()
+        {
+            return View();
+        }
     }
 }

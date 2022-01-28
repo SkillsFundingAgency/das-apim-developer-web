@@ -35,5 +35,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string Index = "index";
 
         public const string Error403 = "error-403";
+        public const string Error404 = "error-404";
+        public const string Error500 = "error-500";
     }
 }

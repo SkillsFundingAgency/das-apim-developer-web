@@ -8,7 +8,12 @@
     {
         Layout = "_layoutProvider";
     }
-    
+    else if (Configuration["AuthType"].Equals("external", StringComparison.CurrentCultureIgnoreCase))
+    {
+        Layout = "_LayoutGeneric";
+    }
+
+    else 
     ViewData["Title"] = "Error";
 }
 
@@ -29,13 +34,20 @@
                 </p>
 
             }
-            else
+
+            else if (Configuration["AuthType"].Equals("Employer", StringComparison.CurrentCultureIgnoreCase))
             {
                 <h1 class="govuk-heading-xl">Access denied</h1>
                 <p class="govuk-body">If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.</p>
                 <p class="govuk-body">
                     <a href="@Model" role="button" draggable="false" class="govuk-button" >Go back to the service home page</a>
                 </p>
+            }
+            
+            else
+            {
+                <h1 class="govuk-heading-xl">Access denied</h1>
+                <p class="govuk-body">You do not have permission to access this page.</p>
             }
         </div>
     </div>
