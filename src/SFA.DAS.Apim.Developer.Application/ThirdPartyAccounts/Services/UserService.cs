@@ -24,7 +24,7 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             _httpContextAccessor = httpContextAccessor;
             _apiClient = apiClient;
         }
-        public async Task<UserDetails> AuthenticateUser(string email, string password)
+        public async Task<AuthenticateUserDetails> AuthenticateUser(string email, string password)
         {
             var authenticateResult =
                 await _apiClient.Post<PostAuthenticateUserResponse>(new PostAuthenticateUserRequest(email, password));
@@ -33,8 +33,8 @@ namespace SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services
             {
                 return null;
             }
-            
-            var userDetails = (UserDetails)authenticateResult.Body.User;
+
+            var userDetails = (AuthenticateUserDetails)authenticateResult.Body?.User ?? new AuthenticateUserDetails{Authenticated = false};
 
             if (!userDetails.Authenticated)
             {

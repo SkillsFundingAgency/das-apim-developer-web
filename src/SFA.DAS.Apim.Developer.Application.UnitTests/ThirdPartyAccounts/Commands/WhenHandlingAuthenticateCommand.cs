@@ -19,7 +19,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
         [Test, MoqAutoData]
         public async Task Then_The_Command_Is_Handled_And_Response_Returned(
             AuthenticateUserCommand command,
-            UserDetails userDetails,
+            AuthenticateUserDetails userDetails,
             [Frozen] Mock<IValidator<AuthenticateUserCommand>> mockValidator,
             [Frozen] Mock<IUserService> userService,
             AuthenticateUserCommandHandler handler)

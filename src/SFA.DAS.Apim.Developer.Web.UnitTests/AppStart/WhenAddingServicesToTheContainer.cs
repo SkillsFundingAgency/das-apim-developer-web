@@ -10,7 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.AuthenticateUser;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.ChangePassword;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Commands.Register;
+using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
@@ -57,6 +59,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         
         [TestCase(typeof(IValidator<RegisterCommand>), typeof(RegisterCommandValidator))]
         [TestCase(typeof(IValidator<AuthenticateUserCommand>), typeof(AuthenticateUserCommandValidator))]
+        [TestCase(typeof(IValidator<GetUserQuery>), typeof(GetUserQueryValidator))]
+        [TestCase(typeof(IValidator<ChangePasswordCommand>), typeof(ChangePasswordCommandValidator))]
         public void Then_Resolves_Mediator_Validators(Type validatorType, Type expectedResolvedType)
         {
             var serviceCollection = new ServiceCollection();
