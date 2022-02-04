@@ -18,7 +18,6 @@
     <span class="das-js-back-link"></span>
 }
 
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
@@ -37,20 +36,21 @@
         
         <h2 class="govuk-heading-l">@Model.Product.DisplayName</h2>
         <p class="govuk-body">@Model.Product.Description</p>
-        <p class="govuk-body">You'll need to send the API key and the API page to your developer.<br/>
-                              You can do this by copying the information below and pasting it into an email.</p>
+        <p class="govuk-body">
+            You'll need to send the API key and the API page to your developer.<br/>
+            You can do this by copying the information below and pasting it into an email.
+        </p>
         
-        <div class="app-summary-card" role="region">
-            <header class="app-summary-card__header">
-                <button data-copy-target="key-@Model.Product.Key" data-accessible-label="@Model.Product.DisplayName"></button>
-                <code class="app-code" id="Key-@Model.Product.Key">
-                    @Model.Product.Key
-                    <br><br>
-                    https://blah.blah
-                </code>
-            </header>
+        <div class="app-api-info">
+            <span class="app-api-info__key" id="key-@Model.Product.Key">
+                @Model.Product.Key
+                <br />
+                <br />
+                https://developer.apprenticeships.education.gov.uk/recruitment-api-documentation
+            </span>
+            <span data-copy-target="key-@Model.Product.Key" data-accessible-label="@Model.Product.DisplayName" class="app-api-info__button-wrap"></span>
         </div>
-        
+
         <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
