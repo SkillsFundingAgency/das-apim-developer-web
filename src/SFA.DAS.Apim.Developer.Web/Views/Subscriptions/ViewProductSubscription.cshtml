@@ -60,7 +60,7 @@
                         </span>
                     </summary>
                     <div class="govuk-details__text">
-                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
+                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
                     </div>
                 </details>
             </div>
