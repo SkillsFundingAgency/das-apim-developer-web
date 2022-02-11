@@ -54,14 +54,7 @@
         }
         
         <h2 class="govuk-heading-l">@Model.Product.DisplayName</h2>
-        @if (ApiDescriptionLookup.Descriptions.ContainsKey(Model.Product.Id))
-        {
-            <p class="govuk-body">@ApiDescriptionLookup.Descriptions[Model.Product.Id]</p>
-        }
-        else
-        {
-            <p class="govuk-body">@Model.Product.Description</p>
-        }
+        <api-description class="govuk-body" tag-name="p" show-documentation-url="false" key-name="@Model.Product.Id" data="@Model.Product.Description" />
         <p class="govuk-body govuk-!-margin-bottom-6">
             You'll need to send the API key and the API page to your developer.<br/>
             You can do this by copying the information below and pasting it into an email.
@@ -80,7 +73,7 @@
         <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                    Do you need a new key?
+                    Do you need a new API key?
                 </span>
             </summary>
             <div class="govuk-details__text">
