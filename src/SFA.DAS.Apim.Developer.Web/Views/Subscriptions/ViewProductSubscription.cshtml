@@ -1,6 +1,8 @@
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
 @using SFA.DAS.Apim.Developer.Web.AppStart
+@using SFA.DAS.Apim.Developer.Web.TagHelpers
 @model SFA.DAS.Apim.Developer.Web.Models.SubscriptionViewModel
+@inject IUrlHelper _urlHelper
 @{
     if (Model.AuthenticationType == AuthenticationType.Employer)
     {
@@ -10,14 +12,20 @@
     {
         Layout = "_LayoutGeneric";
     }
-    ViewData["Title"] = "Key for API";
+    if (Model.AuthenticationType == AuthenticationType.External)
+    {
+        ViewData["Title"] = $"{Model.Product.DisplayName} key";
+    }
+    else
+    {
+        ViewData["Title"] = "Key for API";   
+    }
 }
 
 @* ReSharper disable once Razor.SectionNotResolved *@
 @section breadcrumb {
     <span class="das-js-back-link"></span>
 }
-
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -30,40 +38,50 @@
                 </h1>
             </div>
         }
-        <h1 class="govuk-heading-xl">Key for API</h1>
-        <p class="govuk-body">
-            You need to copy the API key and give it to your developer, this gives them permission to connect to the API on your behalf.
+        @if (Model.AuthenticationType == AuthenticationType.External)
+        {
+            <h1 class="govuk-heading-xl">@Model.Product.DisplayName key</h1>
+            <p class="govuk-body">
+                You need to copy the API key and use it to access the API. If you give it to a developer, this gives them permission to connect to the API on your behalf.
+            </p>
+        }
+        else
+        {
+            <h1 class="govuk-heading-xl">Key for API</h1>
+            <p class="govuk-body">
+                The API key gives your developer permission to connect to the API on your behalf.
+            </p>
+        }
+        
+        <h2 class="govuk-heading-l">@Model.Product.DisplayName</h2>
+        <api-description class="govuk-body" tag-name="p" show-documentation-url="false" key-name="@Model.Product.Id" data="@Model.Product.Description" />
+        <p class="govuk-body govuk-!-margin-bottom-6">
+            You'll need to send the API key and the API page to your developer.<br/>
+            You can do this by copying the information below and pasting it into an email.
         </p>
-        <div class="app-summary-card">
-            <header class="app-summary-card__header">
-                <h3 class="govuk-heading-s app-summary-card__heading">@Model.Product.DisplayName</h3>
-            </header>
-            <div class="app-summary-card__content">
-                <api-description class="govuk-body" tag-name="p" api-name="@Model.Product.Name" key-name="@Model.Product.Id" data="@Model.Product.Description"/>
-                <dl class="govuk-summary-list govuk-summary-list__m">
-                    <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">
-                            API key
-                        </dt>
-                        <dd class="govuk-summary-list__value">
-                            <code class="app-code" id="key-@Model.Product.Key">@Model.Product.Key</code>
-                        </dd>
-                        <dd class="govuk-summary-list__actions">
-                            <span data-copy-target="key-@Model.Product.Key" data-accessible-label="@Model.Product.DisplayName"></span>
-                        </dd>
-                    </div>
-                </dl>
-                <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">
-                            Do you need a new key?
-                        </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                        Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
-                    </div>
-                </details>
-            </div>
+        
+        <div class="app-api-info">
+            <span class="app-api-info__key" id="key-@Model.Product.Key">
+                @Model.Product.Key
+                <br />
+                <br />
+                @Url.RouteUrl(RouteNames.Documentation, new { apiName = Model.Product.Name}, "https")
+            </span>
+            <span data-copy-target="key-@Model.Product.Key" data-accessible-label="@Model.Product.DisplayName" class="app-api-info__button-wrap"></span>
         </div>
+
+        <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    Do you need a new API key?
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                Reasons you might want to renew your API key include – security concerns, a change in your systems or a change of developer or staff.
+            </div>
+            <div class="govuk-details__text">
+                Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
+            </div>
+        </details>
     </div>
 </div>

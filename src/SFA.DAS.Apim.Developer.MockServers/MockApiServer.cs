@@ -25,16 +25,25 @@ namespace SFA.DAS.Apim.Developer.MockServer
             var server = StandAloneApp.Start(settings);
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/subscriptions/([A-Za-z0-9-])+/products"))
+                .WithPath(s => Regex.IsMatch(s, "/subscriptions/([A-Za-z0-9-])+/products$"))
                 .UsingGet()
             ).RespondWith(
                 Response.Create()
                     .WithStatusCode(200)
                     .WithHeader("Content-Type", "application/json")
                     .WithBodyFromFile("product-subscriptions.json"));
+            
+            server.Given(Request.Create()
+                .WithPath(s => Regex.IsMatch(s, "/subscriptions/([A-Za-z0-9-])+/products/\\w+"))
+                .UsingGet()
+            ).RespondWith(
+                Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBodyFromFile("product-subscription.json"));
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-])+/accounts"))
+                .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-])+/accounts$"))
                 //http:localhost:5031/accountusers/45464/accounts
                 .UsingGet()
             ).RespondWith(
@@ -43,6 +52,14 @@ namespace SFA.DAS.Apim.Developer.MockServer
                     .WithHeader("Content-Type", "application/json")
                     .WithBodyFromFile("user-accounts.json"));
 
+            server.Given(Request.Create()
+                .WithPath(s => Regex.IsMatch(s, "/users/authenticate"))
+                .UsingPost()
+            ).RespondWith(
+                Response.Create()
+                    .WithStatusCode(200)
+                    .WithHeader("Content-Type", "application/json")
+                    .WithBodyFromFile("user-authenticated.json"));
 
             return server;
         }

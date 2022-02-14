@@ -16,10 +16,11 @@ CopyTarget.prototype.init = function() {
 
 CopyTarget.prototype.createLink = function() {
     var link = document.createElement('a')
-        link.className = "govuk-link govuk-link--no-visited-state";
-        link.innerHTML = this.accessibleLabel ? 'Copy<span class="govuk-visually-hidden"> ' + this.accessibleLabel + '</span>' : 'Copy'
+        link.className = "app-copy-button app-api-info__button";
+        link.innerHTML = this.accessibleLabel ? 'Copy key<span class="govuk-visually-hidden"> for ' + this.accessibleLabel + '</span>' : 'Copy key'
         link.href = "#"
         link.addEventListener("click", this.copyTargetAction.bind(this))
+    this.link = link
     this.container.appendChild(link)
 }
 
@@ -27,19 +28,11 @@ CopyTarget.prototype.copyTargetAction = function(e) {
     var textToCopy = this.targetElement.innerText
     var that = this
     navigator.clipboard.writeText(textToCopy).then(function() {
-        that.container.innerText = "Key copied"
-        that.showBanner()
+        that.link.innerText = "Key copied"
     }, function() {
         that.container.innerText = "Failed"
     });
     e.preventDefault()
-}
-
-CopyTarget.prototype.showBanner = function() {
-    var banner = document.getElementById('renew-confirmation-banner')
-    if (banner) {
-        banner.style.display = "none"
-    }
 }
 
 // nodeListForEach

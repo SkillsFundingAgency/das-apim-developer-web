@@ -1,0 +1,10 @@
+{
+  "user": {
+    "id": "16589c0d-b6ba-4de1-b733-5532a0ce8618",
+    "firstName": "Hoffen",
+    "lastName": "Hofmeister",
+    "state": "active",
+    "email": "hoff@thehoff.com",
+    "authenticated": true
+  }
+}
