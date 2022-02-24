@@ -15,7 +15,7 @@
             <p class="govuk-body">
                 <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
                 <br/>
-                <span class="govuk-caption">@apiProduct.Description</span>
+                <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description" />
             </p>
         }
         
