@@ -263,5 +263,12 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("terms-conditions", Name = RouteNames.ThirdPartyTermsConditions)]
+        public IActionResult TermsConditions()
+        {
+            return View();
+        }
     }
 }
