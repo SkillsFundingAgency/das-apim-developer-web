@@ -23,7 +23,7 @@ refresh subscription keys to access externally available APIs.
 ### Pre-Requisites
 
 * .net core 3.1 and any supported IDE for DEV running
-* Azure Storage Account - using the emulator or azurelite
+* Azure Storage Account - using the emulator or azurite
 * Clone of this repository
 
 ### Config
