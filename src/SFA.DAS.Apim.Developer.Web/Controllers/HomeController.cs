@@ -27,14 +27,20 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
 
         public async Task <IActionResult> Index()
         {
-            var result = await _mediator.Send(new GetAvailableProductsQuery
+            var apiProducts = await _mediator.Send(new GetAvailableProductsQuery
             {
                 AccountIdentifier = Guid.Empty.ToString(),
                 AccountType = "Documentation"
             });
+            var externalProducts = await _mediator.Send(new GetAvailableProductsQuery
+            {
+                AccountIdentifier = Guid.Empty.ToString(),
+                AccountType = "ExternalUsers"
+            });
             var model = new HomePageViewModel
             {
-                ApiProducts = result.Products.Products.Select(c=>(SubscriptionItem)c).ToList(),
+                ApiProducts = apiProducts.Products.Products.Select(c=>(SubscriptionItem)c).ToList(),
+                ExternalProducts = externalProducts.Products.Products.Select(c => (SubscriptionItem)c).ToList(),
                 DocumentationBaseUrl = _configuration.DocumentationBaseUrl
             };
             return View(model);

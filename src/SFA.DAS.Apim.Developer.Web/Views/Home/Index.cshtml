@@ -25,13 +25,23 @@
         <p class="govuk-body">The API key the employer or training provider will send to you is linked to their account and provides additional functionality, so use that one.</p>
         <p class="govuk-body">You can view the API documentation now, using the links at the top of the page. You can read the documentation but will not be able to call the API until the employer or provider gives you an API key.</p>
         
-        <h2 class="govuk-heading-l" id="independent-api-info">Using our display adverts API if you are working independently</h2>
+        <h2 class="govuk-heading-l" id="independent-api-info">Using our APIs if you are working independently</h2>
         
-        <p class="govuk-body">If you are not working with an employer or training provider and don’t have an apprenticeship service account, you can use the Display adverts API to show adverts from Find apprenticeship training on any website.</p>
+        <p class="govuk-body">If you are not working with an employer or training provider and don’t have an apprenticeship service account, you can use a subset of the Apprenticeship Service APIs as listed below.</p>
         <p class="govuk-body">If you are not a software developer, you'll need someone with technical knowledge to connect your system with the API.</p>
-        <p class="govuk-body">You will need to <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account or sign in to get an API key</a> to use the display advert API.</p>
-        <p class="govuk-body">You can <a asp-route="@RouteNames.Documentation" asp-route-apiName="@vacanciesOuterApi?.Name" class="govuk-link govuk-link--no-visited-state">view the API</a>, but you will need a key before you can call the API.</p>
+        <p class="govuk-body">You will need to <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account or sign in to get an API key</a> to use the Apprenticeship Service API.</p>
         
+        <h2 class="govuk-heading-l" id="independent-api-info">Apprenticeship Service APIs you can use if working independently</h2>
+        
+        @foreach(var externalProduct in Model.ExternalProducts)
+        {
+            <p class="govuk-body">
+                <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@externalProduct.Name" class="govuk-link">@externalProduct.DisplayName</a>
+                <br/>
+                <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@externalProduct.Id" data="@externalProduct.Description" />
+            </p>
+        }
+
         <h2 class="govuk-heading-l">RESTful APIs</h2>
         
         <p class="govuk-body">Apprenticeship service APIs are RESTful. In a RESTful style of API, data resources are given unique URLs and are manipulated through standard HTTP verbs such as:</p>
