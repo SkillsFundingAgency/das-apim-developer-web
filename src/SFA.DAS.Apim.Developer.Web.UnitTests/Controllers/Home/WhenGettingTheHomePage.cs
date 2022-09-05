@@ -22,6 +22,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Home
         public async Task Then_The_Query_Is_Called_To_Get_Products_And_Documentation_Base_Url_Set(
             string documentationBaseUrl,
             GetAvailableProductsQueryResult response,
+            GetAvailableProductsQueryResult externalUsersResponse,
             [Frozen] Mock<IOptions<ApimDeveloperWeb>> config,
             [Frozen] Mock<IMediator> mediator,
             [Greedy] HomeController controller)
@@ -32,7 +33,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Home
                     c.AccountIdentifier.Equals(Guid.Empty.ToString())
                     && c.AccountType.Equals("Documentation")), CancellationToken.None))
                 .ReturnsAsync(response);
-            
+
+            mediator.Setup(x => x.Send(
+                It.Is<GetAvailableProductsQuery>(c =>
+                    c.AccountIdentifier.Equals(Guid.Empty.ToString())
+                    && c.AccountType.Equals("ExternalUsers")), CancellationToken.None))
+                .ReturnsAsync(externalUsersResponse);
+
             var actual = await controller.Index() as ViewResult;
             
             Assert.IsNotNull(actual);
