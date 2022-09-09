@@ -59,12 +59,10 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null)
         {
             var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
-            
-            var result = await _mediator.Send(new GetAvailableProductsQuery
-            {
-                AccountType = _serviceParameters.AuthenticationType.GetDescription(),
-                AccountIdentifier = subscriptionRouteModel.AccountIdentifier
-            });
+
+            var result = await _mediator.Send(new GetAvailableProductsQuery(
+                _serviceParameters.AuthenticationType.GetDescription(),
+                subscriptionRouteModel.AccountIdentifier));
             
             var model = (SubscriptionsViewModel)result;
             model.EmployerAccountId = employerAccountId;

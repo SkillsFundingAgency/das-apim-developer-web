@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
+using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models;
 
@@ -27,14 +28,14 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
 
         public async Task <IActionResult> Index()
         {
-            var result = await _mediator.Send(new GetAvailableProductsQuery
-            {
-                AccountIdentifier = Guid.Empty.ToString(),
-                AccountType = "Documentation"
-            });
+            var (apiProducts, externalProducts) = await TaskEx.AwaitAll(
+                _mediator.Send(new GetAvailableProductsQuery("Documentation")),
+                _mediator.Send(new GetAvailableProductsQuery("ExternalUsers")));
+
             var model = new HomePageViewModel
             {
-                ApiProducts = result.Products.Products.Select(c=>(SubscriptionItem)c).ToList(),
+                ApiProducts = apiProducts.Products.Products.Select(c=>(SubscriptionItem)c).ToList(),
+                ExternalProducts = externalProducts.Products.Products.Select(c => (SubscriptionItem)c).ToList(),
                 DocumentationBaseUrl = _configuration.DocumentationBaseUrl
             };
             return View(model);
