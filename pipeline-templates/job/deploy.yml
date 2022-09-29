@@ -102,7 +102,7 @@ jobs:
 
 - deployment: DeployExternalApp
   dependsOn: DeployResources
-  displayName: Deploy APIM Dev Providers App
+  displayName: Deploy APIM Dev External App
   environment: ${{ parameters.Environment }}
   pool:
     name: DAS - Continuous Deployment Agents
