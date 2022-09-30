@@ -16,6 +16,7 @@ using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
 
@@ -142,7 +143,7 @@ namespace SFA.DAS.Apim.Developer.Web
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-            
+            services.AddMaMenuConfiguration(_configuration, "Logout_Route", "idamsClientId");
             services.Configure<RouteOptions>(options =>
             {
                 

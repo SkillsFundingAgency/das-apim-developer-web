@@ -52,7 +52,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
 
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
 
-            act.Should().Throw<InvalidOperationException>()
+            act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage($"*{errorContent}*");
         }
     }

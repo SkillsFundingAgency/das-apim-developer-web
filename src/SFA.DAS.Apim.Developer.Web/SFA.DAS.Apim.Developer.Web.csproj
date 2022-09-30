@@ -1,36 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="8.1.0" />
-        <PackageReference Include="mediatr.extensions.microsoft.dependencyinjection" Version="8.1.0" />
-        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="3.1.13" />
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="2.2.5" />
+        <PackageReference Include="MediatR" Version="11.0.0" />
+        <PackageReference Include="mediatr.extensions.microsoft.dependencyinjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
         <PackageReference Include="microsoft.AspNetCore.Mvc.viewfeatures" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.1.6" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="3.1.6" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="3.1.6" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.15" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.3" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4" />
         <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-        <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.1.5" />
+        <PackageReference Include="SFA.DAS.EmployerUrlHelper" Version="3.0.43" />
+        <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
-        <PackageReference Include="SFA.DAS.MA.Shared.UI" Version="1.1.79" />
-        <PackageReference Include="StackExchange.Redis" Version="2.1.30" />
-        <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.13.1" />
+        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="2.0.28" />
+        <PackageReference Include="SFA.DAS.GovUK.Auth" Version="0.2.188" />
+        <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
         <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.21" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
-        <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.6" />
+        <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.12" />
     </ItemGroup>
     
     <ItemGroup>
