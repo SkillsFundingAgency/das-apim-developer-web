@@ -151,7 +151,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
-            services.AddApplicationInsightsTelemetry(_configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+            services.AddApplicationInsightsTelemetry();
 
             if (!_environment.IsDevelopment())
             {
