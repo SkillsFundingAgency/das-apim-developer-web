@@ -1,20 +1,14 @@
-﻿@using SFA.DAS.Apim.Developer.Web.Extensions
-@using SFA.DAS.Employer.Shared.UI.Models
-@using WebEssentials.AspNetCore.CdnTagHelpers
+﻿@using SFA.DAS.Employer.Shared.UI.Models
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 
-@* @using Microsoft.Azure.Documents.SystemFunctions *@
-@* @using StructureMap.Diagnostics.TreeView *@
 @{
     var tagManagerCode = "GTM-TD56SF5";
-    string accountId = (string)this.ViewContext.RouteData.Values["employerAccountId"];
+    string accountId = (string)this.ViewContext.RouteData.Values["employerAccountId"] ?? "";
     ViewBag.HideHeaderBorder = true;
     var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
+    
 }
-@* @if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase)) *@
-@* { *@
-@*     tagManagerCode = "GTM-KWQBWGJ"; *@
-@* } *@
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
 <head>
@@ -55,9 +49,6 @@
 
         <partial name="_Header">
             <partial name="_Menu" model="@accountId">
-                <div class="govuk-width-container app-account-header">
-                    @RenderSection("BodyHeader", required: false)
-                </div>
             </partial>
         </partial>
             <div class="das-section--dashboard">
@@ -68,15 +59,15 @@
                 </div>
             </div>
             
-                <partial name="_Footer" model="@footerModel">
-                    <script src="/libs/govuk-frontend/all.js"></script>
-                    <script src="/libs/jquery/jquery.min.js"></script>
-                    <script src="/js/das-all.js"></script>
-                    <script src="/js/app.min.js"></script>
-                    <script>
-                        window.GOVUKFrontend.initAll();
-                        window.DASFrontend.initAll();
-                    </script>
-                </partial>
+        <partial name="_Footer" model="@footerModel"/>
+        <script src="/libs/govuk-frontend/all.js"></script>
+        <script src="/libs/jquery/jquery.min.js"></script>
+        <script src="/js/das-all.js"></script>
+        <script src="/js/app.min.js"></script>
+        <script>
+            window.GOVUKFrontend.initAll();
+            window.DASFrontend.initAll();
+        </script>
+                
     </body>
 </html>

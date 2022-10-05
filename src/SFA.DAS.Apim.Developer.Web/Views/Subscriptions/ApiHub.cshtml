@@ -13,12 +13,12 @@
 }
 
 
-@if (Model.AuthenticationType != AuthenticationType.External)
+@if (Model.AuthenticationType == AuthenticationType.Provider)
 {
     @* ReSharper disable once Razor.SectionNotResolved *@
     @section breadcrumb {
         <span class="das-js-back-link"></span>
-    }    
+    }
 }
 
 
@@ -46,7 +46,7 @@
                         {
                             <a asp-route="@Model.ViewKeyRouteName" id="view-key-for-@subscriptionItem.Id" asp-route-id="@subscriptionItem.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">
                                 View key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
-                            </a>    
+                            </a>
                         }
                         else
                         {
@@ -55,7 +55,7 @@
                                     Get key <span class="govuk-visually-hidden">for the @subscriptionItem.DisplayName</span>
                                 </button>
                             </form>
-                            
+                
                         }
                     </td>
                 </tr>

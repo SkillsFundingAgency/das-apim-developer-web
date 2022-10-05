@@ -25,10 +25,6 @@ namespace SFA.DAS.Apim.Developer.Web.AcceptanceTests.Infrastructure
                     new KeyValuePair<string, string>("ProviderIdams:Wtrealm", "https://localhost:5011/"),
                     new KeyValuePair<string, string>("ProviderSharedUIConfiguration:DashboardUrl", "https://at-pas.apprenticeships.education.gov.uk/"),
                     
-                    new KeyValuePair<string, string>("ExternalLinks:ManageApprenticeshipSiteUrl", "https://localhost:5001/"),
-                    new KeyValuePair<string, string>("ExternalLinks:CommitmentsSiteUrl", "https://localhost:5001/"),
-                    new KeyValuePair<string, string>("ExternalLinks:EmployerRecruitmentSiteUrl", "https://localhost:5001/")
-                    
                 }
             };
 

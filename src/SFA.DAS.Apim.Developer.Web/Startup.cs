@@ -1,20 +1,11 @@
-using System;
-using System.IO;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
-using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
+using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.Provider.Shared.UI.Models;
@@ -85,6 +76,7 @@ namespace SFA.DAS.Apim.Developer.Web
             
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
+                var clientId = "no-auth-id";
                 services.AddEmployerAuthenticationServices();
                 if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
@@ -93,13 +85,14 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    services.AddAndConfigureEmployerAuthentication(
-                        _configuration
-                            .GetSection("Identity")
-                            .Get<IdentityServerConfiguration>());
+                    var config = _configuration
+                        .GetSection("Identity")
+                        .Get<IdentityServerConfiguration>();
+                    services.AddAndConfigureEmployerAuthentication(config);
+                    clientId = config.ClientId;
                 }
                 
-                
+                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
@@ -143,7 +136,7 @@ namespace SFA.DAS.Apim.Developer.Web
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-            services.AddMaMenuConfiguration(_configuration, "Logout_Route", "idamsClientId");
+            
             services.Configure<RouteOptions>(options =>
             {
                 
@@ -154,7 +147,7 @@ namespace SFA.DAS.Apim.Developer.Web
                         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());    
                     }
                     
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                })
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
