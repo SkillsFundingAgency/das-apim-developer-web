@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Domain.Employers;
-using SFA.DAS.Apim.Developer.Domain.Employers.Api;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
 namespace SFA.DAS.Apim.Developer.Web.Infrastructure
