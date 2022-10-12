@@ -41,12 +41,16 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         }
         
         string userId;
+        var email = string.Empty;
         var useGovAuth = _configuration["UseGovSignIn"] != null && _configuration["UseGovSignIn"]
             .Equals("true", StringComparison.CurrentCultureIgnoreCase);
         if (useGovAuth)
         {
             userId = ctx.Principal.Claims
                 .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))
+                .Value;
+            email = ctx.Principal.Claims
+                .First(c => c.Type.Equals(ClaimTypes.Email))
                 .Value;
         }
         else
@@ -56,17 +60,8 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .Value;
         }
             
-        var result = await _accountsSvc.GetUserAccounts(userId);
+        var result = await _accountsSvc.GetUserAccounts(userId, email);
 
-        if (useGovAuth && (result.EmployerAccounts == null || !result.EmployerAccounts.Any()))
-        {
-            var email = ctx.Principal.Claims
-                .First(c => c.Type.Equals(ClaimTypes.Email))
-                .Value;
-            result = await _accountsSvc.GetUserAccountsByEmail(email);
-            await _accountsSvc.UpdateUserAccountIdentifier(email, userId);
-        }
-        
         var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
         var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
         return new List<Claim> {associatedAccountsClaim};

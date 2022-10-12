@@ -77,9 +77,11 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
                 var userClaim = context.User.Claims
                     .First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
 
+                var email = context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
+
                 var userId = userClaim.Value;
 
-                var result = _accountsService.GetUserAccounts(userId).Result;
+                var result = _accountsService.GetUserAccounts(userId, email).Result;
                 
                 var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
                 var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);

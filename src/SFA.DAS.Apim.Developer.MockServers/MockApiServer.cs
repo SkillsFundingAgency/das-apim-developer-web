@@ -44,7 +44,6 @@ namespace SFA.DAS.Apim.Developer.MockServer
 
             server.Given(Request.Create()
                 .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-])+/accounts$"))
-                //http:localhost:5031/accountusers/45464/accounts
                 .UsingGet()
             ).RespondWith(
                 Response.Create()

@@ -34,34 +34,12 @@ public class WhenPopulatingAccountClaims
         
         var actual = await handler.GetClaims(null);
         
-        accountService.Verify(x=>x.GetUserAccounts(It.IsAny<string>()), Times.Never);
+        accountService.Verify(x=>x.GetUserAccounts(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         actual.Should().ContainSingle(c => c.Value.Equals(expectedClaimEmail));
     }
     
     [Test, MoqAutoData]
     public async Task Then_The_Claims_Are_Populated_For_Gov_User(
-        string nameIdentifier,
-        string idamsIdentifier,
-        EmployerUserAccounts accountData,
-        [Frozen] Mock<IEmployerAccountService> accountService,
-        [Frozen] Mock<IConfiguration> configuration,
-        EmployerAccountPostAuthenticationClaimsHandler handler)
-    {
-        configuration.Setup(x => x["UseGovSignIn"]).Returns("true");
-        var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, string.Empty);
-        accountService.Setup(x => x.GetUserAccounts(nameIdentifier)).ReturnsAsync(accountData);
-        
-        var actual = await handler.GetClaims(tokenValidatedContext);
-        
-        accountService.Verify(x=>x.GetUserAccounts(nameIdentifier), Times.Once);
-        accountService.Verify(x=>x.GetUserAccounts(idamsIdentifier), Times.Never);
-        actual.Should().ContainSingle(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-        var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
-        JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
-    }
-
-    [Test, MoqAutoData]
-    public async Task Then_If_The_Account_Is_Not_Returned_For_GovUser_By_Identifier_Then_Searched_By_Email_And_Updated(
         string nameIdentifier,
         string idamsIdentifier,
         string emailAddress,
@@ -72,17 +50,17 @@ public class WhenPopulatingAccountClaims
     {
         configuration.Setup(x => x["UseGovSignIn"]).Returns("true");
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
-        accountService.Setup(x => x.GetUserAccounts(nameIdentifier)).ReturnsAsync(new EmployerUserAccounts());
-        accountService.Setup(x => x.GetUserAccountsByEmail(emailAddress)).ReturnsAsync(accountData);
+        accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         
         var actual = await handler.GetClaims(tokenValidatedContext);
         
+        accountService.Verify(x=>x.GetUserAccounts(nameIdentifier,emailAddress), Times.Once);
+        accountService.Verify(x=>x.GetUserAccounts(idamsIdentifier,emailAddress), Times.Never);
         actual.Should().ContainSingle(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
         var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
         JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
-        accountService.Verify(x=>x.UpdateUserAccountIdentifier(emailAddress, nameIdentifier), Times.Once);
     }
-    
+
     [Test, MoqAutoData]
     public async Task Then_The_Claims_Are_Populated_For_EmployerUsers_User(
         string nameIdentifier,
@@ -93,16 +71,15 @@ public class WhenPopulatingAccountClaims
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, string.Empty);
-        accountService.Setup(x => x.GetUserAccounts(idamsIdentifier)).ReturnsAsync(accountData);
+        accountService.Setup(x => x.GetUserAccounts(idamsIdentifier, "")).ReturnsAsync(accountData);
         
         var actual = await handler.GetClaims(tokenValidatedContext);
         
-        accountService.Verify(x=>x.GetUserAccounts(nameIdentifier), Times.Never);
-        accountService.Verify(x=>x.GetUserAccounts(idamsIdentifier), Times.Once);
+        accountService.Verify(x=>x.GetUserAccounts(nameIdentifier, string.Empty), Times.Never);
+        accountService.Verify(x=>x.GetUserAccounts(idamsIdentifier, string.Empty), Times.Once);
         actual.Should().ContainSingle(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
         var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
         JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
-        accountService.Verify(x=>x.UpdateUserAccountIdentifier(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
     }
 
     private TokenValidatedContext ArrangeTokenValidatedContext(string nameIdentifier, string idamsIdentifier, string emailAddress)

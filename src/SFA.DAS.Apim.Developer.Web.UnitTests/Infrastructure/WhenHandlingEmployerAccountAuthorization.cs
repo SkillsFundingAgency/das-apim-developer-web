@@ -75,6 +75,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         public void Then_If_Not_In_Context_Claims_EmployerAccountService_Checked_And_True_Returned_If_Exists(
             string accountId,
             string userId,
+            string email,
             EmployerIdentifier employerIdentifier,
             EmployerAccountRequirement requirement,
             EmployerUserAccountItem serviceResponse,
@@ -85,7 +86,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             //Arrange
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
-            employerAccountService.Setup(x => x.GetUserAccounts(userId))
+            employerAccountService.Setup(x => x.GetUserAccounts(userId, email))
                 .ReturnsAsync(new EmployerUserAccounts
                 {
                     EmployerAccounts = new List<EmployerUserAccountItem>{ serviceResponse }
@@ -94,7 +95,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var userClaim = new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId);
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
             var employerAccountClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
-            var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {employerAccountClaim, userClaim})});
+            var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {employerAccountClaim, userClaim, new Claim(ClaimTypes.Email, email)})});
             var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
             var responseMock = new FeatureCollection();
             var httpContext = new DefaultHttpContext(responseMock);
@@ -123,7 +124,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             //Arrange
             serviceResponse.AccountId = serviceResponse.AccountId.ToUpper();
             serviceResponse.Role = "Owner";
-            employerAccountService.Setup(x => x.GetUserAccounts(userId))
+            employerAccountService.Setup(x => x.GetUserAccounts(userId,""))
                 .ReturnsAsync(new EmployerUserAccounts
                 {
                     EmployerAccounts = new List<EmployerUserAccountItem>{ serviceResponse }
