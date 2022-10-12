@@ -22,5 +22,15 @@ namespace SFA.DAS.Apim.Developer.Application.Employer.Services
 
             return result.Body;
         }
+
+        public Task<EmployerUserAccounts> GetUserAccountsByEmail(string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateUserAccountIdentifier(string email, string identifier)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
