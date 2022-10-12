@@ -2,8 +2,11 @@ using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SFA.DAS.Apim.Developer.Application.Employer.Services;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Employers;
+using SFA.DAS.Apim.Developer.Domain.Interfaces;
+using SFA.DAS.Apim.Developer.Infrastructure.Api;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -82,39 +85,28 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 var clientId = "no-auth-id";
                 services.AddEmployerAuthenticationServices();
-                services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",
-                    context =>
-                    {
-                        var accountClaims = new Dictionary<string, EmployerUserAccountItem>();
-                        accountClaims.Add("", new EmployerUserAccountItem
-                        {
-                            Role = "Owner",
-                            AccountId = "ABC123",
-                            EmployerName = "Stub Employer"
-                        });
-                        var claims = new[]
-                        {
-                            new Claim(EmployerClaims.AccountsClaimsTypeIdentifier,
-                                JsonConvert.SerializeObject(accountClaims)),
-                            new Claim(EmployerClaims.EmployerEmailClaimsTypeIdentifier, _configuration["NoAuthEmail"]),
-                            new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString())
-                        };
-                        return Task.FromResult(claims.ToList());
-                    });
-                // if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                //         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                // {
-                //     services.AddEmployerStubAuthentication();    
-                // }
-                // else
-                // {
-                //     var config = _configuration
-                //         .GetSection("Identity")
-                //         .Get<IdentityServerConfiguration>();
-                     //services.AddAndConfigureEmployerAuthentication(config);
-                //     clientId = config.ClientId;
-                // }
-                
+                if (_configuration["UseGovSignIn"] != null && _configuration["UseGovSignIn"]
+                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                }
+                else
+                {
+                     if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                             .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                     {
+                         services.AddEmployerStubAuthentication();    
+                     }
+                     else
+                     {
+                         var config = _configuration
+                             .GetSection("Identity")
+                             .Get<IdentityServerConfiguration>();
+                         services.AddAndConfigureEmployerAuthentication(config);
+                         clientId = config.ClientId;
+                     }
+                }
+
                 services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
