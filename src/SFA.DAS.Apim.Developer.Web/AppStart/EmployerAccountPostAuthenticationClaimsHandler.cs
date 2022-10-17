@@ -42,7 +42,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         
         string userId;
         var email = string.Empty;
-        var useGovAuth = _configuration["UseGovSignIn"] != null && _configuration["UseGovSignIn"]
+        var useGovAuth = _configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
             .Equals("true", StringComparison.CurrentCultureIgnoreCase);
         if (useGovAuth)
         {

@@ -48,7 +48,7 @@ public class WhenPopulatingAccountClaims
         [Frozen] Mock<IConfiguration> configuration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
-        configuration.Setup(x => x["UseGovSignIn"]).Returns("true");
+        configuration.Setup(x => x["ApimDeveloperWeb:UseGovSignIn"]).Returns("true");
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         

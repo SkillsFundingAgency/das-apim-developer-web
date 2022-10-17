@@ -85,7 +85,7 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 var clientId = "no-auth-id";
                 services.AddEmployerAuthenticationServices();
-                if (_configuration["UseGovSignIn"] != null && _configuration["UseGovSignIn"]
+                if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
