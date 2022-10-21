@@ -16,6 +16,7 @@ using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
 {
@@ -28,6 +29,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         [TestCase(typeof(IExternalAccountAuthorizationHandler))]
         [TestCase(typeof(IApiDescriptionHelper))]
         [TestCase(typeof(IUserService))]
+        [TestCase(typeof(ICustomClaims))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {
             var serviceCollection = new ServiceCollection();
