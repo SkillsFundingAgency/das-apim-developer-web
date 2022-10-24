@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
@@ -17,12 +19,14 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmployerAccountService _accountsService;
         private readonly ILogger<EmployerAccountAuthorizationHandler> _logger;
+        private readonly ApimDeveloperWeb _apimDeveloperWebConfiguration;
 
-        public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger)
+        public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger, IOptions<ApimDeveloperWeb> apimDeveloperWebConfiguration)
         {
             _httpContextAccessor = httpContextAccessor;
             _accountsService = accountsService;
             _logger = logger;
+            _apimDeveloperWebConfiguration = apimDeveloperWebConfiguration.Value;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountRequirement requirement)
@@ -71,11 +75,13 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
             if (employerAccounts == null || !employerAccounts.ContainsKey(accountIdFromUrl))
             {
-                if (!context.User.HasClaim(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier)))
+                var requiredIdClaim =_apimDeveloperWebConfiguration.UseGovSignIn.Equals("true", StringComparison.CurrentCultureIgnoreCase) ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
+                
+                if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
                     return false;
-
+                
                 var userClaim = context.User.Claims
-                    .First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier));
+                    .First(c => c.Type.Equals(requiredIdClaim));
 
                 var email = context.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Email))?.Value;
 
