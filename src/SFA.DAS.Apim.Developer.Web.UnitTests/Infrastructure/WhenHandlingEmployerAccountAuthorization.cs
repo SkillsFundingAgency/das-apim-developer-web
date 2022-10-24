@@ -83,9 +83,11 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerUserAccountItem serviceResponse,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             [Frozen] Mock<IEmployerAccountService> employerAccountService,
+            [Frozen] Mock<IOptions<ApimDeveloperWeb>> configuration,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
+            configuration.Object.Value.UseGovSignIn = null;
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId, email))

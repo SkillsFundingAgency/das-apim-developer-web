@@ -75,7 +75,8 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
             if (employerAccounts == null || !employerAccounts.ContainsKey(accountIdFromUrl))
             {
-                var requiredIdClaim =_apimDeveloperWebConfiguration.UseGovSignIn.Equals("true", StringComparison.CurrentCultureIgnoreCase) ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
+                var requiredIdClaim =!string.IsNullOrEmpty(_apimDeveloperWebConfiguration.UseGovSignIn) && _apimDeveloperWebConfiguration.UseGovSignIn.Equals("true", StringComparison.CurrentCultureIgnoreCase) 
+                    ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
                 
                 if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
                     return false;
