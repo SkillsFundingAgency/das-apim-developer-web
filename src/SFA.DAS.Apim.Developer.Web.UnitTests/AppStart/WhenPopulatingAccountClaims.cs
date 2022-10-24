@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -46,9 +48,10 @@ public class WhenPopulatingAccountClaims
         EmployerUserAccounts accountData,
         [Frozen] Mock<IEmployerAccountService> accountService,
         [Frozen] Mock<IConfiguration> configuration,
+        [Frozen] Mock<IOptions<ApimDeveloperWeb>> apimWebConfiguration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
-        configuration.Setup(x => x["ApimDeveloperWeb:UseGovSignIn"]).Returns("true");
+        apimWebConfiguration.Object.Value.UseGovSignIn = "true";
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         

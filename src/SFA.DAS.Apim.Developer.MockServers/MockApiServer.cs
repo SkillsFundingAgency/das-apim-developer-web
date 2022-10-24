@@ -43,7 +43,7 @@ namespace SFA.DAS.Apim.Developer.MockServer
                     .WithBodyFromFile("product-subscription.json"));
 
             server.Given(Request.Create()
-                .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-])+/accounts$"))
+                .WithPath(s => Regex.IsMatch(s, "/accountusers/([A-Za-z0-9-:.])+/accounts$"))
                 .UsingGet()
             ).RespondWith(
                 Response.Create()

@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
@@ -13,11 +15,13 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {
     private readonly IEmployerAccountService _accountsSvc;
     private readonly IConfiguration _configuration;
+    private readonly ApimDeveloperWeb _apimDeveloperWebConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IEmployerAccountService accountsSvc, IConfiguration configuration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IEmployerAccountService accountsSvc, IConfiguration configuration, IOptions<ApimDeveloperWeb> apimDeveloperWebConfiguration)
     {
         _accountsSvc = accountsSvc;
         _configuration = configuration;
+        _apimDeveloperWebConfiguration = apimDeveloperWebConfiguration.Value;
     }
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext ctx)
     {
@@ -42,9 +46,8 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         
         string userId;
         var email = string.Empty;
-        var useGovAuth = _configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
-            .Equals("true", StringComparison.CurrentCultureIgnoreCase);
-        if (useGovAuth)
+        if (_apimDeveloperWebConfiguration.UseGovSignIn
+                .Equals("true", StringComparison.CurrentCultureIgnoreCase))
         {
             userId = ctx.Principal.Claims
                 .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))
