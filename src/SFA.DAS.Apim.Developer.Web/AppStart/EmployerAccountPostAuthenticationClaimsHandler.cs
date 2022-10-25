@@ -46,8 +46,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
         
         string userId;
         var email = string.Empty;
-        if (_apimDeveloperWebConfiguration.UseGovSignIn
-                .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+        if (_apimDeveloperWebConfiguration.UseGovSignIn)
         {
             userId = ctx.Principal.Claims
                 .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))

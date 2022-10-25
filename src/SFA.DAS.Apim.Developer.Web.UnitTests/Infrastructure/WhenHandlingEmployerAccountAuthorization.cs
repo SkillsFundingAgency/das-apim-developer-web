@@ -87,7 +87,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
-            configuration.Object.Value.UseGovSignIn = null;
+            configuration.Object.Value.UseGovSignIn = false;
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId, email))
@@ -128,7 +128,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
-            configuration.Object.Value.UseGovSignIn = "true";
+            configuration.Object.Value.UseGovSignIn = true;
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId, email))
@@ -358,7 +358,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
-            apimDeveloperWebConfiguration.Object.Value.UseGovSignIn = "true";
+            apimDeveloperWebConfiguration.Object.Value.UseGovSignIn = true;
             employerIdentifier.Role = "Viewer-Owner-Transactor";
             employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};

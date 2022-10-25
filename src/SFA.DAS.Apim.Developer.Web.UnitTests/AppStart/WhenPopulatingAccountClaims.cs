@@ -51,7 +51,7 @@ public class WhenPopulatingAccountClaims
         [Frozen] Mock<IOptions<ApimDeveloperWeb>> apimWebConfiguration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
-        apimWebConfiguration.Object.Value.UseGovSignIn = "true";
+        apimWebConfiguration.Object.Value.UseGovSignIn = true;
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         
@@ -71,10 +71,12 @@ public class WhenPopulatingAccountClaims
         EmployerUserAccounts accountData,
         [Frozen] Mock<IEmployerAccountService> accountService,
         [Frozen] Mock<IConfiguration> configuration,
+        [Frozen] Mock<IOptions<ApimDeveloperWeb>> apimDeveloperWebConfiguration,
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, string.Empty);
         accountService.Setup(x => x.GetUserAccounts(idamsIdentifier, "")).ReturnsAsync(accountData);
+        apimDeveloperWebConfiguration.Object.Value.UseGovSignIn = false;
         
         var actual = await handler.GetClaims(tokenValidatedContext);
         
