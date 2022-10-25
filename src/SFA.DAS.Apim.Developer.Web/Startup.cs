@@ -145,7 +145,8 @@ namespace SFA.DAS.Apim.Developer.Web
             }
 
             services.AddSharedAuthenticationServices();
-            if (serviceParameters.AuthenticationType != AuthenticationType.Employer)
+            if (_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
+                    .Equals("true", StringComparison.CurrentCultureIgnoreCase))
             {
                 services.AddAuthenticationCookie(serviceParameters.AuthenticationType);    
             }
@@ -201,6 +202,8 @@ namespace SFA.DAS.Apim.Developer.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseAuthentication();
+            
             app.Use(async (context, next) =>
             {
                 if (context.Response.Headers.ContainsKey("X-Frame-Options"))
@@ -224,7 +227,6 @@ namespace SFA.DAS.Apim.Developer.Web
 
             app.UseRouting();
             
-            app.UseAuthentication();
             app.UseAuthorization();
             
             app.UseEndpoints(builder =>
