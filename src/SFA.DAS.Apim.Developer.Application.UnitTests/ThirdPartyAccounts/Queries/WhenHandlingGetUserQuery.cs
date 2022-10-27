@@ -35,7 +35,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Querie
             
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
             
-            act.Should().Throw<ValidationException>()
+            act.Should().ThrowAsync<ValidationException>()
                 .WithMessage($"*{propertyName}*");
         }
         

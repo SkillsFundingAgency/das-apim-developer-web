@@ -15,10 +15,13 @@ using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models;
+using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.Provider.Shared.UI.Attributes;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
-    
+    [Employer.Shared.UI.Attributes.SetNavigationSection(NavigationSection.RecruitHome)]
+    [SetNavigationSection(Provider.Shared.UI.NavigationSection.Recruit)]
     public class SubscriptionsController : Controller
     {
         private readonly IMediator _mediator;

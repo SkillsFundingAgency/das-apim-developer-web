@@ -10,6 +10,7 @@ using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Infrastructure.Api;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.TagHelpers;
+using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -28,7 +29,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IEmployerAccountService, EmployerAccountService>();
             services.AddTransient<IApiDescriptionHelper, ApiDescriptionHelper>();
             services.AddTransient<IUserService, UserService>();
-
+            services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
+            
             var useDevDataProtector = configuration["DevDataProtector"] != null 
                              && configuration["DevDataProtector"].Equals("true", StringComparison.CurrentCultureIgnoreCase);
             if (useDevDataProtector)

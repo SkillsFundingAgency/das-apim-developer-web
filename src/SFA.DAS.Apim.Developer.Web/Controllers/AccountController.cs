@@ -8,7 +8,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     public class AccountController : ControllerBase
     {
         [Route("signout",Name = RouteNames.ProviderSignOut)]
-        public IActionResult SignOut()
+        public IActionResult ProviderSignOut()
         {
             return SignOut(
                 new Microsoft.AspNetCore.Authentication.AuthenticationProperties
@@ -17,6 +17,5 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     AllowRefresh = true
                 },CookieAuthenticationDefaults.AuthenticationScheme, WsFederationDefaults.AuthenticationScheme);
         }
-
     }
 }

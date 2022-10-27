@@ -34,7 +34,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
             
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
             
-            act.Should().Throw<ValidationException>()
+            act.Should().ThrowAsync<ValidationException>()
                 .WithMessage($"*{propertyName}*");
         }
         
@@ -80,7 +80,7 @@ namespace SFA.DAS.Apim.Developer.Application.UnitTests.ThirdPartyAccounts.Comman
 
             var act = new Func<Task>(async () => await handler.Handle(command, CancellationToken.None));
 
-            act.Should().Throw<ValidationException>()
+            act.Should().ThrowAsync<ValidationException>()
                 .WithMessage($"*Error|There was a problem changing your password.*");
         }
     }

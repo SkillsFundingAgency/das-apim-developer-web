@@ -23,8 +23,11 @@
 }
 
 @* ReSharper disable once Razor.SectionNotResolved *@
-@section breadcrumb {
-    <span class="das-js-back-link"></span>
+@if (Model.AuthenticationType == AuthenticationType.Provider)
+{
+    @section breadcrumb {
+        <span class="das-js-back-link"></span>
+    }
 }
 
 <div class="govuk-grid-row">
