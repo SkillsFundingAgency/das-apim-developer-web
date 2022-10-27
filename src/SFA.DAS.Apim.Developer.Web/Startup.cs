@@ -1,12 +1,6 @@
-using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using SFA.DAS.Apim.Developer.Application.Employer.Services;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
-using SFA.DAS.Apim.Developer.Domain.Employers;
-using SFA.DAS.Apim.Developer.Domain.Interfaces;
-using SFA.DAS.Apim.Developer.Infrastructure.Api;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
