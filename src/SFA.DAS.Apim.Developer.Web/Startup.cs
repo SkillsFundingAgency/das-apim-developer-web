@@ -1,5 +1,14 @@
+using System;
+using System.IO;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
@@ -99,6 +108,7 @@ namespace SFA.DAS.Apim.Developer.Web
                          services.AddAndConfigureEmployerAuthentication(config);
                          clientId = config.ClientId;
                      }
+                     services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
                 }
 
                 services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
@@ -120,7 +130,7 @@ namespace SFA.DAS.Apim.Developer.Web
                         .GetSection(nameof(ProviderIdams))
                         .Get<ProviderIdams>());    
                 }
-                    
+                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);    
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
@@ -136,15 +146,10 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 
                 services.AddSingleton(new ProviderSharedUIConfiguration());
+                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
 
             services.AddSharedAuthenticationServices();
-            if (_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
-                    .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-            {
-                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);    
-            }
-            
             
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
             services.AddMediatRValidation();
