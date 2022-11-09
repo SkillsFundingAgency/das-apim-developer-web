@@ -11,6 +11,12 @@ using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
+using SFA.DAS.DfESignIn.Auth.AppStart;
+using System.Configuration;
+using SFA.DAS.DfESignIn.Auth.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using SFA.DAS.Employer.Shared.UI.Configuration;
 
 namespace SFA.DAS.Apim.Developer.Web
 {
@@ -32,17 +38,17 @@ namespace SFA.DAS.Apim.Developer.Web
                     .AddJsonFile("appsettings.Development.json", true);
             }
 #endif
-            
+
             config.AddEnvironmentVariables();
             if (!configuration.IsDev())
             {
                 config.AddAzureTableStorage(options =>
-                    {
-                        options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                        options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                        options.EnvironmentName = configuration["Environment"];
-                        options.PreFixConfigurationKeys = false;
-                    }
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = configuration["Environment"];
+                    options.PreFixConfigurationKeys = false;
+                }
                 );
             }
             _configuration = config.Build();
@@ -73,8 +79,8 @@ namespace SFA.DAS.Apim.Developer.Web
             }
 
             services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
-            
-            
+
+
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
                 var clientId = "no-auth-id";
@@ -82,26 +88,26 @@ namespace SFA.DAS.Apim.Developer.Web
                 if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                    services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(EmployerAccountPostAuthenticationClaimsHandler));
                 }
                 else
                 {
-                     if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                             .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                     {
-                         services.AddEmployerStubAuthentication();    
-                     }
-                     else
-                     {
-                         var config = _configuration
-                             .GetSection("Identity")
-                             .Get<IdentityServerConfiguration>();
-                         services.AddAndConfigureEmployerAuthentication(config);
-                         clientId = config.ClientId;
-                     }
+                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        services.AddEmployerStubAuthentication();
+                    }
+                    else
+                    {
+                        var config = _configuration
+                            .GetSection("Identity")
+                            .Get<IdentityServerConfiguration>();
+                        services.AddAndConfigureEmployerAuthentication(config);
+                        clientId = config.ClientId;
+                    }
                 }
 
-                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
+                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId, _configuration["Environment"]);
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
@@ -109,18 +115,34 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
+
                 if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    services.AddProviderStubAuthentication();
+                    if (_configuration["ApimDeveloperWeb:UseDfeSignIn"] != null && _configuration["ApimDeveloperWeb:UseDfeSignIn"]
+                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
+                    }
+                    else
+                    {
+                        services.AddProviderStubAuthentication();
+                    }
                 }
                 else
                 {
-                    services.AddAndConfigureProviderAuthentication(_configuration
-                        .GetSection(nameof(ProviderIdams))
-                        .Get<ProviderIdams>());    
+                    if (_configuration["ApimDeveloperWeb:UseDfeSignIn"] != null && _configuration["ApimDeveloperWeb:UseDfeSignIn"]
+                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
+                    }
+                    else
+                    {
+                        services.AddAndConfigureProviderAuthentication(_configuration
+                            .GetSection(nameof(ProviderIdams))
+                        .Get<ProviderIdams>());
+                    }
                 }
-                    
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
@@ -132,36 +154,39 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    services.AddAndConfigureExternalUserAuthentication();    
+                    services.AddAndConfigureExternalUserAuthentication();
                 }
-                
+
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
 
             services.AddSharedAuthenticationServices();
-            if (_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
-                    .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+
+            if ((_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
+                                .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                                && serviceParameters.AuthenticationType != AuthenticationType.Employer
+                                && serviceParameters.AuthenticationType != AuthenticationType.Provider)
             {
-                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);    
+                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
-            
-            
+
+
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-            
+
             services.Configure<RouteOptions>(options =>
             {
-                
+
             }).AddMvc(options =>
+            {
+                if (!_configuration.IsDev())
                 {
-                    if (!_configuration.IsDev())
-                    {
-                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());    
-                    }
-                    
-                })
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                }
+
+            })
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
@@ -197,7 +222,7 @@ namespace SFA.DAS.Apim.Developer.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            
+
             app.Use(async (context, next) =>
             {
                 if (context.Response.Headers.ContainsKey("X-Frame-Options"))
@@ -220,9 +245,9 @@ namespace SFA.DAS.Apim.Developer.Web
             });
 
             app.UseRouting();
-            
+
             app.UseAuthorization();
-            
+
             app.UseEndpoints(builder =>
             {
                 builder.MapDefaultControllerRoute();

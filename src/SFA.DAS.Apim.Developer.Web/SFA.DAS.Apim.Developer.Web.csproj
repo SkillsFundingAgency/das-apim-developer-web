@@ -47,6 +47,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\das-shared-packages\SFA.DAS.DfESignIn.Auth\SFA.DAS.DfESignIn.Auth\SFA.DAS.DfESignIn.Auth.csproj" />
       <ProjectReference Include="..\SFA.DAS.Apim.Developer.Application\SFA.DAS.Apim.Developer.Application.csproj" />
       <ProjectReference Include="..\SFA.DAS.Apim.Developer.Domain\SFA.DAS.Apim.Developer.Domain.csproj" />
       <ProjectReference Include="..\SFA.DAS.Apim.Developer.Infrastructure\SFA.DAS.Apim.Developer.Infrastructure.csproj" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apim.Developer.Domain", "SFA.DAS.Apim.Developer.Domain\SFA.DAS.Apim.Developer.Domain.csproj", "{24A2F2BA-6D01-4170-8506-04C14F12930E}"
 EndProject
@@ -23,9 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apim.Developer.Web"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MockServer", "MockServer", "{A12EAD56-F69D-4679-9332-C5825A85138B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apim.Developer.MockServer", "SFA.DAS.Apim.Developer.MockServers\SFA.DAS.Apim.Developer.MockServer.csproj", "{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apim.Developer.MockServer", "SFA.DAS.Apim.Developer.MockServers\SFA.DAS.Apim.Developer.MockServer.csproj", "{C2AEA28A-38C0-4BDA-AD4D-A3741A9B4FFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Apim.Developer.Web.AcceptanceTests", "SFA.DAS.Apim.Developer.Web.AcceptanceTests\SFA.DAS.Apim.Developer.Web.AcceptanceTests.csproj", "{EE450C7F-C816-430C-9193-0F10D723C9BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Apim.Developer.Web.AcceptanceTests", "SFA.DAS.Apim.Developer.Web.AcceptanceTests\SFA.DAS.Apim.Developer.Web.AcceptanceTests.csproj", "{EE450C7F-C816-430C-9193-0F10D723C9BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.DfESignIn.Auth", "..\..\das-shared-packages\SFA.DAS.DfESignIn.Auth\SFA.DAS.DfESignIn.Auth\SFA.DAS.DfESignIn.Auth.csproj", "{A9F8D27C-7AAE-40BC-900B-B5544C13CB18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE450C7F-C816-430C-9193-0F10D723C9BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9F8D27C-7AAE-40BC-900B-B5544C13CB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9F8D27C-7AAE-40BC-900B-B5544C13CB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9F8D27C-7AAE-40BC-900B-B5544C13CB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9F8D27C-7AAE-40BC-900B-B5544C13CB18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
