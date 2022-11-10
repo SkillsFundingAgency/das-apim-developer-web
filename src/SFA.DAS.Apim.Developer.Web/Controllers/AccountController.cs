@@ -26,11 +26,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             if (_apimDeveloperWebConfiguration.Value.UseDfESignIn.Equals(true))
             {
-                var idToken = await HttpContext.GetTokenAsync("id_token");
-
                 var authenticationProperties = new AuthenticationProperties();
                 authenticationProperties.Parameters.Clear();
-                authenticationProperties.Parameters.Add("id_token", idToken);
                 return SignOut(
                     authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
             }
