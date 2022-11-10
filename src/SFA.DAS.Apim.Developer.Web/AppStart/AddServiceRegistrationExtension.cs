@@ -30,7 +30,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IApiDescriptionHelper, ApiDescriptionHelper>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
-            
+
             var useDevDataProtector = configuration["DevDataProtector"] != null 
                              && configuration["DevDataProtector"].Equals("true", StringComparison.CurrentCultureIgnoreCase);
             if (useDevDataProtector)

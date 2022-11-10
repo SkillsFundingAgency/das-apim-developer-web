@@ -116,25 +116,23 @@ namespace SFA.DAS.Apim.Developer.Web
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
 
-                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                if (_configuration["ApimDeveloperWeb:UseDfESignIn"] != null && _configuration["ApimDeveloperWeb:UseDfESignIn"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (_configuration["ApimDeveloperWeb:UseDfeSignIn"] != null && _configuration["ApimDeveloperWeb:UseDfeSignIn"]
-                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
+                        services.AddProviderStubAuthentication();
                     }
                     else
                     {
-                        services.AddProviderStubAuthentication();
+                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
                     }
                 }
                 else
                 {
-                    if (_configuration["ApimDeveloperWeb:UseDfeSignIn"] != null && _configuration["ApimDeveloperWeb:UseDfeSignIn"]
-                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
+                        services.AddProviderStubAuthentication();
                     }
                     else
                     {
