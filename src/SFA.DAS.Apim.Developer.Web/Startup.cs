@@ -116,29 +116,21 @@ namespace SFA.DAS.Apim.Developer.Web
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
 
-                if (_configuration["ApimDeveloperWeb:UseDfESignIn"] != null && _configuration["ApimDeveloperWeb:UseDfESignIn"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                if (_configuration["StubAuth"] != null && _configuration["StubAuth"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        services.AddProviderStubAuthentication();
-                    }
-                    else
-                    {
-                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
-                    }
+                    services.AddProviderStubAuthentication();
                 }
                 else
                 {
-                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    if (_configuration["ApimDeveloperWeb:UseDfESignIn"] != null && _configuration["ApimDeveloperWeb:UseDfESignIn"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        services.AddProviderStubAuthentication();
+                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
                     }
                     else
                     {
                         services.AddAndConfigureProviderAuthentication(_configuration
                             .GetSection(nameof(ProviderIdams))
-                        .Get<ProviderIdams>());
+                            .Get<ProviderIdams>());
                     }
                 }
             }
