@@ -1,5 +1,14 @@
+using System;
+using System.IO;
 using MediatR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -87,19 +96,20 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
-                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        services.AddEmployerStubAuthentication();
-                    }
-                    else
-                    {
-                        var config = _configuration
-                            .GetSection("Identity")
-                            .Get<IdentityServerConfiguration>();
-                        services.AddAndConfigureEmployerAuthentication(config);
-                        clientId = config.ClientId;
-                    }
+                     if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                             .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                     {
+                         services.AddEmployerStubAuthentication();    
+                     }
+                     else
+                     {
+                         var config = _configuration
+                             .GetSection("Identity")
+                             .Get<IdentityServerConfiguration>();
+                         services.AddAndConfigureEmployerAuthentication(config);
+                         clientId = config.ClientId;
+                     }
+                     services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
                 }
 
                 services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId, _configuration["Environment"]);
@@ -143,10 +153,10 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
 
                 services.AddSingleton(new ProviderSharedUIConfiguration());
+                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
 
             services.AddSharedAuthenticationServices();
-
 
             if ((_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
                             .Equals("true", StringComparison.CurrentCultureIgnoreCase))
@@ -155,7 +165,6 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
-
 
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
             services.AddMediatRValidation();
