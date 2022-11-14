@@ -1,15 +1,9 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
-using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -55,22 +49,14 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                 });
             services
                 .AddOptions<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme)
-                .Configure<IEmployerAccountService>((options, accountsService) =>
+                .Configure<IEmployerAccountService, ICustomClaims>((options, accountsService, customClaims) =>
                 {
-                    options.Events.OnTokenValidated = async (ctx) => await PopulateAccountsClaim(ctx, accountsService);
+                    options.Events.OnTokenValidated = async (ctx) =>
+                    {
+                        var claims = await customClaims.GetClaims(ctx);
+                        ctx.Principal.Identities.First().AddClaims(claims);
+                    };
                 });
-        }
-
-        private static async Task PopulateAccountsClaim(TokenValidatedContext ctx, IEmployerAccountService accountsSvc)
-        {
-            var userId = ctx.Principal.Claims
-                .First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier))
-                .Value;
-            
-            var result = await accountsSvc.GetUserAccounts(userId);
-            var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
-            var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-            ctx.Principal.Identities.First().AddClaim(associatedAccountsClaim);
         }
     }
     

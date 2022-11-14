@@ -6,6 +6,6 @@ namespace SFA.DAS.Apim.Developer.Domain.Interfaces
 {
     public interface IEmployerAccountService
     {
-        Task<EmployerUserAccounts> GetUserAccounts(string userId);
+        Task<EmployerUserAccounts> GetUserAccounts(string userId, string email);
     }
 }

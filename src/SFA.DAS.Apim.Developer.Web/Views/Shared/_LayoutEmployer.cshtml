@@ -1,14 +1,14 @@
-﻿@using SFA.DAS.Apim.Developer.Web.Extensions
+﻿@using SFA.DAS.Employer.Shared.UI.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 
-@* @using Microsoft.Azure.Documents.SystemFunctions *@
-@* @using StructureMap.Diagnostics.TreeView *@
 @{
     var tagManagerCode = "GTM-TD56SF5";
+    string accountId = (string)this.ViewContext.RouteData.Values["employerAccountId"] ?? "";
+    ViewBag.HideHeaderBorder = true;
+    var footerModel = new FooterModel { AccountId = accountId, UsePrivacyV2 = true };
+    
 }
-@* @if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase)) *@
-@* { *@
-@*     tagManagerCode = "GTM-KWQBWGJ"; *@
-@* } *@
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
 <head>
@@ -41,54 +41,36 @@
     <!-- End Google Tag Manager -->
 </head>
 
-<body class="govuk-template__body ">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=@tagManagerCode"
-                height="0" width="0" style="display: none; visibility: hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <script>
-        document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    <body class="govuk-template__body ">
+        <script nws-csp-add-nonce="true">
+            document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+        </script>
+        <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-    </script>
-
-    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-
-    @await Html.PartialAsync("_CookieBanner", Html.GetCookieBannerViewModel())
-    @await Html.PartialAsync("_Header", Html.GetHeaderViewModel())
-
-        <div class="govuk-width-container">
-            @RenderSection("breadcrumb", required: false)
-            <main class="govuk-main-wrapper " id="main-content" role="main">
-                @RenderBody()
-            </main>
-        </div>
-
-    @await Html.PartialAsync("_Footer", Html.GetFooterViewModel())
-
-        @* @if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase)) *@
-        @* { *@
-        @*     <partial name="_EmployerFooter" /> *@
-        @* } *@
-        @* else if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase)) *@
-        @* { *@
-        @*     <partial name="_ProviderFooter" /> *@
-        @* } *@
-        @* *@
-        @* <partial name="GoogleAnalyticsInfo" /> *@
-
-        <script src="libs/govuk-frontend/all.js"></script>
-        <script src="libs/jquery/jquery.min.js"></script>
-        <script src="js/das-all.js"></script>
-        <script src="libs/accessible-autocomplete/accessible-autocomplete.min.js"></script>
-        <script src="js/app.min.js"></script>
-        <script src="/js/app.js" no-cdn></script>
+        @* ReSharper disable once Mvc.PartialViewNotResolved *@
+        <partial name="_Header">
+            @* ReSharper disable once Mvc.PartialViewNotResolved *@
+            <partial name="_Menu" model="@accountId">
+            </partial>
+        </partial>
+            <div class="das-section--dashboard">
+                <div class="govuk-width-container">
+                    @RenderSection("breadcrumb", required: false)
+                    <main class="govuk-main-wrapper" id="main-content" role="main">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        @* ReSharper disable once Mvc.PartialViewNotResolved *@
+        <partial name="_Footer" model="@footerModel"/>
+        <script src="/libs/govuk-frontend/all.js"></script>
+        <script src="/libs/jquery/jquery.min.js"></script>
+        <script src="/js/das-all.js"></script>
+        <script src="/js/app.min.js"></script>
         <script>
             window.GOVUKFrontend.initAll();
             window.DASFrontend.initAll();
         </script>
-        @* <partial name="_ZendeskWidget" /> *@
-
+                
     </body>
 </html>
