@@ -157,15 +157,6 @@ namespace SFA.DAS.Apim.Developer.Web
             }
 
             services.AddSharedAuthenticationServices();
-
-            if ((_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
-                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                            && serviceParameters.AuthenticationType != AuthenticationType.Employer
-                            && serviceParameters.AuthenticationType != AuthenticationType.Provider)
-            {
-                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
-            }
-
             services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
