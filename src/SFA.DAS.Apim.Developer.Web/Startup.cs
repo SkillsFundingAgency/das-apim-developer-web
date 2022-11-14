@@ -2,21 +2,16 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
-using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
-using SFA.DAS.DfESignIn.Auth.AppStart;
-using System.Configuration;
-using SFA.DAS.DfESignIn.Auth.Interfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using SFA.DAS.Employer.Shared.UI.Configuration;
 
 namespace SFA.DAS.Apim.Developer.Web
 {
@@ -152,10 +147,11 @@ namespace SFA.DAS.Apim.Developer.Web
 
             services.AddSharedAuthenticationServices();
 
+
             if ((_configuration["ApimDeveloperWeb:UseGovSignIn"] == null || !_configuration["ApimDeveloperWeb:UseGovSignIn"]
-                                .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                                && serviceParameters.AuthenticationType != AuthenticationType.Employer
-                                && serviceParameters.AuthenticationType != AuthenticationType.Provider)
+                            .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                            && serviceParameters.AuthenticationType != AuthenticationType.Employer
+                            && serviceParameters.AuthenticationType != AuthenticationType.Provider)
             {
                 services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
