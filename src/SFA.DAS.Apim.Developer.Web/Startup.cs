@@ -129,7 +129,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 {
                     if (_configuration["ApimDeveloperWeb:UseDfESignIn"] != null && _configuration["ApimDeveloperWeb:UseDfESignIn"].Equals("true", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", typeof(ProviderAccountPostAuthenticationClaimsHandler));
+                        services.AddAndConfigureDfESignInAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth", null);
                     }
                     else
                     {
