@@ -11,5 +11,6 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public string RenewKeyRouteName { get ; set ; }
         public AuthenticationType? AuthenticationType { get ; set ; }
         public string ExternalId { get ; set ; }
+        public string DeleteKeyRouteName { get; set; }
     }
 }

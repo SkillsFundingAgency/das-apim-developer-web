@@ -11,6 +11,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public List<SubscriptionItem> Products { get; set; }
         public string EmployerAccountId { get ; set ; }
         public bool ShowRenewedBanner { get; set; }
+        public bool ShowDeletedBanner { get; set; }
         public string ViewKeyRouteName { get; set; }
         public string CreateKeyRouteName { get; set; }
         public int? Ukprn { get ; set ; }

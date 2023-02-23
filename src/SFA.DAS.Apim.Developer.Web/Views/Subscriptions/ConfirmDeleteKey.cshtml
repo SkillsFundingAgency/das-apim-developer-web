@@ -1,0 +1,65 @@
+@using SFA.DAS.Apim.Developer.Web.AppStart
+@model SFA.DAS.Apim.Developer.Web.AppStart.AuthenticationType?
+@{
+    if (Model == AuthenticationType.Employer)
+    {
+        Layout = "_LayoutEmployer";    
+    }
+    else if (Model == AuthenticationType.External)
+    {
+        Layout = "_LayoutGeneric";
+    }
+    ViewData["Title"] = "Are you sure you want to delete this API key?";
+}
+
+@* ReSharper disable once Razor.SectionNotResolved *@
+
+@if (Model == AuthenticationType.Provider)
+{
+    @section breadcrumb {
+        <span class="das-js-back-link"></span>
+    }
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <partial name="_PageErrorsOverview" />
+        <form method="post">
+            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")">
+                <fieldset class="govuk-fieldset" aria-describedby="confirm-renew-key-hint">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">
+                            Are you sure you want to delete this key?
+                        </h1>
+                    </legend>
+                    <p class="govuk-hint" id="confirm-renew-key-hint">
+                        Deleting the key will disable the previous key and will stop your API from working until you get a new key.
+                    </p>
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("ConfirmDelete"))
+                    {
+                        <span id="confirm-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @ViewData.ModelState["ConfirmDelete"].Errors.First().ErrorMessage
+                        </span>
+                    }
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ConfirmDelete-yes" name="ConfirmDelete" type="radio" value="true">
+                            <label class="govuk-label govuk-radios__label" for="ConfirmDelete-yes">
+                                Yes, delete API key
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="ConfirmDelete-no" name="ConfirmDelete" type="radio" value="false">
+                            <label class="govuk-label govuk-radios__label" for="ConfirmDelete-no">
+                                No, do not delete API key
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button type="submit" draggable="false" class="govuk-button" id="continue-delete-key">
+                Save
+            </button>
+        </form>
+    </div>
+</div>
