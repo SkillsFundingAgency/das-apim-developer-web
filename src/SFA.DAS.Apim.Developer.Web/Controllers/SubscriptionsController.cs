@@ -37,21 +37,21 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("subscriptions/api-list", Name = RouteNames.ApiList)]
-        public IActionResult ApiList([FromQuery] bool? keyDeleted = null)
+        public IActionResult ApiList([FromQuery] string apiName = null, [FromQuery] bool? keyDeleted = null)
         {
             if(_serviceParameters.AuthenticationType == AuthenticationType.Provider)
             {
                 var ukprn = HttpContext.User.FindFirst(c => c.Type.Equals(ProviderClaims.ProviderUkprn)).Value;
-                return new RedirectToRouteResult(RouteNames.ProviderApiHub, new {ukprn, keyDeleted });
+                return new RedirectToRouteResult(RouteNames.ProviderApiHub, new {ukprn, apiName, keyDeleted });
             }
             if(_serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {    
                 var employerAccountClaim = HttpContext.User.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
                 var accounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim);
-                return new RedirectToRouteResult(RouteNames.EmployerApiHub, new {employerAccountId = accounts.FirstOrDefault().Key, keyDeleted });
+                return new RedirectToRouteResult(RouteNames.EmployerApiHub, new {employerAccountId = accounts.FirstOrDefault().Key, apiName, keyDeleted });
             }
             var externalId = HttpContext.User.FindFirst(c => c.Type.Equals(ExternalUserClaims.Id)).Value;
-            return new RedirectToRouteResult(RouteNames.ExternalApiHub, new {externalId, keyDeleted });
+            return new RedirectToRouteResult(RouteNames.ExternalApiHub, new { externalId, apiName, keyDeleted });
         }
         
         
@@ -60,7 +60,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
         [Route("{ukprn:int}/subscriptions", Name = RouteNames.ProviderApiHub)]
         [Route("{externalId}/subscriptions", Name = RouteNames.ExternalApiHub)]
-        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null, [FromQuery] bool? keyDeleted = null)
+        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null, [FromQuery] string apiName = null, [FromQuery] bool? keyDeleted = null)
         {
             var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
 
@@ -76,6 +76,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             model.ViewKeyRouteName = subscriptionRouteModel.ViewSubscriptionRouteName;
             model.AuthenticationType = _serviceParameters.AuthenticationType;
             model.ShowDeletedBanner = keyDeleted != null && keyDeleted.Value;
+            model.ApiName = apiName;
             return View(model);
         }
 
@@ -189,17 +190,27 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 return View("ConfirmDeleteKey", _serviceParameters.AuthenticationType);
             }
 
-            var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
-
             if (viewModel.ConfirmDelete.HasValue && viewModel.ConfirmDelete.Value)
             {
-                var deleteCommand = new DeleteSubscriptionKeyCommand
+                var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
+
+                // Query handler to fetch the API Display name and other properties. 
+                var result = await _mediator.Send(new GetSubscriptionQuery
+                {
+                    AccountType = _serviceParameters.AuthenticationType.GetDescription(),
+                    AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
+                    ProductId = id
+                });
+
+                // Command handler to delete the subscription via Api Client.
+                await _mediator.Send(new DeleteSubscriptionKeyCommand
                 {
                     AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
                     ProductId = id
-                };
-                await _mediator.Send(deleteCommand);
-                return new RedirectToRouteResult(RouteNames.ApiList, new { keyDeleted = true });
+                });
+
+                // Re-route the user to the Api Hub list.
+                return new RedirectToRouteResult(RouteNames.ApiList, new { apiName = result.Product.DisplayName, keyDeleted = true });
             }
             return new RedirectToRouteResult(RouteNames.ApiList, new { keyDeleted = false });
         }
