@@ -12,6 +12,8 @@ using SFA.DAS.Apim.Developer.Web.Models;
 using SFA.DAS.Testing.AutoFixture;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetSubscription;
+using SFA.DAS.Apim.Developer.Domain.Extensions;
 
 namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
 {
@@ -73,6 +75,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             string employerAccountId,
             string id,
             string externalId,
+            GetSubscriptionQueryResult mediatorResult,
             DeleteKeyViewModel viewModel,
             [Frozen] Mock<ServiceParameters> serviceParameters,
             [Frozen] Mock<IMediator> mockMediator)
@@ -80,6 +83,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             viewModel.ConfirmDelete = true;
             serviceParameters.Object.AuthenticationType = AuthenticationType.Employer;
             var controller = new SubscriptionsController(mockMediator.Object, serviceParameters.Object);
+
+            mockMediator.Setup(x =>
+                x.Send(It.Is<GetSubscriptionQuery>(c =>
+                    c.AccountIdentifier.Equals(employerAccountId)
+                    && c.AccountType.Equals(AuthenticationType.Employer.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None)).ReturnsAsync(mediatorResult);
 
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, null, externalId, viewModel) as RedirectToRouteResult;
 
@@ -100,6 +110,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             string id,
             int ukprn,
             string externalId,
+            GetSubscriptionQueryResult mediatorResult,
             DeleteKeyViewModel viewModel,
             [Frozen] Mock<IMediator> mockMediator,
             [Frozen] Mock<ServiceParameters> serviceParameters)
@@ -107,6 +118,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             viewModel.ConfirmDelete = true;
             serviceParameters.Object.AuthenticationType = AuthenticationType.Provider;
             var controller = new SubscriptionsController(mockMediator.Object, serviceParameters.Object);
+
+            mockMediator.Setup(x =>
+                x.Send(It.Is<GetSubscriptionQuery>(c =>
+                    c.AccountIdentifier.Equals(ukprn.ToString())
+                    && c.AccountType.Equals(AuthenticationType.Provider.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None)).ReturnsAsync(mediatorResult);
 
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, ukprn, externalId, viewModel) as RedirectToRouteResult;
 
@@ -127,6 +145,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             string id,
             int ukprn,
             string externalId,
+            GetSubscriptionQueryResult mediatorResult,
             DeleteKeyViewModel viewModel,
             [Frozen] Mock<IMediator> mockMediator,
             [Frozen] Mock<ServiceParameters> serviceParameters)
@@ -134,6 +153,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             viewModel.ConfirmDelete = true;
             serviceParameters.Object.AuthenticationType = AuthenticationType.External;
             var controller = new SubscriptionsController(mockMediator.Object, serviceParameters.Object);
+
+            mockMediator.Setup(x =>
+                x.Send(It.Is<GetSubscriptionQuery>(c =>
+                    c.AccountIdentifier.Equals(externalId)
+                    && c.AccountType.Equals(AuthenticationType.External.GetDescription())
+                    && c.ProductId.Equals(id)
+                ), CancellationToken.None)).ReturnsAsync(mediatorResult);
 
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, ukprn, externalId, viewModel) as RedirectToRouteResult;
 
