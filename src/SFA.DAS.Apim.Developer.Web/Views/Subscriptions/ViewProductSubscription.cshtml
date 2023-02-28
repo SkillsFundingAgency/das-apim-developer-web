@@ -88,7 +88,7 @@
                 </p>
                 <p>
                     Renewing your API key will stop the previous key from working and create a new key for you to use. <br><br>
-                    <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>
+                    <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew API key</a>
                 </p>
                 <h2 class="govuk-heading-m">
                     Delete API key 
@@ -97,7 +97,7 @@
                     If you no longer want to use this API you can delete your key.
                     This will stop the API from working. <br><br>
                     <a id="delete-key" asp-route="@Model.DeleteKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">
-                        Delete API Key
+                        Delete API key
                     </a>
                 </p>
             </div>
