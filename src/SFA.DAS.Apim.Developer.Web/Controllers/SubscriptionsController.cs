@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.CreateSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.DeleteSubscriptionKey;
@@ -190,6 +191,15 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 return View("ConfirmDeleteKey", _serviceParameters.AuthenticationType);
             }
 
+            // Add the route information based on the logged on profile.
+            var routeName = _serviceParameters.AuthenticationType switch
+            {
+                AuthenticationType.Employer => RouteNames.EmployerApiHub,
+                AuthenticationType.External => RouteNames.ExternalApiHub,
+                AuthenticationType.Provider => RouteNames.ProviderApiHub,
+                _ => RouteNames.ApiList
+            };
+
             if (viewModel.ConfirmDelete.HasValue && viewModel.ConfirmDelete.Value)
             {
                 var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
@@ -209,10 +219,10 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     ProductId = id
                 });
 
-                // Re-route the user to the Api Hub list.
-                return new RedirectToRouteResult(RouteNames.ApiList, new { apiName = result.Product.DisplayName, keyDeleted = true });
+                return new RedirectToRouteResult(routeName, new { apiName = result.Product.DisplayName, employerAccountId, id, ukprn, keyDeleted = true });
             }
-            return new RedirectToRouteResult(RouteNames.ApiList, new { keyDeleted = false });
+
+            return new RedirectToRouteResult(routeName, new { employerAccountId, id, ukprn, keyDeleted = false });
         }
     }
 }
