@@ -32,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, null, externalId, viewModel) as ViewResult;
 
             actual.ViewName.Should().Be("ConfirmDeleteKey");
-            actual.Model.Should().BeAssignableTo<AuthenticationType>();
+            actual.Model.Should().BeAssignableTo<SubscriptionDeleteKeyViewModel>();
         }
 
         [Test, MoqAutoData]
@@ -49,7 +49,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
 
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, null, externalId, viewModel) as RedirectToRouteResult;
 
-            actual.RouteName.Should().Be(RouteNames.ApiList);
+            actual.RouteName.Should().Be(RouteNames.EmployerApiHub);
         }
 
         [Test, MoqAutoData]
@@ -93,7 +93,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
 
             var actual = await controller.PostConfirmDeleteKey(employerAccountId, id, null, externalId, viewModel) as RedirectToRouteResult;
 
-            actual.RouteName.Should().Be(RouteNames.ApiList);
+            actual.RouteName.Should().Be(RouteNames.EmployerApiHub);
             actual.RouteValues.Should().ContainKey("keyDeleted");
             actual.RouteValues["keyDeleted"].Should().Be(true);
             mockMediator.Verify(mediator => mediator.Send(
