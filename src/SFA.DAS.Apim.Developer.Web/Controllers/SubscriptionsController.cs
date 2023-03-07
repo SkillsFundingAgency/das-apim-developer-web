@@ -176,7 +176,9 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("{externalId}/subscriptions/{id}/confirm-delete", Name = RouteNames.ExternalDeleteKey)]
         public IActionResult ConfirmDeleteKey([FromRoute] string employerAccountId, [FromRoute] string id, [FromRoute] int? ukprn, [FromRoute] string externalId)
         {
-            return View(_serviceParameters.AuthenticationType);
+            var subscriptionDeleteKeyViewModel = new SubscriptionDeleteKeyViewModel(_serviceParameters, id, employerAccountId, ukprn, externalId);
+
+            return View(subscriptionDeleteKeyViewModel);
         }
 
         [HttpPost]
@@ -186,9 +188,11 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("{externalId}/subscriptions/{id}/confirm-delete", Name = RouteNames.ExternalDeleteKey)]
         public async Task<IActionResult> PostConfirmDeleteKey([FromRoute] string employerAccountId, [FromRoute] string id, [FromRoute] int? ukprn, [FromRoute] string externalId, DeleteKeyViewModel viewModel)
         {
+            var subscriptionDeleteKeyViewModel = new SubscriptionDeleteKeyViewModel(_serviceParameters, id, employerAccountId, ukprn, externalId);
+
             if (!ModelState.IsValid)
             {
-                return View("ConfirmDeleteKey", _serviceParameters.AuthenticationType);
+                return View("ConfirmDeleteKey", subscriptionDeleteKeyViewModel);
             }
 
             if (viewModel.ConfirmDelete.HasValue && viewModel.ConfirmDelete.Value)
@@ -210,10 +214,10 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                     ProductId = id
                 });
 
-                return new RedirectToRouteResult(RouteNames.ApiList, new { apiName = result.Product.DisplayName, keyDeleted = true });
+                return new RedirectToRouteResult(subscriptionDeleteKeyViewModel.PostSubmitDeleteKeyRouteName, new { apiName = result.Product.DisplayName, employerAccountId, id, ukprn, externalId, keyDeleted = true });
             }
 
-            return new RedirectToRouteResult(RouteNames.ApiList, new { keyDeleted = false });
+            return new RedirectToRouteResult(subscriptionDeleteKeyViewModel.PostSubmitDeleteKeyRouteName, new { employerAccountId, id, ukprn, externalId, keyDeleted = false });
         }
     }
 }
