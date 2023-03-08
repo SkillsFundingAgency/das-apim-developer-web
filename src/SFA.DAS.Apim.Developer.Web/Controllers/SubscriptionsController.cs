@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.CreateSubscriptionKey;
+using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.DeleteSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Commands.RenewSubscriptionKey;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetSubscription;
@@ -36,21 +38,21 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [HttpGet]
         [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
         [Route("subscriptions/api-list", Name = RouteNames.ApiList)]
-        public IActionResult ApiList()
+        public IActionResult ApiList([FromQuery] string apiName = null, [FromQuery] bool? keyDeleted = null)
         {
             if(_serviceParameters.AuthenticationType == AuthenticationType.Provider)
             {
                 var ukprn = HttpContext.User.FindFirst(c => c.Type.Equals(ProviderClaims.ProviderUkprn)).Value;
-                return new RedirectToRouteResult(RouteNames.ProviderApiHub, new {ukprn});
+                return new RedirectToRouteResult(RouteNames.ProviderApiHub, new {ukprn, apiName, keyDeleted });
             }
             if(_serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {    
                 var employerAccountClaim = HttpContext.User.FindFirst(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
                 var accounts = JsonConvert.DeserializeObject<Dictionary<string, EmployerUserAccountItem>>(employerAccountClaim);
-                return new RedirectToRouteResult(RouteNames.EmployerApiHub, new {employerAccountId = accounts.FirstOrDefault().Key});
+                return new RedirectToRouteResult(RouteNames.EmployerApiHub, new {employerAccountId = accounts.FirstOrDefault().Key, apiName, keyDeleted });
             }
             var externalId = HttpContext.User.FindFirst(c => c.Type.Equals(ExternalUserClaims.Id)).Value;
-            return new RedirectToRouteResult(RouteNames.ExternalApiHub, new {externalId});
+            return new RedirectToRouteResult(RouteNames.ExternalApiHub, new { externalId, apiName, keyDeleted });
         }
         
         
@@ -59,7 +61,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("accounts/{employerAccountId}/subscriptions", Name = RouteNames.EmployerApiHub)]
         [Route("{ukprn:int}/subscriptions", Name = RouteNames.ProviderApiHub)]
         [Route("{externalId}/subscriptions", Name = RouteNames.ExternalApiHub)]
-        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null)
+        public async Task<IActionResult> ApiHub([FromRoute]string employerAccountId, [FromRoute]int? ukprn, [FromRoute]string externalId = null, [FromQuery] string apiName = null, [FromQuery] bool? keyDeleted = null)
         {
             var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
 
@@ -74,6 +76,8 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             model.CreateKeyRouteName = subscriptionRouteModel.CreateKeyRouteName;
             model.ViewKeyRouteName = subscriptionRouteModel.ViewSubscriptionRouteName;
             model.AuthenticationType = _serviceParameters.AuthenticationType;
+            model.ShowDeletedBanner = keyDeleted != null && keyDeleted.Value;
+            model.ApiName = apiName;
             return View(model);
         }
 
@@ -131,6 +135,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 ExternalId = externalId,
                 ShowRenewedBanner = keyRenewed != null && keyRenewed.Value,
                 RenewKeyRouteName = subscriptionRouteModel.RenewKeyRouteName,
+                DeleteKeyRouteName = subscriptionRouteModel.DeleteKeyRouteName,
                 AuthenticationType = _serviceParameters.AuthenticationType
             };
 
@@ -162,6 +167,57 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 return RedirectToRoute(subscriptionRouteModel.ViewSubscriptionRouteName, new { employerAccountId, id, ukprn, keyRenewed = true, externalId });    
             }
             return RedirectToRoute(subscriptionRouteModel.ViewSubscriptionRouteName, new { employerAccountId, ukprn, id, externalId });
+        }
+
+        [HttpGet]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-delete", Name = RouteNames.EmployerDeleteKey)]
+        [Route("{ukprn:int}/subscriptions/{id}/confirm-delete", Name = RouteNames.ProviderDeleteKey)]
+        [Route("{externalId}/subscriptions/{id}/confirm-delete", Name = RouteNames.ExternalDeleteKey)]
+        public IActionResult ConfirmDeleteKey([FromRoute] string employerAccountId, [FromRoute] string id, [FromRoute] int? ukprn, [FromRoute] string externalId)
+        {
+            var subscriptionDeleteKeyViewModel = new SubscriptionDeleteKeyViewModel(_serviceParameters, id, employerAccountId, ukprn, externalId);
+
+            return View(subscriptionDeleteKeyViewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = nameof(PolicyNames.HasProviderEmployerAdminOrExternalAccount))]
+        [Route("accounts/{employerAccountId}/subscriptions/{id}/confirm-delete", Name = RouteNames.EmployerDeleteKey)]
+        [Route("{ukprn:int}/subscriptions/{id}/confirm-delete", Name = RouteNames.ProviderDeleteKey)]
+        [Route("{externalId}/subscriptions/{id}/confirm-delete", Name = RouteNames.ExternalDeleteKey)]
+        public async Task<IActionResult> PostConfirmDeleteKey([FromRoute] string employerAccountId, [FromRoute] string id, [FromRoute] int? ukprn, [FromRoute] string externalId, DeleteKeyViewModel viewModel)
+        {
+            var subscriptionDeleteKeyViewModel = new SubscriptionDeleteKeyViewModel(_serviceParameters, id, employerAccountId, ukprn, externalId);
+
+            if (!ModelState.IsValid)
+            {
+                return View("ConfirmDeleteKey", subscriptionDeleteKeyViewModel);
+            }
+
+            if (viewModel.ConfirmDelete.HasValue && viewModel.ConfirmDelete.Value)
+            {
+                var subscriptionRouteModel = new SubscriptionRouteModel(_serviceParameters, employerAccountId, ukprn, externalId);
+
+                // Query handler to fetch the API Display name and other properties. 
+                var result = await _mediator.Send(new GetSubscriptionQuery
+                {
+                    AccountType = _serviceParameters.AuthenticationType.GetDescription(),
+                    AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
+                    ProductId = id
+                });
+
+                // Command handler to delete the subscription via Api Client.
+                await _mediator.Send(new DeleteSubscriptionKeyCommand
+                {
+                    AccountIdentifier = subscriptionRouteModel.AccountIdentifier,
+                    ProductId = id
+                });
+
+                return new RedirectToRouteResult(subscriptionDeleteKeyViewModel.PostSubmitDeleteKeyRouteName, new { apiName = result.Product.DisplayName, employerAccountId, id, ukprn, externalId, keyDeleted = true });
+            }
+
+            return new RedirectToRouteResult(subscriptionDeleteKeyViewModel.PostSubmitDeleteKeyRouteName, new { employerAccountId, id, ukprn, externalId, keyDeleted = false });
         }
     }
 }

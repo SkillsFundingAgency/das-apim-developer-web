@@ -76,14 +76,30 @@
         <details class="govuk-details govuk-!-margin-bottom-0" data-module="govuk-details">
             <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">
-                    Do you need a new API key?
+                    No longer want this API key?
                 </span>
             </summary>
             <div class="govuk-details__text">
-                Reasons you might want to renew your API key include – security concerns, a change in your systems or a change of developer or staff.
-            </div>
-            <div class="govuk-details__text">
-                Renewing the key will disable the previous key and will stop your API from working until you use the new key. <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew Key</a>.
+                <h2 class="govuk-heading-m">
+                    Renew API key 
+                </h2>
+                <p>
+                    You may want to renew your API key for security reasons or because of a change in your systems or staff. 
+                </p>
+                <p>
+                    Renewing your API key will stop the previous key from working and create a new key for you to use. <br><br>
+                    <a id="renew-key" asp-route="@Model.RenewKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">Renew API key</a>
+                </p>
+                <h2 class="govuk-heading-m">
+                    Delete API key 
+                </h2>
+                <p>
+                    If you no longer want to use this API you can delete your key.
+                    This will stop the API from working. <br><br>
+                    <a id="delete-key" asp-route="@Model.DeleteKeyRouteName" asp-route-id="@Model.Product.Id" asp-route-ukprn="@Model.Ukprn" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-externalId="@Model.ExternalId" class="govuk-link govuk-link--no-visited-state">
+                        Delete API key
+                    </a>
+                </p>
             </div>
         </details>
     </div>

@@ -7,6 +7,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string EmployerRenewKey = "employer-renew-key";
         public const string EmployerSignOut = "employer-sign-out";
         public const string EmployerCreateKey = "employer-create-key";
+        public const string EmployerDeleteKey = "employer-delete-key";
         public const string EmployerViewSubscription = "employer-view-subscription";
 
         public const string ProviderRecruitInform = "provider-recruit-inform";
@@ -14,6 +15,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ProviderCreateKey = "provider-create-key";
         public const string ProviderViewSubscription = "provider-view-subscription";
         public const string ProviderRenewKey = "provider-renew-key";
+        public const string ProviderDeleteKey = "provider-delete-key";
         public const string ProviderSignOut = "provider-signout";
 
         public const string ThirdPartyRegister = "third-party-register";
@@ -29,6 +31,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string ExternalViewSubscription = "external-view-subscription";
         public const string ExternalCreateKey = "external-create-key";
         public const string ExternalRenewKey = "external-renew-key";
+        public const string ExternalDeleteKey = "external-delete-key";
         public const string ExternalLogout = "external-signout";
 
         public const string ApiList = "api-list";

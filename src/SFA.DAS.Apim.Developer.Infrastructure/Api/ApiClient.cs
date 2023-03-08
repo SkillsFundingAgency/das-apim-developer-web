@@ -58,6 +58,16 @@ namespace SFA.DAS.Apim.Developer.Infrastructure.Api
             return await ProcessResponse<TResponse>(response);
         }
 
+        public async Task<ApiResponse<TResponse>> Delete<TResponse>(IDeleteApiRequest request)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Delete, request.DeleteUrl);
+            AddAuthenticationHeader(requestMessage);
+
+            var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+
+            return await ProcessResponse<TResponse>(response);
+        }
+
         private void AddAuthenticationHeader(HttpRequestMessage httpRequestMessage)
         {
             httpRequestMessage.Headers.Add("Ocp-Apim-Subscription-Key", _config.Key);
