@@ -111,7 +111,7 @@ namespace SFA.DAS.Apim.Developer.Web
                      services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
                 }
 
-                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
+                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["ResourceEnvironmentName"]);
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
