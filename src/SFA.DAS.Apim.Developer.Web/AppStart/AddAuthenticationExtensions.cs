@@ -4,6 +4,7 @@ using SFA.DAS.Apim.Developer.Application.Employer.Services;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Infrastructure.Api;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Authentication;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -33,6 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IProviderAccountAuthorisationHandler, ProviderAccountAuthorizationHandler>();
             services.AddTransient<IExternalAccountAuthorizationHandler, ExternalAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ProviderEmployerExternalAccountAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov one login go live
         }
     }
 }

@@ -16,6 +16,7 @@ using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Queries.GetUser;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
 
 namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
@@ -51,12 +52,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
             
             Assert.IsNotNull(type);
-            type.Count.Should().Be(5);
+            type.Count.Should().Be(6);
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerViewerAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ExternalAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderEmployerExternalAccountAuthorizationHandler));
+            type.Should().ContainSingle(c => c.GetType() == typeof(AccountActiveAuthorizationHandler));
         }
         
         [TestCase(typeof(IValidator<RegisterCommand>), typeof(RegisterCommandValidator))]
