@@ -41,6 +41,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 new Claim(EmployerClaims.EmployerEmailClaimsTypeIdentifier, _configuration["NoAuthEmail"]),
                 new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString())
             };
+            
             return claims.ToList();
         }
         
@@ -61,11 +62,17 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
                 .First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier))
                 .Value;
         }
-            
+
+        var returnClaims = new List<Claim>();
         var result = await _accountsSvc.GetUserAccounts(userId, email);
 
+        if (result.IsSuspended)
+        {
+            returnClaims.Add(new Claim(ClaimTypes.AuthorizationDecision,"Suspended"));
+        }
+
         var accountsAsJson = JsonConvert.SerializeObject(result.EmployerAccounts.ToDictionary(k => k.AccountId));
-        var associatedAccountsClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json);
-        return new List<Claim> {associatedAccountsClaim};
+        returnClaims.Add(new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, accountsAsJson, JsonClaimValueTypes.Json));
+        return returnClaims;
     }
 }
