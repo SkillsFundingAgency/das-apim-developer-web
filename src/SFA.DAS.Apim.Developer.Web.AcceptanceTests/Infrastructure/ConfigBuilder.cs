@@ -18,6 +18,7 @@ namespace SFA.DAS.Apim.Developer.Web.AcceptanceTests.Infrastructure
                     new KeyValuePair<string, string>("Version", "1.0"),
                     new KeyValuePair<string, string>("StubAuth", "true"),
                     new KeyValuePair<string, string>("AuthType", authType),
+                    new KeyValuePair<string, string>("ResourceEnvironmentName", "test"),
 
                     new KeyValuePair<string, string>($"{authType}ApimDeveloperApi:Key", "test"),
                     new KeyValuePair<string, string>($"{authType}ApimDeveloperApi:BaseUrl", "http://localhost:5031/"),
