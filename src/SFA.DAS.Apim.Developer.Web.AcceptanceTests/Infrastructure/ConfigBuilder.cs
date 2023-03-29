@@ -16,7 +16,7 @@ namespace SFA.DAS.Apim.Developer.Web.AcceptanceTests.Infrastructure
                     new KeyValuePair<string, string>("ConfigNames", "SFA.DAS.Apim.Developer.Web"),
                     new KeyValuePair<string, string>("Environment", "DEV"),
                     new KeyValuePair<string, string>("Version", "1.0"),
-                    new KeyValuePair<string, string>("StubAuth", "true"),
+                    new KeyValuePair<string, string>("LocalStubAuth", "true"),
                     new KeyValuePair<string, string>("AuthType", authType),
                     new KeyValuePair<string, string>("ResourceEnvironmentName", "test"),
 

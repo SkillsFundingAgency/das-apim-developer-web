@@ -95,7 +95,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                     if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                     if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                              .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                      {
                          services.AddEmployerStubAuthentication();    
@@ -119,7 +119,7 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
-                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddProviderStubAuthentication();
@@ -135,7 +135,7 @@ namespace SFA.DAS.Apim.Developer.Web
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
                 services.AddExternalAuthenticationServices();
-                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddExternalStubAuthentication();

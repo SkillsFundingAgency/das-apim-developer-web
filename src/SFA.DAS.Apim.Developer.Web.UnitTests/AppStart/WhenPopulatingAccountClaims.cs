@@ -32,7 +32,7 @@ public class WhenPopulatingAccountClaims
     {
         var expectedClaimEmail = "test@testing.com";
         configuration.Setup(x => x["NoAuthEmail"]).Returns(expectedClaimEmail);
-        configuration.Setup(x => x["StubAuth"]).Returns("true");
+        configuration.Setup(x => x["LocalStubAuth"]).Returns("true");
         
         var actual = await handler.GetClaims(null);
         
