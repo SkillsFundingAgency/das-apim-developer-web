@@ -86,15 +86,17 @@ namespace SFA.DAS.Apim.Developer.Web
             
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
-                var clientId = "no-auth-id";
+                
                 services.AddEmployerAuthenticationServices();
                 if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                    services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
                 }
                 else
                 {
+                     var clientId = "no-auth-id";
                      if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                              .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                      {
@@ -109,9 +111,10 @@ namespace SFA.DAS.Apim.Developer.Web
                          clientId = config.ClientId;
                      }
                      services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
+                     services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["ResourceEnvironmentName"]);
                 }
 
-                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["ResourceEnvironmentName"]);
+                
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
