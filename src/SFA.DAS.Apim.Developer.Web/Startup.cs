@@ -1,14 +1,5 @@
-using System;
-using System.IO;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
@@ -91,7 +82,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                    services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
                     services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
                 }
                 else
