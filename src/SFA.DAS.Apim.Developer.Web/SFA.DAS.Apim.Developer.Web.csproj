@@ -10,7 +10,7 @@
         <PackageReference Include="MediatR" Version="11.0.0" />
         <PackageReference Include="mediatr.extensions.microsoft.dependencyinjection" Version="11.0.0" />
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.15" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="6.0.9" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
@@ -24,12 +24,12 @@
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="5.1.4" />
         <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
-        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="2.0.30-prerelease-11" />
+        <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="17.1.44" />
         <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
         <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
-        <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.28" />
+        <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.45-prerelease-14" />
         <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
         <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.21" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.13" />
         <PackageReference Include="SFA.DAS.Provider.Shared.UI" Version="2.0.18" />

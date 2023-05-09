@@ -1,14 +1,5 @@
-using System;
-using System.IO;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
@@ -86,16 +77,18 @@ namespace SFA.DAS.Apim.Developer.Web
             
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
-                var clientId = "no-auth-id";
+                
                 services.AddEmployerAuthenticationServices();
                 if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    services.AddAndConfigureGovUkAuthentication(_configuration, $"{typeof(AddServiceRegistrationExtension).Assembly.GetName().Name}.Auth",typeof(EmployerAccountPostAuthenticationClaimsHandler));
+                    services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
+                    services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
                 }
                 else
                 {
-                     if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                     var clientId = "no-auth-id";
+                     if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                              .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                      {
                          services.AddEmployerStubAuthentication();    
@@ -109,9 +102,10 @@ namespace SFA.DAS.Apim.Developer.Web
                          clientId = config.ClientId;
                      }
                      services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
+                     services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["ResourceEnvironmentName"]);
                 }
 
-                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["Environment"]);
+                
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
@@ -119,7 +113,7 @@ namespace SFA.DAS.Apim.Developer.Web
             {
                 services.AddProviderUiServiceRegistration(_configuration);
                 services.AddProviderAuthenticationServices();
-                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddProviderStubAuthentication();
@@ -135,7 +129,7 @@ namespace SFA.DAS.Apim.Developer.Web
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
                 services.AddExternalAuthenticationServices();
-                if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+                if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                         .Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     services.AddExternalStubAuthentication();

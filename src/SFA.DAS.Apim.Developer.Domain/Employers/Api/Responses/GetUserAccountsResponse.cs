@@ -5,6 +5,8 @@ namespace SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses
 {
     public class GetUserAccountsResponse
     {
+        [JsonProperty("IsSuspended")]
+        public bool IsSuspended { get; set; }
         [JsonProperty("UserAccounts")]
         public List<EmployerIdentifier> UserAccounts { get; set; }
     }

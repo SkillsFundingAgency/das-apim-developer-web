@@ -7,20 +7,19 @@ namespace SFA.DAS.Apim.Developer.Domain.Employers
     public class EmployerUserAccounts
     {
         public IEnumerable<EmployerUserAccountItem> EmployerAccounts { get ; set ; }
+        public bool IsSuspended { get; set; }
 
         public static implicit operator EmployerUserAccounts(GetUserAccountsResponse source)
         {
-            if (source?.UserAccounts == null)
-            {
-                return new EmployerUserAccounts
-                {
-                    EmployerAccounts = new List<EmployerUserAccountItem>()
-                };
-            }
+            var accounts = source?.UserAccounts == null
+                ? new List<EmployerUserAccountItem>()
+                : source.UserAccounts.Select(c => (EmployerUserAccountItem) c).ToList();
+            
             
             return new EmployerUserAccounts
             {
-                EmployerAccounts = source.UserAccounts.Select(c=>(EmployerUserAccountItem)c).ToList()
+                EmployerAccounts = accounts,
+                IsSuspended = source?.IsSuspended ?? false
             };
         }
     }

@@ -25,7 +25,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                     .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
                 services.AddDataProtection()
-                    .SetApplicationName("das-apim-developer-web")
+                    .SetApplicationName("das-employer")
                     .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
             }
         }

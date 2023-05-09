@@ -55,6 +55,9 @@
         },
         "cdnUrl": {
             "type": "string"
+        },
+        "stubAuth": {
+            "type": "string"
         }
     },
     "variables": {
@@ -198,6 +201,10 @@
                                 {
                                     "name": "AuthType",
                                     "value": "[parameters('appConfiguration')[copyIndex()].authType]"
+                                },
+                                {
+                                    "name": "StubAuth",
+                                    "value": "[parameters('stubAuth')]"
                                 }
                             ]
                         }

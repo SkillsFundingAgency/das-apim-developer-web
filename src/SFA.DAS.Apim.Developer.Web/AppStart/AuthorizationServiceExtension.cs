@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Authentication;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -24,6 +25,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                         policy.Requirements.Add(new EmployerAccountRequirement());
                         policy.RequireAuthenticatedUser();
+                        policy.Requirements.Add(new AccountActiveRequirement());
                     });
                 options.AddPolicy(
                     PolicyNames.HasEmployerViewAccount, policy =>
@@ -31,6 +33,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                         policy.Requirements.Add(new EmployerViewerRoleRequirement());
                         policy.RequireAuthenticatedUser();
+                        policy.Requirements.Add(new AccountActiveRequirement());
                     });
                 options.AddPolicy(
                     PolicyNames
@@ -56,6 +59,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         if (serviceParametersAuthenticationType is AuthenticationType.Employer)
                         {
                             policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
+                            policy.Requirements.Add(new AccountActiveRequirement());
                         }
                         else if (serviceParametersAuthenticationType is AuthenticationType.Provider)
                         {
