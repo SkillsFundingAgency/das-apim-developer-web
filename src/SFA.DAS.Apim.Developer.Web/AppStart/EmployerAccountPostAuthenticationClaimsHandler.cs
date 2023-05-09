@@ -25,7 +25,7 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
     }
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext ctx)
     {
-        if (_configuration["StubAuth"] != null && _configuration["StubAuth"]
+        if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                 .Equals("true", StringComparison.CurrentCultureIgnoreCase))
         {
             var accountClaims = new Dictionary<string, EmployerUserAccountItem>();
