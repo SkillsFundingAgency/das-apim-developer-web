@@ -7,6 +7,7 @@ using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.DfESignIn.Auth.AppStart;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
@@ -18,6 +19,8 @@ namespace SFA.DAS.Apim.Developer.Web
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IConfigurationRoot _configuration;
+        private const string ClientName = "ProviderRoATP";
+        private const string CookieAuthName = "SFA.DAS.ProviderApprenticeshipService";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -51,6 +54,10 @@ namespace SFA.DAS.Apim.Developer.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var useDfESignIn = _configuration["ApimDeveloperWeb:UseDfESignIn"] != null &&
+                               _configuration["ApimDeveloperWeb:UseDfESignIn"]
+                                   .Equals("true", StringComparison.CurrentCultureIgnoreCase);
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -120,11 +127,23 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    services.AddAndConfigureProviderAuthentication(_configuration
-                        .GetSection(nameof(ProviderIdams))
-                        .Get<ProviderIdams>());    
+                    if (useDfESignIn)
+                    {
+                        services.AddAndConfigureDfESignInAuthentication(
+                            _configuration,
+                            CookieAuthName,
+                            typeof(CustomServiceRole),
+                            ClientName,
+                            "/signout");
+                    }
+                    else
+                    {
+                        services.AddAndConfigureProviderAuthentication(_configuration
+                            .GetSection(nameof(ProviderIdams))
+                            .Get<ProviderIdams>());
+                        services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
+                    }
                 }
-                services.AddAuthenticationCookie(serviceParameters.AuthenticationType);    
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
             {
@@ -161,6 +180,7 @@ namespace SFA.DAS.Apim.Developer.Web
                     }
                     
                 })
+                .SetDfESignInConfiguration(useDfESignIn)
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
