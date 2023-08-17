@@ -7,6 +7,7 @@ using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProdu
 using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models;
+using SFA.DAS.Provider.Shared.UI.Models;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
@@ -14,10 +15,12 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ApimDeveloperWeb _configuration;
+        private readonly ProviderSharedUIConfiguration _providerConfiguration;
 
-        public HomeController (IMediator mediator, IOptions<ApimDeveloperWeb> configuration)
+        public HomeController (IMediator mediator, IOptions<ApimDeveloperWeb> configuration, ProviderSharedUIConfiguration providerConfiguration)
         {
             _mediator = mediator;
+            _providerConfiguration = providerConfiguration;
             _configuration = configuration.Value;
         }
             
@@ -38,6 +41,13 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 DocumentationBaseUrl = _configuration.DocumentationBaseUrl
             };
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("dashboard", Name = RouteNames.Dashboard)]
+        public IActionResult Dashboard()
+        {
+            return RedirectPermanent(_providerConfiguration.DashboardUrl);
         }
     }
 }

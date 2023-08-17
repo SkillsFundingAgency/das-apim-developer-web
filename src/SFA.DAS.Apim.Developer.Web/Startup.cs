@@ -134,7 +134,8 @@ namespace SFA.DAS.Apim.Developer.Web
                             CookieAuthName,
                             typeof(CustomServiceRole),
                             ClientName,
-                            "/signout");
+                            "/signout",
+                            "/dashboard");
                     }
                     else
                     {
