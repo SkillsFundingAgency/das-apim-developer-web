@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -19,29 +18,22 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [Route("signout",Name = RouteNames.ProviderSignOut)]
-        public async Task<IActionResult> ProviderSignOut()
+        public IActionResult ProviderSignOut()
         {
-            if (_apimDeveloperWeb.UseDfESignIn)
+            foreach (var requestCookie in HttpContext.Request.Cookies)
             {
-                var idToken = await HttpContext.GetTokenAsync("id_token");
-                var authenticationProperties = new AuthenticationProperties
+                HttpContext.Response.Cookies.Delete(requestCookie.Key);
+            }
+            var authScheme = _apimDeveloperWeb.UseDfESignIn
+                ? OpenIdConnectDefaults.AuthenticationScheme
+                : WsFederationDefaults.AuthenticationScheme;
+
+            return SignOut(
+                new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                 {
                     RedirectUri = "",
                     AllowRefresh = true
-                };
-                authenticationProperties.Parameters.Clear();
-                authenticationProperties.Parameters.Add("id_token", idToken);
-                return SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
-            }
-            else
-            {
-                return SignOut(
-                    new Microsoft.AspNetCore.Authentication.AuthenticationProperties
-                    {
-                        RedirectUri = "",
-                        AllowRefresh = true
-                    }, CookieAuthenticationDefaults.AuthenticationScheme, WsFederationDefaults.AuthenticationScheme);
-            }
+                },CookieAuthenticationDefaults.AuthenticationScheme, authScheme);
         }
     }
 }
