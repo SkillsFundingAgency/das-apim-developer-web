@@ -20,10 +20,6 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("signout",Name = RouteNames.ProviderSignOut)]
         public IActionResult ProviderSignOut()
         {
-            foreach (var requestCookie in HttpContext.Request.Cookies)
-            {
-                HttpContext.Response.Cookies.Delete(requestCookie.Key);
-            }
             var authScheme = _apimDeveloperWeb.UseDfESignIn
                 ? OpenIdConnectDefaults.AuthenticationScheme
                 : WsFederationDefaults.AuthenticationScheme;
