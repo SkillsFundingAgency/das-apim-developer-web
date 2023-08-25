@@ -21,7 +21,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Home
             var actual = controller.Dashboard() as RedirectResult;
             
             Assert.IsNotNull(actual);
-            actual.Url.Should().Be(dashboardUrl);
+            actual.Url.Should().Be(dashboardUrl + "/signout");
         }
     }
 }
