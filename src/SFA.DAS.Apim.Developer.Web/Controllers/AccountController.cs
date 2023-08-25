@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.WsFederation;
@@ -18,18 +19,29 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         }
 
         [Route("signout",Name = RouteNames.ProviderSignOut)]
-        public IActionResult ProviderSignOut()
+        public async Task<IActionResult> ProviderSignOut()
         {
-            var authScheme = _apimDeveloperWeb.UseDfESignIn
-                ? OpenIdConnectDefaults.AuthenticationScheme
-                : WsFederationDefaults.AuthenticationScheme;
-
-            return SignOut(
-                new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+            if (_apimDeveloperWeb.UseDfESignIn)
+            {
+                var idToken = await HttpContext.GetTokenAsync("id_token");
+                var authenticationProperties = new AuthenticationProperties
                 {
                     RedirectUri = "",
                     AllowRefresh = true
-                },CookieAuthenticationDefaults.AuthenticationScheme, authScheme);
+                };
+                authenticationProperties.Parameters.Clear();
+                authenticationProperties.Parameters.Add("id_token", idToken);
+                return SignOut(authenticationProperties, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
+            }
+            else
+            {
+                return SignOut(
+                    new Microsoft.AspNetCore.Authentication.AuthenticationProperties
+                    {
+                        RedirectUri = "",
+                        AllowRefresh = true
+                    }, CookieAuthenticationDefaults.AuthenticationScheme, WsFederationDefaults.AuthenticationScheme);
+            }
         }
     }
 }
