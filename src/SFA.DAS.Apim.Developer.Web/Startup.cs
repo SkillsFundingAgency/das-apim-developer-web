@@ -135,7 +135,7 @@ namespace SFA.DAS.Apim.Developer.Web
                             typeof(CustomServiceRole),
                             ClientName,
                             "/signout",
-                            "/dashboard");
+                            "");
                     }
                     else
                     {
