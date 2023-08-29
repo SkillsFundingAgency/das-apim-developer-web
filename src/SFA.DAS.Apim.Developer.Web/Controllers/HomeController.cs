@@ -47,7 +47,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("dashboard", Name = RouteNames.Dashboard)]
         public IActionResult Dashboard()
         {
-            return RedirectPermanent(_providerConfiguration.DashboardUrl + "/signout");
+            return RedirectPermanent(_providerConfiguration.DashboardUrl);
         }
     }
 }
