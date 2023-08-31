@@ -27,7 +27,6 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
             return SignOut(
                 new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                 {
-                    //RedirectUri = "",
                     AllowRefresh = true
                 },CookieAuthenticationDefaults.AuthenticationScheme, authScheme);
         }
