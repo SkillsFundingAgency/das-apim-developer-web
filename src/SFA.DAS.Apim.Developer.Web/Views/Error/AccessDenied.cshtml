@@ -7,6 +7,7 @@
     else if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
     {
         Layout = "_layoutProvider";
+        ViewData["Title"] = Model.UseDfESignIn ? "Different service role needed - Apprenticeships" : "";
     }
     else if (Configuration["AuthType"].Equals("external", StringComparison.CurrentCultureIgnoreCase))
     {
@@ -30,15 +31,18 @@
                 @if(Model.UseDfESignIn){
                     <div class="hgroup">
                         <h1 class="govuk-heading-xl">
-                            You need a different permission level to view this page
+                        To continue, you'll need to get your role for this service changed.
                         </h1>
                     </div>
                     <div class="inner">
                         <p>
-                            To continue, you’ll need to get the permission level of your DfE Sign-in account changed.
+                            To continue, you'll need to get the permission level of your DfE Sign-in account changed.
                         </p>
                         <p>
-                            The DfE Sign-in approver inside your organisation can do this for you. You can find out who your approver is under <a href="@Model.HelpPageLink" target="_blank" rel="noopener noreferrer">the organisation section of your DfE Sign-in account.</a>
+                            You can ask for a higher role by <a href="@Model.HelpPageLink" target="_blank" rel="noopener noreferrer">requesting access to a service in your DfE Sign-in account</a>. Select Apprenticeship service for training providers, and then request a higher role at the next step.
+                        </p>
+                        <p>
+                            The DfE Sign-in approver inside your organisation will need to approve your request.
                         </p>
                         <p>
                             If you came here by mistake, go back to the <a href="@Model.DashboardUrl">homepage of Manage apprenticeships for training providers.</a>
