@@ -1,4 +1,4 @@
-@model string
+@model SFA.DAS.Apim.Developer.Web.Models.Error403ViewModel
 @{
     if (Configuration["AuthType"].Equals("employer", StringComparison.CurrentCultureIgnoreCase))
     {
@@ -7,6 +7,7 @@
     else if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
     {
         Layout = "_layoutProvider";
+        ViewData["Title"] = Model.UseDfESignIn ? "Different service role needed - Apprenticeships" : "";
     }
     else if (Configuration["AuthType"].Equals("external", StringComparison.CurrentCultureIgnoreCase))
     {
@@ -27,12 +28,35 @@
 
             @if (Configuration["AuthType"].Equals("provider", StringComparison.CurrentCultureIgnoreCase))
             {
+                @if(Model.UseDfESignIn){
+                    <div class="hgroup">
+                        <h1 class="govuk-heading-xl">
+                        To continue, you'll need to get your role for this service changed.
+                        </h1>
+                    </div>
+                    <div class="inner">
+                        <p>
+                            To continue, you'll need to get the permission level of your DfE Sign-in account changed.
+                        </p>
+                        <p>
+                            You can ask for a higher role by <a href="@Model.HelpPageLink" target="_blank" rel="noopener noreferrer">requesting access to a service in your DfE Sign-in account</a>. Select Apprenticeship service for training providers, and then request a higher role at the next step.
+                        </p>
+                        <p>
+                            The DfE Sign-in approver inside your organisation will need to approve your request.
+                        </p>
+                        <p>
+                            If you came here by mistake, go back to the <a href="@Model.DashboardUrl">homepage of this service.</a>
+                        </p>
+                </div>
+            }
+            else
+            {
                 <h1 class="govuk-heading-xl">You do not have permission to access this page</h1>
                 <p class="govuk-body">If you think you should have permission to access this page or want to confirm what permissions you have, contact an IdAMS super user.</p>
                 <p class="govuk-body">
-                    <a href="@Model" role="button" draggable="false" class="govuk-link govuk-link--no-visited-state" >Go back to home page</a>
+                    <a href="@Model.DashboardUrl" role="button" draggable="false" class="govuk-link govuk-link--no-visited-state">Go back to home page</a>
                 </p>
-
+            }
             }
 
             else if (Configuration["AuthType"].Equals("Employer", StringComparison.CurrentCultureIgnoreCase))
@@ -40,7 +64,7 @@
                 <h1 class="govuk-heading-xl">Access denied</h1>
                 <p class="govuk-body">If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.</p>
                 <p class="govuk-body">
-                    <a href="@Model" role="button" draggable="false" class="govuk-button" >Go back to the service home page</a>
+                    <a href="@Model.DashboardUrl" role="button" draggable="false" class="govuk-button" >Go back to the service home page</a>
                 </p>
             }
             
