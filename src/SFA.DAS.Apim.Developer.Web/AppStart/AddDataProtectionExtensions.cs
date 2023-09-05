@@ -8,7 +8,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
     public static class AddDataProtectionExtensions
     {
-        public static void AddDataProtection(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDataProtection(this IServiceCollection services, IConfiguration configuration, AuthenticationType? authenticationType)
         {
             
             var config = configuration.GetSection(nameof(ApimDeveloperWeb))
@@ -18,6 +18,13 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                 && !string.IsNullOrEmpty(config.DataProtectionKeysDatabase) 
                 && !string.IsNullOrEmpty(config.RedisConnectionString))
             {
+                var applicationName = authenticationType switch
+                {
+                    AuthenticationType.Employer => "das-employer",
+                    AuthenticationType.Provider => "das-provider",
+                    _ => "das-external"
+                };
+
                 var redisConnectionString = config.RedisConnectionString;
                 var dataProtectionKeysDatabase = config.DataProtectionKeysDatabase;
 
@@ -25,7 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                     .Connect($"{redisConnectionString},{dataProtectionKeysDatabase}");
 
                 services.AddDataProtection()
-                    .SetApplicationName("das-employer")
+                    .SetApplicationName(applicationName)
                     .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
             }
         }

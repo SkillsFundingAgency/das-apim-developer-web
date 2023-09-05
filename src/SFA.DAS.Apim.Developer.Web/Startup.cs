@@ -134,7 +134,8 @@ namespace SFA.DAS.Apim.Developer.Web
                             CookieAuthName,
                             typeof(CustomServiceRole),
                             ClientName,
-                            "/signout");
+                            "/signout",
+                            "");
                     }
                     else
                     {
@@ -189,7 +190,7 @@ namespace SFA.DAS.Apim.Developer.Web
             if (!_environment.IsDevelopment())
             {
                 services.AddHealthChecks();
-                services.AddDataProtection(_configuration);
+                services.AddDataProtection(_configuration, serviceParameters.AuthenticationType);
             }
 #if DEBUG
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
