@@ -40,6 +40,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         public const string JsonDocumentation = "api-doc-json";
 
         public const string Index = "index";
+        public const string Dashboard = "dashboard";
 
         public const string Error403 = "error-403";
         public const string Error404 = "error-404";
