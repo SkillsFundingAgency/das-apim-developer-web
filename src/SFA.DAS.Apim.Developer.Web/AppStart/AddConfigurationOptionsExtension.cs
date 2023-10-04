@@ -21,6 +21,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
             services.Configure<ProviderIdams>(configuration.GetSection("ProviderIdams"));
             services.AddSingleton(cfg => cfg.GetService<IOptions<ProviderIdams>>().Value);
+            services.Configure<TrainingProviderApiClientConfiguration>(configuration.GetSection("TrainingProviderApiClientSettings"));
+            services.AddSingleton(cfg => cfg.GetService<IOptions<TrainingProviderApiClientConfiguration>>().Value);
         }
     }
 }

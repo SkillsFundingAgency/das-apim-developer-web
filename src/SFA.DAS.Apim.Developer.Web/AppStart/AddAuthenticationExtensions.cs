@@ -21,6 +21,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
         public static void AddProviderAuthenticationServices(this IServiceCollection services)
         {
             services.AddSingleton<IAuthorizationHandler, ProviderAccountAuthorizationHandler>();
+            services.AddSingleton<ITrainingProviderAuthorizationHandler, TrainingProviderAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, TrainingProviderAllRolesAuthorizationHandler>();
         }
 
         public static void AddExternalAuthenticationServices(this IServiceCollection services)
@@ -35,6 +37,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IExternalAccountAuthorizationHandler, ExternalAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, ProviderEmployerExternalAccountAuthorizationHandler>();
             services.AddSingleton<IAuthorizationHandler, AccountActiveAuthorizationHandler>();//TODO remove after gov one login go live
+            services.AddSingleton<ITrainingProviderAuthorizationHandler, TrainingProviderAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, TrainingProviderAllRolesAuthorizationHandler>();
         }
     }
 }
