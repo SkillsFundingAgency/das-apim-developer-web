@@ -20,14 +20,11 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
     ///<inheritdoc cref="ITrainingProviderAuthorizationHandler"/>
     public class TrainingProviderAuthorizationHandler : ITrainingProviderAuthorizationHandler
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ITrainingProviderService _trainingProviderService;
 
         public TrainingProviderAuthorizationHandler(
-            IHttpContextAccessor httpContextAccessor,
             ITrainingProviderService trainingProviderService)
-        {
-            _httpContextAccessor = httpContextAccessor;
+        { 
             _trainingProviderService = trainingProviderService;
         }
 
@@ -38,10 +35,10 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
             //if the ukprn is invalid return false.
             if (ukprn <= 0) return false;
 
-            var providerDetails = await _trainingProviderService.GetProviderDetails(ukprn);
+            var providerStatusDetails = await _trainingProviderService.GetProviderStatus(ukprn);
 
             // Condition to check if the Provider Details has permission to access Apprenticeship Services based on the property value "CanAccessApprenticeshipService" set to True.
-            return providerDetails is { CanAccessApprenticeshipService: true };
+            return providerStatusDetails is { CanAccessService: true };
         }
 
         private static long GetProviderId(AuthorizationHandlerContext context)

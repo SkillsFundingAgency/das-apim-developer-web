@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
@@ -21,8 +19,6 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
             services.Configure<ProviderIdams>(configuration.GetSection("ProviderIdams"));
             services.AddSingleton(cfg => cfg.GetService<IOptions<ProviderIdams>>().Value);
-            services.Configure<TrainingProviderApiClientConfiguration>(configuration.GetSection("TrainingProviderApiClientSettings"));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<TrainingProviderApiClientConfiguration>>().Value);
         }
     }
 }

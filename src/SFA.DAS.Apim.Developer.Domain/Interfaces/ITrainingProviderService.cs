@@ -9,10 +9,10 @@ namespace SFA.DAS.Apim.Developer.Domain.Interfaces
     public interface ITrainingProviderService
     {
         /// <summary>
-        /// Contract to get the details of the Provider by given ukprn or provider Id.
+        /// Contract to get the status details of the Provider by given ukprn or provider Id.
         /// </summary>
-        /// <param name="providerId">ukprn.</param>
+        /// <param name="ukprn">ukprn.</param>
         /// <returns>GetProviderSummaryResult.</returns>
-        Task<GetProviderSummaryResult> GetProviderDetails(long providerId);
+        Task<ProviderAccountResponse> GetProviderStatus(long ukprn);
     }
 }

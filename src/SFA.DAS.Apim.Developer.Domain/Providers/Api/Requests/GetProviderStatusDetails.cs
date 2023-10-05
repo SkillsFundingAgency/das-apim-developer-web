@@ -2,15 +2,15 @@
 
 namespace SFA.DAS.Apim.Developer.Domain.Providers.Api.Requests
 {
-    public class GetProviderDetails : IGetApiRequest
+    public class GetProviderStatusDetails : IGetApiRequest
     {
         private readonly long _ukprn;
 
-        public GetProviderDetails(long ukprn)
+        public GetProviderStatusDetails(long ukprn)
         {
             _ukprn = ukprn;
         }
 
-        public string GetUrl => $"api/providers/{_ukprn}";
+        public string GetUrl => $"provideraccounts/{_ukprn}";
     }
 }
