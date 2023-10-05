@@ -58,9 +58,6 @@
     },
     "stubAuth": {
       "type": "string"
-    },
-    "UseStubProviderValidation": {
-      "type": "string"
     }
   },
   "variables": {
@@ -208,10 +205,6 @@
                 {
                   "name": "StubAuth",
                   "value": "[parameters('stubAuth')]"
-                },
-                {
-                  "name": "UseStubProviderValidation",
-                  "value": "[parameters('useStubProviderValidation')]"
                 }
               ]
             }
