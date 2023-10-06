@@ -21,7 +21,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             long ukprn,
             ProviderAccountResponse apiResponse,
             [Frozen] Mock<ITrainingProviderService> trainingProviderService,
-            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
             TrainingProviderAllRolesRequirement requirement,
             TrainingProviderAuthorizationHandler handler)
         {
@@ -30,11 +29,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var claim = new Claim(ProviderClaims.ProviderUkprn, ukprn.ToString());
             var claimsPrinciple = new ClaimsPrincipal(new[] { new ClaimsIdentity(new[] { claim }) });
             var context = new AuthorizationHandlerContext(new[] { requirement }, claimsPrinciple, null);
-            var responseMock = new FeatureCollection();
-            var httpContext = new DefaultHttpContext(responseMock);
-            httpContext.Request.RouteValues.Add(RouteValues.Ukprn, ukprn);
-            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
-
             
             trainingProviderService.Setup(x => x.GetProviderStatus(ukprn)).ReturnsAsync(apiResponse);
 

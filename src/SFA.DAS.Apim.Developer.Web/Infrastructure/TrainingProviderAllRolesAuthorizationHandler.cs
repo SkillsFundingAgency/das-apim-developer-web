@@ -56,7 +56,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
             // logic to check if the provider is authorized if not redirect the user to PAS 401 un-authorized page.
             if (!isStubProviderValidationEnabled && !(await _handler.IsProviderAuthorized(context, true)))
             {
-                currentContext?.Response.Redirect($"{_providerSharedUiConfiguration.DashboardUrl}/error/401");
+                currentContext?.Response.Redirect($"{_providerSharedUiConfiguration.DashboardUrl}/error/403/invalid-status");
             }
 
             context.Succeed(requirement);
