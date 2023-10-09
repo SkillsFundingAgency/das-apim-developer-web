@@ -18,6 +18,7 @@ using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.GovUK.Auth.Authentication;
 using SFA.DAS.GovUK.Auth.Services;
+using SFA.DAS.Provider.Shared.UI.Models;
 
 namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
 {
@@ -31,6 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         [TestCase(typeof(IApiDescriptionHelper))]
         [TestCase(typeof(IUserService))]
         [TestCase(typeof(ICustomClaims))]
+        [TestCase(typeof(ITrainingProviderAuthorizationHandler))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {
             var serviceCollection = new ServiceCollection();
@@ -52,13 +54,14 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
             
             Assert.IsNotNull(type);
-            type.Count.Should().Be(6);
+            type.Count.Should().Be(8);
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerViewerAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ExternalAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderEmployerExternalAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(AccountActiveAuthorizationHandler));
+            type.Should().Contain(c => c.GetType() == typeof(TrainingProviderAllRolesAuthorizationHandler));
         }
         
         [TestCase(typeof(IValidator<RegisterCommand>), typeof(RegisterCommandValidator))]
@@ -79,7 +82,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
         private static void SetupServiceCollection(ServiceCollection serviceCollection)
         {
             var configuration = GenerateConfiguration();
-            
+
+            serviceCollection.AddSingleton(Mock.Of<ProviderSharedUIConfiguration>());
             serviceCollection.AddSingleton(Mock.Of<IWebHostEnvironment>());
             serviceCollection.AddSingleton(Mock.Of<IConfiguration>());
             serviceCollection.AddConfigurationOptions(configuration, AuthenticationType.Employer);
