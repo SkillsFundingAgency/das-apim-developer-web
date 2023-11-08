@@ -12,6 +12,7 @@ using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
+using SFA.DAS.DfESignIn.Auth.Enums;
 
 namespace SFA.DAS.Apim.Developer.Web
 {
@@ -19,7 +20,6 @@ namespace SFA.DAS.Apim.Developer.Web
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IConfigurationRoot _configuration;
-        private const string ClientName = "ProviderRoATP";
         private const string CookieAuthName = "SFA.DAS.ProviderApprenticeshipService";
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
@@ -133,7 +133,7 @@ namespace SFA.DAS.Apim.Developer.Web
                             _configuration,
                             CookieAuthName,
                             typeof(CustomServiceRole),
-                            ClientName,
+                            ClientName.ProviderRoatp,
                             "/signout",
                             "");
                     }

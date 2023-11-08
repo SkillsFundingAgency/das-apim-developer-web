@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Apim.Developer.Application.Employer.Services;
+using SFA.DAS.Apim.Developer.Application.Provider.Services;
 using SFA.DAS.Apim.Developer.Application.ThirdPartyAccounts.Services;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Infrastructure.Api;
@@ -30,7 +31,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddTransient<IApiDescriptionHelper, ApiDescriptionHelper>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
-            
+            services.AddTransient<ITrainingProviderService, TrainingProviderService>();
+
             var useDevDataProtector = configuration["DevDataProtector"] != null 
                              && configuration["DevDataProtector"].Equals("true", StringComparison.CurrentCultureIgnoreCase);
             if (useDevDataProtector)
