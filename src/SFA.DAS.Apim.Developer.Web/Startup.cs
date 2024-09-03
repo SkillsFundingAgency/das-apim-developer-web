@@ -132,7 +132,7 @@ namespace SFA.DAS.Apim.Developer.Web
 
             services.AddSharedAuthenticationServices();
             
-            services.AddMediatR(typeof(GetAvailableProductsQuery).Assembly);
+            services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(GetAvailableProductsQuery).Assembly));
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });

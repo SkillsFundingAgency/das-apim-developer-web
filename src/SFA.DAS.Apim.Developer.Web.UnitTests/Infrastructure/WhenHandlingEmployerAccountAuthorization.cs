@@ -42,7 +42,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
             //Assert
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
         
         [Test, MoqAutoData]
@@ -69,7 +69,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test, MoqAutoData]
@@ -108,7 +108,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
             
             //Assert
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
             
         }
         
@@ -146,7 +146,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
             
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
         
         [Test, MoqAutoData]
@@ -172,7 +172,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
         
         [Test, MoqAutoData]
@@ -198,7 +198,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
         
         [Test, MoqAutoData]
@@ -224,7 +224,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
 
             //Assert
-            Assert.IsTrue(result);
+            Assert.That(result, Is.True);
         }
         
         [Test, MoqAutoData]
@@ -250,7 +250,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
         
         
@@ -277,7 +277,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test, MoqAutoData]
@@ -303,7 +303,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
         
         [Test, MoqAutoData]
@@ -330,7 +330,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, true);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
 
         [Test, MoqAutoData]
@@ -355,7 +355,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var result = authorizationHandler.IsEmployerAuthorised(context, false);
 
             //Assert
-            Assert.IsFalse(result);
+            Assert.That(result, Is.False);
         }
     }
 }

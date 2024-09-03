@@ -29,10 +29,10 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Errors
             
             var actual = errorController.AccessDenied() as ViewResult;
 
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.ViewName.Should().Be("AccessDenied");
             var actualModel = actual.Model as Error403ViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.DashboardUrl.Should().Be(homepageUrl);
         }
     }

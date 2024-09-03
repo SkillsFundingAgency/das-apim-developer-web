@@ -37,9 +37,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ViewProductSubscription(employerAccountId, id,null, true) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
             actualModel.EmployerAccountId.Should().Be(employerAccountId);
             actualModel.ShowRenewedBanner.Should().BeTrue();
@@ -67,9 +67,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ViewProductSubscription(employerAccountId, id,ukprn, true) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeTrue();
@@ -98,9 +98,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ViewProductSubscription(employerAccountId, id,ukprn, true, externalId) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeTrue();
