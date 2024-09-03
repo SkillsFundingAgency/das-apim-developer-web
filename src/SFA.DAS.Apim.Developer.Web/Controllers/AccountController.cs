@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication.WsFederation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
@@ -20,15 +19,11 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         [Route("signout",Name = RouteNames.ProviderSignOut)]
         public IActionResult ProviderSignOut()
         {
-            var authScheme = _apimDeveloperWeb.UseDfESignIn
-                ? OpenIdConnectDefaults.AuthenticationScheme
-                : WsFederationDefaults.AuthenticationScheme;
-
             return SignOut(
                 new Microsoft.AspNetCore.Authentication.AuthenticationProperties
                 {
                     AllowRefresh = true
-                },CookieAuthenticationDefaults.AuthenticationScheme, authScheme);
+                },CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
 }

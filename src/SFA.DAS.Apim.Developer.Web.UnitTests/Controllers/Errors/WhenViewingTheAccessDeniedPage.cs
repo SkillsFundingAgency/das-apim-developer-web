@@ -24,7 +24,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Errors
             [Frozen] Mock<IConfiguration> configuration,
             [Greedy] ErrorController errorController)
         {
-            apimDeveloperWeb.Object.UseDfESignIn = useDfESignIn;
             configuration?.SetupGet(x => x[It.Is<string>(s => s == "ResourceEnvironmentName")]).Returns("LOCAL");
             externalLinks.Object.Value.ManageApprenticeshipSiteUrl = homepageUrl;
             
@@ -35,7 +34,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Errors
             var actualModel = actual.Model as Error403ViewModel;
             Assert.IsNotNull(actualModel);
             actualModel.DashboardUrl.Should().Be(homepageUrl);
-            actualModel.UseDfESignIn.Should().Be(useDfESignIn);
         }
     }
 }

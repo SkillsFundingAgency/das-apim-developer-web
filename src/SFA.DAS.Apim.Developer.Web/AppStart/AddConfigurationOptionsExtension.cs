@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Options;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
-using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -15,10 +14,6 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton(cfg => cfg.GetService<IOptions<ApimDeveloperWeb>>().Value);
             services.Configure<ApimDeveloperApi>(configuration.GetSection($"{authenticationType}{nameof(ApimDeveloperApi)}"));
             services.AddSingleton(cfg => cfg.GetService<IOptions<ApimDeveloperApi>>().Value);
-            services.Configure<IdentityServerConfiguration>(configuration.GetSection("Identity"));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<IdentityServerConfiguration>>().Value);
-            services.Configure<ProviderIdams>(configuration.GetSection("ProviderIdams"));
-            services.AddSingleton(cfg => cfg.GetService<IOptions<ProviderIdams>>().Value);
         }
     }
 }

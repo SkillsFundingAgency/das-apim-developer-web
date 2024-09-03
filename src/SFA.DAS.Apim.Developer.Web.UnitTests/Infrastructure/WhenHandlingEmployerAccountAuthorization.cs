@@ -10,7 +10,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
-using SFA.DAS.Apim.Developer.Domain.Employers.Api;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
@@ -74,47 +73,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
         }
 
         [Test, MoqAutoData]
-        public void Then_If_Not_In_Context_Claims_EmployerAccountService_Checked_And_True_Returned_If_Exists(
-            string accountId,
-            string userId,
-            string email,
-            EmployerIdentifier employerIdentifier,
-            EmployerAccountRequirement requirement,
-            EmployerUserAccountItem serviceResponse,
-            [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-            [Frozen] Mock<IEmployerAccountService> employerAccountService,
-            [Frozen] Mock<IOptions<ApimDeveloperWeb>> configuration,
-            EmployerAccountAuthorizationHandler authorizationHandler)
-        {
-            //Arrange
-            configuration.Object.Value.UseGovSignIn = false;
-            serviceResponse.AccountId = accountId.ToUpper();
-            serviceResponse.Role = "Owner";
-            employerAccountService.Setup(x => x.GetUserAccounts(userId, email))
-                .ReturnsAsync(new EmployerUserAccounts
-                {
-                    EmployerAccounts = new List<EmployerUserAccountItem>{ serviceResponse }
-                });
-            
-            var userClaim = new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, userId);
-            var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};
-            var employerAccountClaim = new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(employerAccounts));
-            var claimsPrinciple = new ClaimsPrincipal(new[] {new ClaimsIdentity(new[] {employerAccountClaim, userClaim, new Claim(ClaimTypes.Email, email)})});
-            var context = new AuthorizationHandlerContext(new[] {requirement}, claimsPrinciple, null);
-            var responseMock = new FeatureCollection();
-            var httpContext = new DefaultHttpContext(responseMock);
-            httpContext.Request.RouteValues.Add(RouteValues.EmployerAccountId,accountId.ToUpper());
-            httpContextAccessor.Setup(x => x.HttpContext).Returns(httpContext);
-            
-            //Act
-            var result = authorizationHandler.IsEmployerAuthorised(context, false);
-            
-            //Assert
-            Assert.IsTrue(result);
-            
-        }
-
-        [Test, MoqAutoData]
         public void Then_If_Not_In_Context_Claims_EmployerAccountService_Checked_And_True_Returned_If_Exists_For_GovSignIn(
             string accountId,
             string userId,
@@ -128,7 +86,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
-            configuration.Object.Value.UseGovSignIn = true;
             serviceResponse.AccountId = accountId.ToUpper();
             serviceResponse.Role = "Owner";
             employerAccountService.Setup(x => x.GetUserAccounts(userId, email))
@@ -358,7 +315,6 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange
-            apimDeveloperWebConfiguration.Object.Value.UseGovSignIn = true;
             employerIdentifier.Role = "Viewer-Owner-Transactor";
             employerIdentifier.AccountId = employerIdentifier.AccountId.ToUpper();
             var employerAccounts = new Dictionary<string, EmployerIdentifier>{{employerIdentifier.AccountId, employerIdentifier}};

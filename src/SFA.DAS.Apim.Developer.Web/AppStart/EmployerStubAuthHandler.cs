@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SFA.DAS.Apim.Developer.Domain.Employers;
@@ -34,7 +29,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             {
                 new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, JsonConvert.SerializeObject(accountClaims)),
                 new Claim(EmployerClaims.EmployerEmailClaimsTypeIdentifier, "testemployer@user.com"),
-                new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString())
+                new Claim(EmployerClaims.IdamsUserIdClaimTypeIdentifier, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
             };
             var identity = new ClaimsIdentity(claims, "Employer-stub");
             var principal = new ClaimsPrincipal(identity);

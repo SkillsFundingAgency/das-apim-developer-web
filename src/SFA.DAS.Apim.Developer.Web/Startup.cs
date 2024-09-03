@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
-using SFA.DAS.Apim.Developer.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
@@ -54,10 +53,6 @@ namespace SFA.DAS.Apim.Developer.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var useDfESignIn = _configuration["ApimDeveloperWeb:UseDfESignIn"] != null &&
-                               _configuration["ApimDeveloperWeb:UseDfESignIn"]
-                                   .Equals("true", StringComparison.CurrentCultureIgnoreCase);
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -84,35 +79,17 @@ namespace SFA.DAS.Apim.Developer.Web
             
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
-                
-                services.AddEmployerAuthenticationServices();
-                if (_configuration["ApimDeveloperWeb:UseGovSignIn"] != null && _configuration["ApimDeveloperWeb:UseGovSignIn"]
-                        .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
-                    services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
+                services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
+                if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
+                     .Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                { 
+                    services.AddEmployerStubAuthentication();    
                 }
                 else
                 {
-                     var clientId = "no-auth-id";
-                     if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
-                             .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                     {
-                         services.AddEmployerStubAuthentication();    
-                     }
-                     else
-                     {
-                         var config = _configuration
-                             .GetSection("Identity")
-                             .Get<IdentityServerConfiguration>();
-                         services.AddAndConfigureEmployerAuthentication(config);
-                         clientId = config.ClientId;
-                     }
-                     services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
-                     services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, clientId,_configuration["ResourceEnvironmentName"]);
+                    services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
                 }
-
-                
+                 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
@@ -127,23 +104,13 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    if (useDfESignIn)
-                    {
-                        services.AddAndConfigureDfESignInAuthentication(
-                            _configuration,
-                            CookieAuthName,
-                            typeof(CustomServiceRole),
-                            ClientName.ProviderRoatp,
-                            "/signout",
-                            "");
-                    }
-                    else
-                    {
-                        services.AddAndConfigureProviderAuthentication(_configuration
-                            .GetSection(nameof(ProviderIdams))
-                            .Get<ProviderIdams>());
-                        services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
-                    }
+                    services.AddAndConfigureDfESignInAuthentication(
+                        _configuration,
+                        CookieAuthName,
+                        typeof(CustomServiceRole),
+                        ClientName.ProviderRoatp,
+                        "/signout",
+                        "");
                 }
             }
             else if (serviceParameters.AuthenticationType == AuthenticationType.External)
@@ -181,7 +148,7 @@ namespace SFA.DAS.Apim.Developer.Web
                     }
                     
                 })
-                .SetDfESignInConfiguration(useDfESignIn)
+                .SetDfESignInConfiguration(true)
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 

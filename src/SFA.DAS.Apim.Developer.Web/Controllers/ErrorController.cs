@@ -32,8 +32,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
         {
             return View("AccessDenied", new Error403ViewModel(_config["ResourceEnvironmentName"])
             {
-                DashboardUrl = _serviceParameters.AuthenticationType == AuthenticationType.Employer ? _configuration.ManageApprenticeshipSiteUrl : _providerConfiguration.DashboardUrl + "/account",
-                UseDfESignIn = _apimDeveloper.UseDfESignIn
+                DashboardUrl = _serviceParameters.AuthenticationType == AuthenticationType.Employer ? _configuration.ManageApprenticeshipSiteUrl : _providerConfiguration.DashboardUrl + "/account"
             });
         }
         
