@@ -22,7 +22,7 @@ refresh subscription keys to access externally available APIs.
 
 ### Pre-Requisites
 
-* .net core 3.1 and any supported IDE for DEV running
+* .net 8 and any supported IDE for DEV running
 * Azure Storage Account - using the emulator or azurite
 * Clone of this repository
 
@@ -79,29 +79,10 @@ Data:
     "BaseUrl":"https://localhost:5031/",
     "key":""
   },
-  "Identity":{
-    "ClientId":"{{CLIENT_ID}}}}",
-    "Scopes":"{{SCOPES}}}}",
-    "BaseAddress":"{{IDENTITY_PROVIDER_BASEADDRESS}}}}",
-    "TokenCertificateThumbprint":"{{TOKEN_CERTIFICATE_THUMBPRINT}}",
-    "TokenEndpoint":"",
-    "UseCertificate":true,
-    "ChangePasswordUrl":"/account/changepassword?clientId={0}&returnurl=",
-    "AccountActivationUrl":"",
-    "AuthorizeEndpoint":"",
-    "UserInfoEndpoint":"",
-    "ClientSecret":"{{CLIENT_SECRET}}}}",
-    "ChangeEmailUrl":"",
-    "LogoutEndpoint":""
-  },
   "ExternalLinks":{
     "ManageApprenticeshipSiteUrl":"https://localhost:5001/",
     "CommitmentsSiteUrl":"https://localhost:5001/",
     "EmployerRecruitmentSiteUrl":"https://localhost:5001/"
-  },
-  "ProviderIdams": {
-    "MetadataAddress": "{{METADATA_ADDRESS}}}}",
-    "Wtrealm": "https://localhost:5011/"
   },
   "ProviderSharedUIConfiguration" :{
     "DashboardUrl":"https://localhost:1234"
@@ -129,7 +110,7 @@ All configurations assume that you have set `StubAuth:true`. If you wish to run 
 
 ## Technologies
 
-* .NetCore 3.1
+* .Net 8
 * Mock Server
 * REDIS
 * NLog
