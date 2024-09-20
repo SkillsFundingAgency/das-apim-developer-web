@@ -30,7 +30,7 @@ refresh subscription keys to access externally available APIs.
 
 ### Config
 
-It is possible to run the site using the mock server and no authentication. The below appsettings.json assumes you have  
+It is possible to run the site using the mock server and no authentication. APIM Developer Web uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apim-developer-web/SFA.DAS.Apim.Developer.Web.json). The below appsettings.json assumes you have  
 
 appsettings.json file
 ```json
@@ -133,8 +133,8 @@ Application logs are logged to [Application Insights](https://learn.microsoft.co
 * .NetCore 6.0
 * Mock Server
 * REDIS
-* NLog
 * Azure Table Storage
+* Azure App Insights
 * NUnit
 * Moq
 * FluentAssertions
