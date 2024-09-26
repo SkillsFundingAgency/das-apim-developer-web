@@ -11,7 +11,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="FluentAssertions" Version="6.12.1" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.8" />
         
         <PackageReference Include="Nunit" Version="4.2.2" />
@@ -20,9 +20,8 @@
         <PackageReference Include="SpecFlow" Version="3.9.74" />
         <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
         <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
-        <PackageReference Include="Moq" Version="4.20.71" />
-        <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-        <PackageReference Include="WireMock.Net.Abstractions" Version="1.6.1" />
+        <PackageReference Include="Moq" Version="4.20.72" />
+        <PackageReference Include="WireMock.Net.Abstractions" Version="1.6.4" />
     </ItemGroup>
 
     <ItemGroup>
