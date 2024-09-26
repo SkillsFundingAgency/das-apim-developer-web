@@ -89,7 +89,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 {
                     services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
                 }
-                 
+                services.AddEmployerAuthenticationServices(); 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
