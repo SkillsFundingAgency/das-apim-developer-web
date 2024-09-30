@@ -23,9 +23,10 @@ refresh subscription keys to access externally available APIs.
 ### Pre-Requisites
 
 * A clone of this repository
-* A code editor that supports Azure functions and .NetCore 6.0
+* .net 8 and any supported IDE for DEV running
 * An Azure Active Directory account with the appropriate roles as per the [config](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apim-developer-web/SFA.DAS.Apim.Developer.Web.json)
 * Azure Storage Emulator(https://learn.microsoft.com/en-us/azure/storage/common/storage-use-emulator)
+
 
 
 ### Config
@@ -86,10 +87,6 @@ Data:
     "CommitmentsSiteUrl":"https://localhost:5001/",
     "EmployerRecruitmentSiteUrl":"https://localhost:5001/"
   },
-  "ProviderIdams": {
-    "MetadataAddress": "{{METADATA_ADDRESS}}}}",
-    "Wtrealm": "https://localhost:5011/"
-  },
   "ProviderSharedUIConfiguration" :{
     "DashboardUrl":"https://localhost:1234"
   }
@@ -130,7 +127,7 @@ Application logs are logged to [Application Insights](https://learn.microsoft.co
 
 ## Technologies
 
-* .NetCore 6.0
+* .Net 8
 * Mock Server
 * REDIS
 * Azure Table Storage

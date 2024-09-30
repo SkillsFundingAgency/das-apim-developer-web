@@ -30,7 +30,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.CreateSubscription(employerAccountId, id, null, externalId) as RedirectToRouteResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.EmployerViewSubscription);
             actual.RouteValues["employerAccountId"].Should().Be(employerAccountId);
             actual.RouteValues["id"].Should().Be(id);
@@ -55,7 +55,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.CreateSubscription("", id, ukprn, externalId) as RedirectToRouteResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.ProviderViewSubscription);
             actual.RouteValues["ukprn"].Should().Be(ukprn);
             actual.RouteValues["id"].Should().Be(id);
@@ -80,7 +80,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.CreateSubscription("", id, ukprn, externalId) as RedirectToRouteResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.ExternalViewSubscription);
             actual.RouteValues["externalId"].Should().Be(externalId);
             actual.RouteValues["id"].Should().Be(id);

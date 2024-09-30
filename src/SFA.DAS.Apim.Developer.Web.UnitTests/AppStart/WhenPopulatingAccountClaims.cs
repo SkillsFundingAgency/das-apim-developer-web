@@ -52,7 +52,6 @@ public class WhenPopulatingAccountClaims
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
         accountData.IsSuspended = false;
-        apimWebConfiguration.Object.Value.UseGovSignIn = true;
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         
@@ -77,7 +76,6 @@ public class WhenPopulatingAccountClaims
         EmployerAccountPostAuthenticationClaimsHandler handler)
     {
         accountData.IsSuspended = true;
-        apimWebConfiguration.Object.Value.UseGovSignIn = true;
         var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, emailAddress);
         accountService.Setup(x => x.GetUserAccounts(nameIdentifier,emailAddress)).ReturnsAsync(accountData);
         
@@ -89,29 +87,6 @@ public class WhenPopulatingAccountClaims
         var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
         JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
         actual.First(c => c.Type.Equals(ClaimTypes.AuthorizationDecision)).Value.Should().Be("Suspended");
-    }
-
-    [Test, MoqAutoData]
-    public async Task Then_The_Claims_Are_Populated_For_EmployerUsers_User(
-        string nameIdentifier,
-        string idamsIdentifier,
-        EmployerUserAccounts accountData,
-        [Frozen] Mock<IEmployerAccountService> accountService,
-        [Frozen] Mock<IConfiguration> configuration,
-        [Frozen] Mock<IOptions<ApimDeveloperWeb>> apimDeveloperWebConfiguration,
-        EmployerAccountPostAuthenticationClaimsHandler handler)
-    {
-        var tokenValidatedContext = ArrangeTokenValidatedContext(nameIdentifier, idamsIdentifier, string.Empty);
-        accountService.Setup(x => x.GetUserAccounts(idamsIdentifier, "")).ReturnsAsync(accountData);
-        apimDeveloperWebConfiguration.Object.Value.UseGovSignIn = false;
-        
-        var actual = await handler.GetClaims(tokenValidatedContext);
-        
-        accountService.Verify(x=>x.GetUserAccounts(nameIdentifier, string.Empty), Times.Never);
-        accountService.Verify(x=>x.GetUserAccounts(idamsIdentifier, string.Empty), Times.Once);
-        actual.Should().ContainSingle(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier));
-        var actualClaimValue = actual.First(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)).Value;
-        JsonConvert.SerializeObject(accountData.EmployerAccounts.ToDictionary(k => k.AccountId)).Should().Be(actualClaimValue);
     }
 
     private TokenValidatedContext ArrangeTokenValidatedContext(string nameIdentifier, string idamsIdentifier, string emailAddress)

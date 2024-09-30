@@ -16,7 +16,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Inform
         {
             var actual = controller.Index(accountId) as ViewResult;
 
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.ViewName.Should().Be("Index");
             var actualModel = actual.Model as string;
             actualModel.Should().Be(accountId);

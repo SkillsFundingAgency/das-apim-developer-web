@@ -38,9 +38,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ApiHub(employerAccountId, ukprn) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionsViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Products.Select(c=>c.DisplayName).Should().BeEquivalentTo(mediatorResult.Products.Products.Select(c=>c.DisplayName));
             actualModel.EmployerAccountId.Should().Be(employerAccountId);
             actualModel.ShowRenewedBanner.Should().BeFalse();
@@ -68,9 +68,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ApiHub(employerAccountId, ukprn) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionsViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Products.Select(c=>c.DisplayName).Should().BeEquivalentTo(mediatorResult.Products.Products.Select(c=>c.DisplayName));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeFalse();
@@ -100,9 +100,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             
             var actual = await controller.ApiHub(employerAccountId, ukprn, externalId) as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionsViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Products.Select(c=>c.DisplayName).Should().BeEquivalentTo(mediatorResult.Products.Products.Select(c=>c.DisplayName));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeFalse();

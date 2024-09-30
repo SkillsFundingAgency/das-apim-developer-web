@@ -37,7 +37,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             var actual = controller.ApiList() as RedirectToRouteResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.ProviderApiHub);
             actual.RouteValues["ukprn"].Should().Be(ukprn.ToString());
         }    
@@ -58,7 +58,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             var actual = controller.ApiList() as RedirectToRouteResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.EmployerApiHub);
             actual.RouteValues["employerAccountId"].Should().Be(employerAccounts.FirstOrDefault().Key);
         }
@@ -78,7 +78,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             var actual = controller.ApiList() as RedirectToRouteResult;
             
             //Assert
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.RouteName.Should().Be(RouteNames.ExternalApiHub);
             actual.RouteValues["externalId"].Should().Be(id.ToString());
         }
