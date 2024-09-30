@@ -34,9 +34,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Documentation
             
             var actual = await controller.GetApiProduct(apiName) as ViewResult;
 
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as ApiProductViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.Url.Should().Be(url);
         }
     }

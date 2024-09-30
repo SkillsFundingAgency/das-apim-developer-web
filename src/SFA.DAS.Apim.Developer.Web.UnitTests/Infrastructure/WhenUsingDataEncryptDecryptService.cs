@@ -119,7 +119,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             var actual = service.EncodedData(id);
             
             //Assert
-            Assert.AreEqual(WebEncoders.Base64UrlEncode(toEncode), actual);
+            Assert.That(actual, Is.EqualTo(WebEncoders.Base64UrlEncode(toEncode)));
         }
     }
 }

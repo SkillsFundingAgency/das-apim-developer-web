@@ -42,9 +42,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Home
 
             var actual = await controller.Index() as ViewResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as HomePageViewModel;
-            Assert.IsNotNull(actualModel);
+            Assert.That(actualModel, Is.Not.Null);
             actualModel.DocumentationBaseUrl.Should().Be(documentationBaseUrl);
         }
     }

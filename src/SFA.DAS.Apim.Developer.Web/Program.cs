@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using NLog.Web;
-using SFA.DAS.Apim.Developer.Web;
-
 namespace SFA.DAS.Apim.Developer.Web
 {
     public class Program
@@ -17,8 +12,7 @@ namespace SFA.DAS.Apim.Developer.Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
-                        .UseStartup<Startup>()
-                        .UseNLog();
+                        .UseStartup<Startup>();
                 });
     }
 }

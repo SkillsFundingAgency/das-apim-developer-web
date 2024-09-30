@@ -1,9 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
@@ -15,13 +13,11 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
 {
     private readonly IEmployerAccountService _accountsSvc;
     private readonly IConfiguration _configuration;
-    private readonly ApimDeveloperWeb _apimDeveloperWebConfiguration;
 
-    public EmployerAccountPostAuthenticationClaimsHandler(IEmployerAccountService accountsSvc, IConfiguration configuration, IOptions<ApimDeveloperWeb> apimDeveloperWebConfiguration)
+    public EmployerAccountPostAuthenticationClaimsHandler(IEmployerAccountService accountsSvc, IConfiguration configuration)
     {
         _accountsSvc = accountsSvc;
         _configuration = configuration;
-        _apimDeveloperWebConfiguration = apimDeveloperWebConfiguration.Value;
     }
     public async Task<IEnumerable<Claim>> GetClaims(TokenValidatedContext ctx)
     {
@@ -44,24 +40,14 @@ public class EmployerAccountPostAuthenticationClaimsHandler : ICustomClaims
             
             return claims.ToList();
         }
+
+        var userId = ctx.Principal.Claims
+            .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))
+            .Value;
+        var email = ctx.Principal.Claims
+            .First(c => c.Type.Equals(ClaimTypes.Email))
+            .Value;
         
-        string userId;
-        var email = string.Empty;
-        if (_apimDeveloperWebConfiguration.UseGovSignIn)
-        {
-            userId = ctx.Principal.Claims
-                .First(c => c.Type.Equals(ClaimTypes.NameIdentifier))
-                .Value;
-            email = ctx.Principal.Claims
-                .First(c => c.Type.Equals(ClaimTypes.Email))
-                .Value;
-        }
-        else
-        {
-            userId = ctx.Principal.Claims
-                .First(c => c.Type.Equals(EmployerClaims.IdamsUserIdClaimTypeIdentifier))
-                .Value;
-        }
 
         var returnClaims = new List<Claim>();
         var result = await _accountsSvc.GetUserAccounts(userId, email);

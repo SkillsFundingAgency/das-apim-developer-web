@@ -41,7 +41,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
 
             var type = provider.GetService(toResolve);
             
-            Assert.IsNotNull(type);
+            Assert.That(type, Is.Not.Null);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
             
             var type = provider.GetServices(typeof(IAuthorizationHandler)).ToList();
             
-            Assert.IsNotNull(type);
+            Assert.That(type, Is.Not.Null);
             type.Count.Should().Be(8);
             type.Should().ContainSingle(c => c.GetType() == typeof(EmployerAccountAuthorizationHandler));
             type.Should().ContainSingle(c => c.GetType() == typeof(ProviderAccountAuthorizationHandler));
