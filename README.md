@@ -22,13 +22,16 @@ refresh subscription keys to access externally available APIs.
 
 ### Pre-Requisites
 
-* .net core 3.1 and any supported IDE for DEV running
-* Azure Storage Account - using the emulator or azurite
-* Clone of this repository
+* A clone of this repository
+* .net 8 and any supported IDE for DEV running
+* An Azure Active Directory account with the appropriate roles as per the [config](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apim-developer-web/SFA.DAS.Apim.Developer.Web.json)
+* Azure Storage Emulator(https://learn.microsoft.com/en-us/azure/storage/common/storage-use-emulator)
+
+
 
 ### Config
 
-It is possible to run the site using the mock server and no authentication. The below appsettings.json assumes you have  
+It is possible to run the site using the mock server and no authentication. APIM Developer Web uses the standard Apprenticeship Service configuration. All configuration can be found in the [das-employer-config repository](https://github.com/SkillsFundingAgency/das-employer-config/blob/master/das-apim-developer-web/SFA.DAS.Apim.Developer.Web.json). The below appsettings.json assumes you have  
 
 appsettings.json file
 ```json
@@ -41,7 +44,7 @@ appsettings.json file
     }
   },
   "ConfigurationStorageConnectionString": "UseDevelopmentStorage=true;",
-  "ConfigNames": "SFA.DAS.Apim.Developer.Web",
+  "ConfigNames": "SFA.DAS.Apim.Developer.Web,SFA.DAS.Employer.GovSignIn,SFA.DAS.Provider.DfeSignIn",
   "Environment": "LOCAL",
   "Version": "1.0",
   "APPINSIGHTS_INSTRUMENTATIONKEY": "",
@@ -78,30 +81,11 @@ Data:
   "ExternalApimDeveloperApi":{
     "BaseUrl":"https://localhost:5031/",
     "key":""
-  },
-  "Identity":{
-    "ClientId":"{{CLIENT_ID}}}}",
-    "Scopes":"{{SCOPES}}}}",
-    "BaseAddress":"{{IDENTITY_PROVIDER_BASEADDRESS}}}}",
-    "TokenCertificateThumbprint":"{{TOKEN_CERTIFICATE_THUMBPRINT}}",
-    "TokenEndpoint":"",
-    "UseCertificate":true,
-    "ChangePasswordUrl":"/account/changepassword?clientId={0}&returnurl=",
-    "AccountActivationUrl":"",
-    "AuthorizeEndpoint":"",
-    "UserInfoEndpoint":"",
-    "ClientSecret":"{{CLIENT_SECRET}}}}",
-    "ChangeEmailUrl":"",
-    "LogoutEndpoint":""
-  },
+  },  
   "ExternalLinks":{
     "ManageApprenticeshipSiteUrl":"https://localhost:5001/",
     "CommitmentsSiteUrl":"https://localhost:5001/",
     "EmployerRecruitmentSiteUrl":"https://localhost:5001/"
-  },
-  "ProviderIdams": {
-    "MetadataAddress": "{{METADATA_ADDRESS}}}}",
-    "Wtrealm": "https://localhost:5011/"
   },
   "ProviderSharedUIConfiguration" :{
     "DashboardUrl":"https://localhost:1234"
@@ -127,13 +111,27 @@ If running the outer api, keep the config as above and run the SFA.DAS.Apim.Deve
 
 All configurations assume that you have set `StubAuth:true`. If you wish to run with provider, employer or external authentication then these will need configuring.
 
+MacOS
+```
+ASPNETCORE_ENVIRONMENT=Development dotnet run
+```
+Windows cmd
+```
+set ASPNETCORE_ENVIRONMENT=Development
+dotnet run
+```
+
+### Application logs
+Application logs are logged to [Application Insights](https://learn.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview) and can be viewed using [Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/overview) at https://portal.azure.com
+
+
 ## Technologies
 
-* .NetCore 3.1
+* .Net 8
 * Mock Server
 * REDIS
-* NLog
 * Azure Table Storage
+* Azure App Insights
 * NUnit
 * Moq
 * FluentAssertions
@@ -141,3 +139,7 @@ All configurations assume that you have set `StubAuth:true`. If you wish to run 
 ## 🐛 Known Issues
 
 * Do not run in IISExpress
+
+## License
+
+Licensed under the [MIT license](LICENSE)

@@ -20,7 +20,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Home
 
             var actual = controller.Dashboard() as RedirectResult;
             
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.Url.Should().Be(dashboardUrl);
         }
     }

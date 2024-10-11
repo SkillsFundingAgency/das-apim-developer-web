@@ -1,9 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SFA.DAS.Apim.Developer.Domain.Configuration;
 using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 
@@ -19,14 +17,12 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmployerAccountService _accountsService;
         private readonly ILogger<EmployerAccountAuthorizationHandler> _logger;
-        private readonly ApimDeveloperWeb _apimDeveloperWebConfiguration;
 
-        public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger, IOptions<ApimDeveloperWeb> apimDeveloperWebConfiguration)
+        public EmployerAccountAuthorizationHandler(IHttpContextAccessor httpContextAccessor, IEmployerAccountService accountsService, ILogger<EmployerAccountAuthorizationHandler> logger)
         {
             _httpContextAccessor = httpContextAccessor;
             _accountsService = accountsService;
             _logger = logger;
-            _apimDeveloperWebConfiguration = apimDeveloperWebConfiguration.Value;
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountRequirement requirement)
@@ -75,8 +71,7 @@ namespace SFA.DAS.Apim.Developer.Web.Infrastructure
 
             if (employerAccounts == null || !employerAccounts.ContainsKey(accountIdFromUrl))
             {
-                var requiredIdClaim =_apimDeveloperWebConfiguration.UseGovSignIn 
-                    ? ClaimTypes.NameIdentifier : EmployerClaims.IdamsUserIdClaimTypeIdentifier;
+                var requiredIdClaim =ClaimTypes.NameIdentifier;
                 
                 if (!context.User.HasClaim(c => c.Type.Equals(requiredIdClaim)))
                     return false;

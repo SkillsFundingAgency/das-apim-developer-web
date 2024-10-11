@@ -29,7 +29,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Documentation
 
             var actual = await controller.GetApiProductDocumentation(apiName) as ContentResult;
 
-            Assert.IsNotNull(actual);
+            Assert.That(actual, Is.Not.Null);
             actual.Content.Should().BeEquivalentTo(JObject.Parse(mediatorResult.Product.Documentation).ToString());
             
         }
