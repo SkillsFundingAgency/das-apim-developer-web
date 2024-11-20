@@ -93,8 +93,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
         }
         
         [Test]
-        [MoqInlineAutoData("VacanciesManageOuterApi-Sandbox","Test creating an advert on Find an apprenticeship using your existing systems.")]
-        [MoqInlineAutoData("VacanciesOuterApi","Display recruitment adverts from Find an apprenticeship.")]
+        [MoqInlineAutoData("VacanciesManageOuterApi-Sandbox","Test your implementation of the Recruitment API.")]
+        [MoqInlineAutoData("VacanciesOuterApi", "Get and display adverts from Find an apprenticeship.")]
         public void Then_The_Url_And_Text_Is_Processed_But_Url_Hidden_If_Bool_Passed(
             string keyName,
             string expectedInput,
@@ -117,8 +117,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
         }
 
         [Test]
-        [MoqInlineAutoData("VacanciesManageOuterApi-Sandbox","Test creating an advert on Find an apprenticeship using your existing systems.")]
-        [MoqInlineAutoData("VacanciesOuterApi","Display recruitment adverts from Find an apprenticeship.")]
+        [MoqInlineAutoData("VacanciesManageOuterApi-Sandbox","Test your implementation of the Recruitment API.")]
+        [MoqInlineAutoData("VacanciesOuterApi", "Get and display adverts from Find an apprenticeship.")]
         public void Then_If_There_Is_A_Description_Substitution_That_Is_Used(
             string keyName,
             string expectedValue,

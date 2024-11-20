@@ -4,124 +4,111 @@
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Apprenticeship services";
     var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
+    var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName);
+    var firstProduct = apiProducts.First();
 }
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Get started</h1>
-        <h2 class="govuk-heading-l">About the Apprenticeship Service APIs</h2>
+        <h1 class="govuk-heading-xl">Using Apprenticeship service APIs</h1>
+        <p class="govuk-body">This page is for developers who want to use Apprenticeship service APIs.</p>
+
+        <h2 class="govuk-heading-l">Our APIs</h2>
         
-        @foreach(var apiProduct in Model.ApiProducts)
+        @foreach(var apiProduct in apiProducts)
         {
+            <h3 class="govuk-heading-s"><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a></h3>
             <p class="govuk-body">
-                <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
-                <br/>
                 <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description" />
             </p>
         }
         
-        <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs if you are working with an employer or training provider</h2>
+        <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs</h2>
+        <h3 class="govuk-heading-m">If you're working with an employer</h3>
         
-        <p class="govuk-body">If you’re working with an employer or training provider, they can get you an API key using their Apprenticeship service account.</p>
-        <p class="govuk-body">The API key the employer or training provider will send to you is linked to their account and provides additional functionality, so use that one.</p>
-        <p class="govuk-body">You can view the API documentation now, using the links at the top of the page. You can read the documentation but will not be able to call the API until the employer or provider gives you an API key.</p>
-        <p class="govuk-body">The training provider or employer can delete the API keys from within their account. Deleting the key will stop applications using the key from working.</p>
-        
-        <h2 class="govuk-heading-l" id="independent-api-info">Using our APIs if you’re working independently</h2>
-        
-        <p class="govuk-body">If you’re not working with a training provider or employer, you can access the following APIs:</p>
+        <p class="govuk-body">You can use the:</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li>Display adverts API</li>
+            @foreach (var apiProduct in apiProducts.Take(3))
+            {
+                <li><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a></li>
+            }
         </ul>
-        <p class="govuk-body">You will need to <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link govuk-link--no-visited-state">create an account to access the API keys.</a></p>
-        <p class="govuk-body">If you already have an account, you can <a asp-route="@RouteNames.ThirdPartySignIn" class="govuk-link govuk-link--no-visited-state">sign in to access the API keys.</a></p>
-        
-        <h2 class="govuk-heading-l" id="independent-api-info">Apprenticeship Service APIs you can use if working independently</h2>
-        
-        @foreach(var externalProduct in Model.ExternalProducts)
-        {
-            <p class="govuk-body">
-                <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@externalProduct.Name" class="govuk-link">@externalProduct.DisplayName</a>
-                <br/>
-                <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@externalProduct.Id" data="@externalProduct.Description" />
-            </p>
-        }
+        <p class="govuk-body">You’ll need to get an API key from the employer you’re working with before you can call our APIs.</p>
+        <p class="govuk-body">The employer will find these API keys in the <strong>Adverts</strong> section of their apprenticeship service account. At the bottom of the page, there’s a link for <strong>Recruitment APIs</strong>.</p>
+        <p class="govuk-body">If an employer deletes their API key, your application will stop working.</p>
 
-        <h2 class="govuk-heading-l">RESTful APIs</h2>
-        
-        <p class="govuk-body">Apprenticeship service APIs are RESTful. In a RESTful style of API, data resources are given unique URLs and are manipulated through standard HTTP verbs such as:</p>
+        <h3 class="govuk-heading-m">If you're working with a training provider</h3>
+
+        <p class="govuk-body">You can use the:</p>
         <ul class="govuk-list govuk-list--bullet">
-            <li><code class="das-!-color-green">GET</code> to request a resource</li>
-            <li><code class="das-!-color-green">POST</code> to create a resource</li>
-            <li><code class="das-!-color-green">PUT</code> to replace a resource</li>
-            <li><code class="das-!-color-green">DELETE</code> to remove a resource</li>
+            @foreach (var apiProduct in apiProducts)
+            {
+                <li><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a></li>
+            }
         </ul>
-        <p class="govuk-body">All Apprenticeship Service APIs use the JSON data standard as the content type. JSON, or JavaScript Object Notation, is an open, standard format for storing and exchanging data. It can be used as a data format by any programming language, which makes it ideal for HTTP-based API services.</p>
+        <p class="govuk-body">You’ll need to get an API key from the training provider you’re working with before you can call our APIs.</p>
+        <p class="govuk-body">The training provider will find these API keys in the <strong>Developer APIs</strong> section on their apprenticeship service account homepage.</p>
+        <p class="govuk-body">If a training provider deletes their API key, your application will stop working.</p>
 
-        <h2 class="govuk-heading-l">API authentication</h2>
-        
-        <p class="govuk-body">Apprenticeship Service APIs require authentication credentials to be sent with each request. Credentials are sent in the form of an API key which is contained within a custom HTTP request header.</p>
-        <p class="govuk-body">
-            The custom request header must be named <em>Ocp-Apim-Subscription-Key</em> and you must use your API key as the value for this custom request header in each API request.<br><br>
-            For example:
-        </p>
-        <code>
-            GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
-            Host: api.apprenticeships.education.gov.uk<br>
-            X-Version: 1<br>
-            Ocp-Apim-Subscription-Key:<br>
-        </code>
-        <p class="govuk-body govuk-!-margin-top-6">In the case of an authentication failure, the API request will return a HTTP 401 response with a message giving the reason for the authentication failure, either:</p>
-        <ul class="govuk-list govuk-list--number">
-            <li>the <em>Ocp-Apim-Subscription-Key </em> header is missing</li>
-            <li>the subscription key given as the header value is invalid</li>
-        </ul>
-        <p class="govuk-body">If you are accessing different APIs, they will have their own API key.</p>
-        <p class="govuk-body">The following sections provide information on how to obtain your API key(s).</p>
+        <h3 class="govuk-heading-m">If you're working on your own</h3>
 
-        <h2 class="govuk-heading-l">API Versioning</h2>
-        
-        <p class="govuk-body">All Apprenticeship Service APIs are versioned. This ensures API consumers receive a predictable response from an API, even when a newer version of an API is released.</p>
-        <p class="govuk-body">The version of the API you require must be specified within a custom HTTP request header.</p>
-        <p class="govuk-body">The custom request header must be named <em>X-Version</em> and you must specify the version (as a whole number) as the value for this custom request header in each API request.</p>
+        <p class="govuk-body">You can only use the <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@firstProduct.Name" class="govuk-link">@firstProduct.DisplayName</a>.</p>
+        <p class="govuk-body">You will need an API key to call the @firstProduct.DisplayName. You can <a href="https://developer.apprenticeships.education.gov.uk/third-party-accounts/register?" class="govuk-link">create an account to get an API key</a>.</p>
+        <p class="govuk-body">If you already have an account, you can <a class="govuk-link" href="https://developer.apprenticeships.education.gov.uk/third-party-accounts/sign-in">sign in to get an API key</a>.</p>
+
+        <h2 class="govuk-heading-l">How our APIs work</h2>
+        <p class="govuk-body">Our APIs are RESTful and use JSON.</p>
+
+        <h2 class="govuk-heading-l">How our APIs work</h2>
+        <p class="govuk-body">Our APIs are RESTful and use JSON.</p>
+
+        <h3 class="govuk-heading-m">Authentication</h3>
+
+        <p class="govuk-body">You need an API key to call our APIs. Each API requires a different key. How to get keys is detailed in the <strong>Using our APIs</strong> section.</p>
+        <div class="govuk-inset-text">
+            <p>Every request to our API must contain your API key. Use your API key as the value for the HTTP request header <code>Ocp-Apim-Subscription-Key</code>.</p>
+        </div>
         <p class="govuk-body">For example:</p>
-        <code>
-            GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
-            Host: api.apprenticeships.education.gov.uk<br>
-            X-Version: 1<br>
-            Ocp-Apim-Subscription-Key:<br>
-        </code>
-        <p class="govuk-body govuk-!-margin-top-6">In case of a version check failure, you will receive a HTTP 404 response with a message giving the reason for the failure, either:</p>
-        <ul class="govuk-list govuk-list--number">
-            <li>the <em>X-Version </em> header is missing</li>
-            <li>the version specified does not exist</li>
+        <div class="app-summary-card__header">
+            <code>
+                GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
+                Host: api.apprenticeships.education.gov.uk<br>
+                X-Version: 1<br>
+                Ocp-Apim-Subscription-Key:<br>
+            </code>
+        </div><br />
+        <p class="govuk-body">The API will return a 401 status code if you do not include this field or if the API key is invalid.</p>
+
+        <h4 class="govuk-heading-s">Keeping your API key secure</h4>
+
+        <p class="govuk-body">Do not:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>embed API keys in your code - consider storing them inside environment variables or configuration.</li>
+            <li>store API keys in your application source tree - if all or part of the source is made public, the API key may be compromised.</li>
         </ul>
-        <p class="govuk-body">The Apprenticeship service maintains the current version of an API, as well as the previous version for a limited period of time. 3 months after the release of a new version of an API, the previous version will be decommissioned, so you will need to update to the latest version within 3 months of the new one becoming available.</p>
+        <p class="govuk-body">Regenerate your API keys regularly, including with each application release. This will reduce the chance of an API key being discovered.</p>
 
-        <h2 class="govuk-heading-l">API Rate Limiting</h2>
-        
-        <p class="govuk-body">
-            Rate limiting is applied to the Apprenticeship Service APIs to ensure a high quality service is delivered for all users.<br><br>
-            You can make up to <code class="das-!-color-red">150</code> requests within a <code class="das-!-color-red">5</code> minute period. If you exceed this limit, you will receive a <code class="das-!-color-green">429 Too Many Requests</code> HTTP status code for each request made within the rest of the <code class="das-!-color-red">5</code> minute timeframe. At the end of the time period, your rate limit will reset back to <code class="das-!-color-red">150</code> requests.
-        </p>
+        <h3 class="govuk-heading-m">Versioning</h3>
 
-        <h2 class="govuk-heading-l">API Key Security</h2>
-        
-        <p class="govuk-body">It is important to keep your API keys secure. This will prevent them from being discovered, your account from being compromised and your rate-limit quota from being exceeded.</p>
-        
-        <h2 class="govuk-heading-l">Do not embed API keys in your code</h2>
-        
-        <p class="govuk-body">Storing subscription keys in your application code increases the risk that they will be discovered, particularly if any of your source code is made public or it can be viewed by people who should not have access to the API key. Instead, you should consider storing them inside environment variables or configuration.</p>
+        <p class="govuk-body">Our APIs are versioned. This means the API will keep acting predictably even after we’ve released a new version.</p>
+        <p class="govuk-body">After a new release version of the API, the old version will be maintained for 3 months only.</p>
+        <div class="govuk-inset-text">
+            <p>Every request to our API must include which API version you are calling. State which version you want you for the HTTP request header <code>X-version</code>. This value must be a whole number.</p>
+        </div>
+        <p class="govuk-body">For example:</p>
+        <div class="app-summary-card__header">
+            <code>
+                GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
+                Host: api.apprenticeships.education.gov.uk<br>
+                X-Version: 1<br>
+                Ocp-Apim-Subscription-Key:<br>
+            </code>
+        </div><br />
+        <p class="govuk-body">The API will return a 401 status code if you do not include this field or if the version number is invalid.</p>
 
-        <h2 class="govuk-heading-l">Do not store API keys in your source tree</h2>
-        
-        <p class="govuk-body">If you store API keys in files, for example, configuration or environment files, do not store them inside the application source tree. If all or part of the source is made public, the API key may be compromised.</p>
+        <h3 class="govuk-heading-m">Rate limiting</h3>
 
-        <h2 class="govuk-heading-l">Regenerate your API keys</h2>
-        
-        <p class="govuk-body">Regenerate your API keys regularly, including with each application release, to reduce the chance that an API key will be discovered.</p>
-        
-        <h2 class="govuk-heading-l">Environments</h2>
-        
-        <p class="govuk-body">Apprenticeship Service APIs are hosted in our live environment where production data is made available. A sandbox environment is also provided for some APIs, which run the same API versions as live to allow software developers to test their integration with Apprenticeship Service APIs in a safe place.</p>
+        <p class="govuk-body">We use rate limiting to protect the quality of our APIs.</p>
+        <p class="govuk-body">You can make up to 150 requests within a 5 minute period.</p>
+        <p class="govuk-body">The API will return a 429 status code if you exceed this request limit. After the end of the 5 minute period, your request limit will reset back to 150 requests for the next period.</p>
     </div>
 </div>
