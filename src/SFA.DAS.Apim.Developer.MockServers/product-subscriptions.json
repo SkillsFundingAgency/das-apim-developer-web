@@ -20,6 +20,20 @@
       "displayName": "Display advert API",
       "name": "Display-Advert-API-v1",
       "key": "0e4dd5e702eb4644bc2dd9e6bd84b481"
+    },
+    {
+      "id": "VacanciesTrackApprenticeshipProgressApi",
+      "description": "Share data on the progress of your apprenticeships.",
+      "displayName": "Track apprenticeship progress API",
+      "name": "Track-Apprenticeship-Progress-API-v1",
+      "key": ""
+    },
+    {
+      "id": "VacanciesTrackApprenticeshipProgressApi-Sandbox",
+      "description": "Test your implementation of the Track apprenticeship progress API.",
+      "displayName": "Track apprenticeship progress API sandbox",
+      "name": "Track-Apprenticeship-Progress-API-Sandbox-v1",
+      "key": ""
     }
   ]
 }

@@ -56,7 +56,9 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
         public static Dictionary<string, string> Descriptions => new Dictionary<string, string>
         {
             { "VacanciesManageOuterApi-Sandbox", "Test your implementation of the Recruitment API." },
-            { "VacanciesOuterApi", "Get and display adverts from Find an apprenticeship." }
+            { "VacanciesOuterApi", "Get and display adverts from Find an apprenticeship." },
+            { "VacanciesTrackApprenticeshipProgressApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." },
+            { "VacanciesTrackApprenticeshipProgressApi", "Share data on the progress of your apprenticeships." }
         };
     }
 }
