@@ -2,7 +2,7 @@
 @model SFA.DAS.Apim.Developer.Web.Models.HomePageViewModel
 @{
     Layout = "_LayoutGeneric";    
-    ViewData["Title"] = "Apprenticeship services";
+    ViewData["Title"] = "Using Apprenticeship service APIs – Apprenticeship service – GOV.UK";
     var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
     var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName);
     var firstProduct = apiProducts.First();
@@ -47,7 +47,7 @@
         </ul>
         <p class="govuk-body">You’ll need to get an API key from the training provider you’re working with before you can call our APIs.</p>
         <p class="govuk-body">The training provider will find these API keys in the <strong>Developer APIs</strong> section on their apprenticeship service account homepage.</p>
-        <p class="govuk-body">If a training provider deletes their API key, your application will stop working.</p>
+        <p class="govuk-body">If the training provider deletes their API key, your application will stop working.</p>
 
         <h3 class="govuk-heading-m">If you're working on your own</h3>
 
@@ -89,7 +89,7 @@
         <p class="govuk-body">Our APIs are versioned. This means the API will keep acting predictably even after we’ve released a new version.</p>
         <p class="govuk-body">After a new release version of the API, the old version will be maintained for 3 months only.</p>
         <div class="govuk-inset-text">
-            <p>Every request to our API must include which API version you are calling. State which version you want you for the HTTP request header <code>X-version</code>. This value must be a whole number.</p>
+            <p>Every request to our API must include which API version you are calling. State which version you want for the HTTP request header <code>X-version</code>. This value must be a whole number.</p>
         </div>
         <p class="govuk-body">For example:</p>
         <div class="app-summary-card__header">
@@ -100,7 +100,7 @@
                 Ocp-Apim-Subscription-Key:<br>
             </code>
         </div><br />
-        <p class="govuk-body">The API will return a 401 status code if you do not include this field or if the version number is invalid.</p>
+        <p class="govuk-body">The API will return a 404 status code if you do not include this field or if the version number is invalid.</p>
 
         <h3 class="govuk-heading-m">Rate limiting</h3>
 
