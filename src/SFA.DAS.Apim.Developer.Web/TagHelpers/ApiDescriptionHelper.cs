@@ -57,8 +57,8 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
         {
             { "VacanciesManageOuterApi-Sandbox", "Test your implementation of the Recruitment API." },
             { "VacanciesOuterApi", "Get and display adverts from Find an apprenticeship." },
-            { "VacanciesTrackApprenticeshipProgressApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." },
-            { "VacanciesTrackApprenticeshipProgressApi", "Share data on the progress of your apprenticeships." }
+            { "TrackProgressOuterApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." },
+            { "TrackProgressOuterApi", "Share data on the progress of your apprenticeships." }
         };
     }
 }
