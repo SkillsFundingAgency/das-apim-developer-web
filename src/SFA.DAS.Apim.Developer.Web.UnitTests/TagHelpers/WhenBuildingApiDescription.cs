@@ -119,6 +119,8 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.TagHelpers
         [Test]
         [MoqInlineAutoData("VacanciesManageOuterApi-Sandbox","Test your implementation of the Recruitment API.")]
         [MoqInlineAutoData("VacanciesOuterApi", "Get and display adverts from Find an apprenticeship.")]
+        [MoqInlineAutoData("TrackProgressOuterApi", "Share data on the progress of your apprenticeships.")]
+        [MoqInlineAutoData("TrackProgressOuterApi-Sandbox", "Test your implementation of the Track apprenticeship progress API.")]
         public void Then_If_There_Is_A_Description_Substitution_That_Is_Used(
             string keyName,
             string expectedValue,
