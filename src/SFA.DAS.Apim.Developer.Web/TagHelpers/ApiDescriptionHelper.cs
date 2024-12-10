@@ -55,8 +55,12 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
     {
         public static Dictionary<string, string> Descriptions => new Dictionary<string, string>
         {
-            { "VacanciesManageOuterApi-Sandbox", "Test creating an advert on Find an apprenticeship using your existing systems." },
-            { "VacanciesOuterApi", "Display recruitment adverts from Find an apprenticeship." }
+            // This overrides the product descriptions drawn from the swagger doc annotations on each products' Program class in das-apim-endpoints.
+            // Sandbox environments don't exist in APIM and so their descriptions must be overidden.
+            { "VacanciesManageOuterApi-Sandbox", "Test your implementation of the Recruitment API." },
+            { "VacanciesOuterApi", "Get and display adverts from Find an apprenticeship." },
+            { "TrackProgressOuterApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." },
+            { "TrackProgressOuterApi", "Share data on the progress of your apprenticeships." }
         };
     }
 }
