@@ -59,7 +59,8 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
             // Sandbox environments don't exist in APIM and so their descriptions must be overidden.
             { "VacanciesManageOuterApi-Sandbox", "Test your implementation of the Recruitment API." },
             { "VacanciesOuterApi", "Get and display adverts from Find an apprenticeship." },
-            { "TrackProgressOuterApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." }
+            { "TrackProgressOuterApi-Sandbox", "Test your implementation of the Track apprenticeship progress API." },
+            { "TrackProgressOuterApi", "Share data on the progress of your apprenticeships." }
         };
     }
 }
