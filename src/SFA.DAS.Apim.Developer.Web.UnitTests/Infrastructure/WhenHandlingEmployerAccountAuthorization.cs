@@ -13,7 +13,9 @@ using SFA.DAS.Apim.Developer.Domain.Employers;
 using SFA.DAS.Apim.Developer.Domain.Employers.Api.Responses;
 using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Employer;
 using SFA.DAS.Testing.AutoFixture;
+using EmployerClaims = SFA.DAS.Apim.Developer.Web.Infrastructure.EmployerClaims;
 
 namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
 {
@@ -81,7 +83,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountRequirement requirement,
             EmployerUserAccountItem serviceResponse,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-            [Frozen] Mock<IEmployerAccountService> employerAccountService,
+            [Frozen] Mock<IGovAuthEmployerAccountService> employerAccountService,
             [Frozen] Mock<IOptions<ApimDeveloperWeb>> configuration,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
@@ -120,7 +122,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Infrastructure
             EmployerAccountRequirement requirement,
             EmployerUserAccountItem serviceResponse,
             [Frozen] Mock<IHttpContextAccessor> httpContextAccessor,
-            [Frozen] Mock<IEmployerAccountService> employerAccountService,
+            [Frozen] Mock<IGovAuthEmployerAccountService> employerAccountService,
             EmployerAccountAuthorizationHandler authorizationHandler)
         {
             //Arrange

@@ -18,7 +18,9 @@ using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Models;
 using SFA.DAS.Employer.Shared.UI;
+using SFA.DAS.GovUK.Auth.Employer;
 using SFA.DAS.Provider.Shared.UI.Attributes;
+using EmployerClaims = SFA.DAS.Apim.Developer.Web.Infrastructure.EmployerClaims;
 
 namespace SFA.DAS.Apim.Developer.Web.Controllers
 {
