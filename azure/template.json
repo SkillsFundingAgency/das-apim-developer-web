@@ -26,6 +26,9 @@
     "loggingRedisKey": {
       "type": "string"
     },
+    "deployPrivateLinkedScopedResource": {
+            "type": "bool"
+    },
     "tags": {
       "type": "object"
     },
@@ -64,7 +67,8 @@
     "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
-    "configNames": "SFA.DAS.Apim.Developer.Web,SFA.DAS.Employer.GovSignIn,SFA.DAS.Provider.DfeSignIn"
+    "configNames": "SFA.DAS.Apim.Developer.Web,SFA.DAS.Employer.GovSignIn,SFA.DAS.Provider.DfeSignIn",
+    "privateLinkScopeName": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-shared-ampls'))]"
   },
   "resources": [
     {
@@ -130,6 +134,35 @@
       "dependsOn": [
         "[variables('resourceGroupName')]"
       ]
+    },
+    {
+      "condition": "[parameters('deployPrivateLinkedScopedResource')]",
+      "apiVersion": "2021-04-01",
+      "name": "[concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-private-link-scoped-', parameters('utcValue'))]",
+      "type": "Microsoft.Resources/deployments",
+      "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('deploymentUrlBase'),'private-linked-scoped-resource.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "privateLinkScopeName": {
+            "value": "[variables('privateLinkScopeName')]"
+          },
+          "scopedResourceName": {
+            "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
+          },
+          "scopedResourceId": {
+            "value": "[reference(concat(parameters('appConfiguration')[copyIndex()].subServiceName, '-application-insights')).outputs.AppInsightsResourceId.value]"
+          }
+        }
+      },
+      "copy": {
+        "name": "appInsightsCopy",
+        "count": "[length(parameters('appConfiguration'))]"
+      }
     },
     {
       "apiVersion": "2021-04-01",
