@@ -27,10 +27,8 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
             services.AddHttpClient<IApiClient, ApiClient>();
-            services.AddTransient<IEmployerAccountService, EmployerAccountService>();
             services.AddTransient<IApiDescriptionHelper, ApiDescriptionHelper>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<ICustomClaims, EmployerAccountPostAuthenticationClaimsHandler>();
             services.AddTransient<ITrainingProviderService, TrainingProviderService>();
 
             var useDevDataProtector = configuration["DevDataProtector"] != null 

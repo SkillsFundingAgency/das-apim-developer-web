@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Apim.Developer.Application.Employer.Services;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -12,6 +13,7 @@ using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
 using SFA.DAS.DfESignIn.Auth.Enums;
+using SFA.DAS.GovUK.Auth.Models;
 
 namespace SFA.DAS.Apim.Developer.Web
 {
@@ -87,7 +89,11 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    services.AddAndConfigureGovUkAuthentication(_configuration, typeof(EmployerAccountPostAuthenticationClaimsHandler), "", "/SignIn-Stub");
+                    services.AddAndConfigureGovUkAuthentication(_configuration, new AuthRedirects
+                    {
+                        SignedOutRedirectUrl = "",
+                        LocalStubLoginPath = "/SignIn-Stub"
+                    } , null,typeof(EmployerAccountService));
                 }
                 services.AddEmployerAuthenticationServices(); 
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
