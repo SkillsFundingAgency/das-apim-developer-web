@@ -17,6 +17,7 @@ using SFA.DAS.Apim.Developer.Domain.Interfaces;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.GovUK.Auth.Authentication;
+using SFA.DAS.GovUK.Auth.Employer;
 using SFA.DAS.GovUK.Auth.Services;
 using SFA.DAS.Provider.Shared.UI.Models;
 
@@ -24,14 +25,13 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.AppStart
 {
     public class WhenAddingServicesToTheContainer
     {
-        [TestCase(typeof(IEmployerAccountService))]
+        [TestCase(typeof(IGovAuthEmployerAccountService))]
         [TestCase(typeof(IApiClient))]
         [TestCase(typeof(IEmployerAccountAuthorisationHandler))]
         [TestCase(typeof(IProviderAccountAuthorisationHandler))]
         [TestCase(typeof(IExternalAccountAuthorizationHandler))]
         [TestCase(typeof(IApiDescriptionHelper))]
         [TestCase(typeof(IUserService))]
-        [TestCase(typeof(ICustomClaims))]
         [TestCase(typeof(ITrainingProviderAuthorizationHandler))]
         public void Then_The_Dependencies_Are_Correctly_Resolved(Type toResolve)
         {

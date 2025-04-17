@@ -13,6 +13,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+      <PackageReference Include="SFA.DAS.GovUK.Auth" Version="17.1.141" />
       <PackageReference Include="System.Security.Cryptography.Xml" Version="8.0.1" />
       <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
       <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
