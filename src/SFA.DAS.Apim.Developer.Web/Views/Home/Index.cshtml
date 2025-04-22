@@ -52,8 +52,8 @@
         <h3 class="govuk-heading-m">If you're working on your own</h3>
 
         <p class="govuk-body">You can only use the <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@firstProduct.Name" class="govuk-link">@firstProduct.DisplayName</a>.</p>
-        <p class="govuk-body">You will need an API key to call the @firstProduct.DisplayName. You can <a href="https://developer.apprenticeships.education.gov.uk/third-party-accounts/register?" class="govuk-link">create an account to get an API key</a>.</p>
-        <p class="govuk-body">If you already have an account, you can <a class="govuk-link" href="https://developer.apprenticeships.education.gov.uk/third-party-accounts/sign-in">sign in to get an API key</a>.</p>
+        <p class="govuk-body">You will need an API key to call the @firstProduct.DisplayName. You can <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link">create an account to get an API key</a>.</p>
+        <p class="govuk-body">If you already have an account, you can <a class="govuk-link" asp-route="@RouteNames.ThirdPartySignIn">sign in to get an API key</a>.</p>
 
         <h2 class="govuk-heading-l">How our APIs work</h2>
         <p class="govuk-body">Our APIs are RESTful and use JSON.</p>
