@@ -4,7 +4,7 @@
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Using Apprenticeship service APIs – Apprenticeship service – GOV.UK";
     var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
-    var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName);
+    var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName).ToList();
     var firstProduct = apiProducts.First();
 }
 <div class="govuk-grid-row">
@@ -17,9 +17,19 @@
         @foreach(var apiProduct in apiProducts)
         {
             <h3 class="govuk-heading-s"><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a></h3>
+            if (apiProduct.Versions.Any())
+            {
+                <p class="govuk-body">Previous Versions
+                    @foreach (var productVersion in apiProduct.Versions)
+                    {
+                        <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@productVersion.Value" class="govuk-link">@apiProduct.DisplayName - @productVersion.Key</a>    
+                    }
+                </p>
+            }
             <p class="govuk-body">
                 <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description" />
             </p>
+            
         }
         
         <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs</h2>

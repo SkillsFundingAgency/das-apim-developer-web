@@ -40,7 +40,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
             Assert.That(actualModel, Is.Not.Null);
-            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
+            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options
+                .Excluding(c=>c.Name)
+                .Excluding(c=>c.Versions));
             actualModel.EmployerAccountId.Should().Be(employerAccountId);
             actualModel.ShowRenewedBanner.Should().BeTrue();
             actualModel.RenewKeyRouteName.Should().Be(RouteNames.EmployerRenewKey);
@@ -70,7 +72,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
             Assert.That(actualModel, Is.Not.Null);
-            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
+            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options
+                .Excluding(c=>c.Name)
+                .Excluding(c=>c.Versions));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeTrue();
             actualModel.RenewKeyRouteName.Should().Be(RouteNames.ProviderRenewKey);
@@ -101,7 +105,9 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Subscriptions
             Assert.That(actual, Is.Not.Null);
             var actualModel = actual.Model as SubscriptionViewModel;
             Assert.That(actualModel, Is.Not.Null);
-            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options.Excluding(c=>c.Name));
+            actualModel.Product.Should().BeEquivalentTo(mediatorResult.Product, options=> options
+                .Excluding(c=>c.Name)
+                .Excluding(c=>c.Versions));
             actualModel.Ukprn.Should().Be(ukprn);
             actualModel.ShowRenewedBanner.Should().BeTrue();
             actualModel.RenewKeyRouteName.Should().Be(RouteNames.ExternalRenewKey);

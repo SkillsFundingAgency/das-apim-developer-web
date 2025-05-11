@@ -10,6 +10,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public string Description { get; set; } 
         public string Documentation { get; set; }
         public string Url { get ; set ; }
+        public Dictionary<string, string> Documents { get; set; }
 
         public static implicit operator ApiProductViewModel(GetProductQueryResult source)
         {
@@ -23,7 +24,8 @@ namespace SFA.DAS.Apim.Developer.Web.Models
                 DisplayName = source.Product.DisplayName,
                 Name = source.Product.Name,
                 Description = source.Product.Description,
-                Documentation = source.Product.Documentation
+                Documentation = source.Product.Documentation,
+                Documents = source.Product.Documents
             };
         }
     }

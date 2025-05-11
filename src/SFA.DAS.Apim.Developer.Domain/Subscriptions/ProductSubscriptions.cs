@@ -32,6 +32,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
         public string Name { get; set; }
         public string Description { get; set; }
         public string DisplayName { get; set; }
+        public List<string> Versions { get; set; }
 
 
         public static implicit operator ProductSubscriptionItem(GetProductSubscriptionItem source)
@@ -42,7 +43,8 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions
                 Key = source.Key,
                 Description = source.Description,
                 Name = source.Name,
-                DisplayName = source.DisplayName
+                DisplayName = source.DisplayName,
+                Versions = source.Versions
             };
         }
     }

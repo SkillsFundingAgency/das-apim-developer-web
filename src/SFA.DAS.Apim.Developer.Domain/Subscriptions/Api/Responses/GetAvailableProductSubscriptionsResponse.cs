@@ -21,5 +21,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Subscriptions.Api.Responses
         public string Name { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
+        [JsonProperty("versions")]
+        public List<string> Versions { get; set; }
     }
 }

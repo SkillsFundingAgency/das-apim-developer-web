@@ -36,7 +36,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public string DisplayName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
+        public Dictionary<string, string> Versions { get; set; }
 
         public static implicit operator SubscriptionItem(ProductSubscriptionItem source)
         {
@@ -46,7 +46,8 @@ namespace SFA.DAS.Apim.Developer.Web.Models
                 Key = source.Key,
                 DisplayName = source.DisplayName,
                 Name = source.Name.ToLower(),
-                Description = source.Description
+                Description = source.Description,
+                Versions = source.Versions.ToDictionary(c=>c[^2..], c=>c)
             };
         }
     }
