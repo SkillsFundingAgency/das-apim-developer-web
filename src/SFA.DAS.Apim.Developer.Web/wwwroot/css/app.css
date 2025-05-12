@@ -142,3 +142,26 @@
     margin-top: 2px;
     box-shadow: none;
 }
+
+.app-product-listing {
+    margin-bottom: 1.5em;
+}
+
+.app-product-listing__header {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    margin-bottom: .5em;
+}
+
+.app-product-listing__versions {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    gap: .85em;
+    li {
+        border-left: 1px solid #b1b4b6;
+        padding-left: .85em;
+    }
+}
