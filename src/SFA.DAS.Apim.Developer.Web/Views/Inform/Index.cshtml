@@ -1,5 +1,6 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SFA.DAS.Apim.Developer.Web.Infrastructure
-@model string
+@model SFA.DAS.Apim.Developer.Web.Models.InformViewModel
 @{
     Layout = "_LayoutEmployer";
     ViewData["Title"] = "Get started with the recruitment APIs";
@@ -22,10 +23,10 @@
         </ul>
         <h2 class="govuk-heading-l">How do I use the APIs?</h2>
         <div class="govuk-inset-text">You'll need someone with technical knowledge to connect your system with the API, for example a software developer.</div>
-        <p class="govuk-body">You can share this <a asp-route="@RouteNames.Index" class="govuk-link">developer get started page</a> with the person who is going to connect your system with the API, they can access the API from there.</p>
+        <p class="govuk-body">You can share this <a href="https://@Model.DocumentationUrl" class="govuk-link">developer get started page</a> with the person who is going to connect your system with the API, they can access the API from there.</p>
         <p class="govuk-body">You will need to give your developer API keys. The keys give your developer permission to connect to the API on your behalf.</p>
         <p class="govuk-body">Your developer will also be able to try out the API using the sandbox provided.</p>
         <h2 class="govuk-heading-l">Where do I access the API Key?</h2>
-        <p class="govuk-body">If you have owner permissions you will be able to access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model" class="govuk-link">API keys here</a>.</p>
+        <p class="govuk-body">If you have owner permissions you will be able to access the <a asp-route="@RouteNames.EmployerApiHub" asp-route-employerAccountId="@Model.EmployerAccountId" class="govuk-link">API keys here</a>.</p>
     </div>
 </div>

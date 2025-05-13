@@ -3,8 +3,8 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using SFA.DAS.Apim.Developer.Domain.Employers;
-using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.GovUK.Auth.Employer;
+using EmployerClaims = SFA.DAS.Apim.Developer.Web.Infrastructure.EmployerClaims;
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
