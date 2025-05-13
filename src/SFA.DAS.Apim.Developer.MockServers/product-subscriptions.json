@@ -22,7 +22,7 @@
       "displayName": "Display advert API",
       "name": "Display-Advert-API-v2",
       "key": "0e4dd5e702eb4644bc2dd9e6bd84b481",
-      "versions": ["Display-Advert-API-v1"]
+      "versions": ["display-advert-api-v1"]
     },
     {
       "id": "TrackProgressOuterApi",

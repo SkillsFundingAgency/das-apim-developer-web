@@ -44,7 +44,7 @@ namespace SFA.DAS.Apim.Developer.Web.Controllers
                 Id = apiName
             });
 
-            return Content(JObject.Parse(result.Product.Documents[apiName]).ToString());
+            return Content(JObject.Parse(result.Product.Documents[apiName.ToLower()]).ToString());
         }
     }
 }
