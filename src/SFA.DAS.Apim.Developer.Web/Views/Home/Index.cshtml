@@ -4,7 +4,7 @@
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Using Apprenticeship service APIs – Apprenticeship service – GOV.UK";
     var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
-    var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName);
+    var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName).ToList();
     var firstProduct = apiProducts.First();
 }
 <div class="govuk-grid-row">
@@ -16,12 +16,32 @@
         
         @foreach(var apiProduct in apiProducts)
         {
-            <h3 class="govuk-heading-s"><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a></h3>
-            <p class="govuk-body">
-                <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description" />
-            </p>
+            <div class="app-product-listing">
+                <div class="app-product-listing__header">
+                    <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
+                        <a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@apiProduct.Name" class="govuk-link">@apiProduct.DisplayName</a>
+                    </h3>
+                    @if (apiProduct.Versions.Any())
+                    {
+                        <ul class="govuk-list app-product-listing__versions">
+                            @foreach (var productVersion in apiProduct.Versions)
+                            {
+                                <li><a asp-host="@Model.DocumentationBaseUrl" asp-protocol="https" asp-route="@RouteNames.Documentation" asp-route-apiName="@productVersion.Value" class="govuk-link">@apiProduct.DisplayName - @productVersion.Key</a> </li>
+                            }
+                        </ul>
+                    }
+                </div>
+               
+                <p class="govuk-body">
+                    <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description"/>
+                </p>
+            </div>
+            
         }
-        
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+
         <h2 class="govuk-heading-l" id="employer-provider-api-info">Using our APIs</h2>
         <h3 class="govuk-heading-m">If you're working with an employer</h3>
         
@@ -55,6 +75,9 @@
         <p class="govuk-body">You will need an API key to call the @firstProduct.DisplayName. You can <a asp-route="@RouteNames.ThirdPartyRegister" class="govuk-link">create an account to get an API key</a>.</p>
         <p class="govuk-body">If you already have an account, you can <a class="govuk-link" asp-route="@RouteNames.ThirdPartySignIn">sign in to get an API key</a>.</p>
 
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+
         <h2 class="govuk-heading-l">How our APIs work</h2>
         <p class="govuk-body">Our APIs are RESTful and use JSON.</p>
 
@@ -69,7 +92,7 @@
             <code>
                 GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
                 Host: api.apprenticeships.education.gov.uk<br>
-                X-Version: 1<br>
+                X-Version: 2<br>
                 Ocp-Apim-Subscription-Key:<br>
             </code>
         </div><br />
@@ -96,7 +119,7 @@
             <code>
                 GET https://api.apprenticeships.education.gov.uk/vacancies/{yourAction} HTTP/1.1<br>
                 Host: api.apprenticeships.education.gov.uk<br>
-                X-Version: 1<br>
+                X-Version: 2<br>
                 Ocp-Apim-Subscription-Key:<br>
             </code>
         </div><br />

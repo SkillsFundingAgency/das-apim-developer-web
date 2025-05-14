@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SFA.DAS.Apim.Developer.Domain.Products.Api.Responses
@@ -14,5 +15,7 @@ namespace SFA.DAS.Apim.Developer.Domain.Products.Api.Responses
         public string Description { get; set; }
         [JsonProperty("documentation")]
         public string Documentation { get; set; }
+        [JsonProperty("documents")]
+        public Dictionary<string,string> Documents { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace SFA.DAS.Apim.Developer.Web.UnitTests.Controllers.Documentation
             [Greedy] DocumentationController controller)
         {
             mediatorResult.Product.Documentation = value.ToString();
+            mediatorResult.Product.Documents.Add(apiName.ToLower(), value.ToString());
             mediator.Setup(x => x.Send(It.Is<GetProductQuery>(c => c.Id.Equals(apiName)), CancellationToken.None))
                 .ReturnsAsync(mediatorResult);
 
