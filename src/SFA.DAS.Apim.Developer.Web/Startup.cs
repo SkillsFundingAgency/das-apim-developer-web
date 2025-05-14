@@ -2,17 +2,17 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Apim.Developer.Application.Employer.Services;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
-using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Apim.Developer.Web.AppStart;
 using SFA.DAS.Apim.Developer.Web.Extensions;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
+using SFA.DAS.Apim.Developer.Web.Infrastructure.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.DfESignIn.Auth.AppStart;
+using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.Employer.Shared.UI;
 using SFA.DAS.GovUK.Auth.AppStart;
 using SFA.DAS.Provider.Shared.UI.Models;
 using SFA.DAS.Provider.Shared.UI.Startup;
-using SFA.DAS.DfESignIn.Auth.Enums;
 using SFA.DAS.GovUK.Auth.Models;
 
 namespace SFA.DAS.Apim.Developer.Web
@@ -36,7 +36,7 @@ namespace SFA.DAS.Apim.Developer.Web
                     .AddJsonFile("appsettings.Development.json", true);
             }
 #endif
-            
+
             config.AddEnvironmentVariables();
             if (!configuration.IsDev())
             {
@@ -77,15 +77,15 @@ namespace SFA.DAS.Apim.Developer.Web
             }
 
             services.AddConfigurationOptions(_configuration, serviceParameters.AuthenticationType);
-            
-            
+
+
             if (serviceParameters.AuthenticationType == AuthenticationType.Employer)
             {
                 services.AddMaMenuConfiguration(RouteNames.EmployerSignOut, _configuration["ResourceEnvironmentName"]);
                 if (_configuration["LocalStubAuth"] != null && _configuration["LocalStubAuth"]
                      .Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                { 
-                    services.AddEmployerStubAuthentication();    
+                {
+                    services.AddEmployerStubAuthentication();
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace SFA.DAS.Apim.Developer.Web
                         LocalStubLoginPath = "/SignIn-Stub"
                     } , null,typeof(EmployerAccountService));
                 }
-                services.AddEmployerAuthenticationServices(); 
+                services.AddEmployerAuthenticationServices();
                 services.Configure<ExternalLinksConfiguration>(_configuration.GetSection(ExternalLinksConfiguration.ApimDeveloperExternalLinksConfiguration));
                 services.AddSingleton(new ProviderSharedUIConfiguration());
             }
@@ -129,32 +129,31 @@ namespace SFA.DAS.Apim.Developer.Web
                 }
                 else
                 {
-                    services.AddAndConfigureExternalUserAuthentication();    
+                    services.AddAndConfigureExternalUserAuthentication();
                 }
-                
+
                 services.AddSingleton(new ProviderSharedUIConfiguration());
                 services.AddAuthenticationCookie(serviceParameters.AuthenticationType);
             }
 
             services.AddSharedAuthenticationServices();
-            
+
             services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(GetAvailableProductsQuery).Assembly));
             services.AddMediatRValidation();
             services.AddServiceRegistration(serviceParameters, _configuration);
             services.Configure<IISServerOptions>(options => { options.AutomaticAuthentication = false; });
-            
+
             services.Configure<RouteOptions>(options =>
             {
-                
+
             }).AddMvc(options =>
                 {
                     if (!_configuration.IsDev())
                     {
-                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());    
+                        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     }
-                    
+
                 })
-                .SetDfESignInConfiguration(true)
                 .EnableGoogleAnalytics();
             services.AddAuthorizationService(serviceParameters.AuthenticationType);
 
@@ -190,7 +189,7 @@ namespace SFA.DAS.Apim.Developer.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            
+
             app.Use(async (context, next) =>
             {
                 if (context.Response.Headers.ContainsKey("X-Frame-Options"))
@@ -213,9 +212,9 @@ namespace SFA.DAS.Apim.Developer.Web
             });
 
             app.UseRouting();
-            
+
             app.UseAuthorization();
-            
+
             app.UseEndpoints(builder =>
             {
                 builder.MapDefaultControllerRoute();
