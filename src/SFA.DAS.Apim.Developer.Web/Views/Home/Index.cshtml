@@ -3,7 +3,6 @@
 @{
     Layout = "_LayoutGeneric";    
     ViewData["Title"] = "Using Apprenticeship service APIs – Apprenticeship service – GOV.UK";
-    var vacanciesOuterApi = Model.ApiProducts.FirstOrDefault(c=>c.Id.Equals("VacanciesOuterApi"));
     var apiProducts = Model.ApiProducts.OrderBy(i => i.DisplayName).ToList();
     var firstProduct = apiProducts.First();
 }
@@ -33,7 +32,7 @@
                 </div>
                
                 <p class="govuk-body">
-                    <api-description class="govuk-caption" tag-name="span" show-documentation-url="false" key-name="@apiProduct.Id" data="@apiProduct.Description"/>
+                    <api-description class="govuk-caption" tag-name="span" show-documentation-url="@apiProduct.ShowDocumentationUrl" key-name="@apiProduct.Id" api-name="@apiProduct.Name" data="@apiProduct.Description"/>
                 </p>
             </div>
             

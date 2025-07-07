@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using SFA.DAS.Apim.Developer.Application.Subscriptions.Queries.GetAvailableProducts;
 using SFA.DAS.Apim.Developer.Domain.Subscriptions;
 using SFA.DAS.Apim.Developer.Web.AppStart;
@@ -36,6 +34,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
         public string DisplayName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool ShowDocumentationUrl { get; set; }
         public Dictionary<string, string> Versions { get; set; }
 
         public static implicit operator SubscriptionItem(ProductSubscriptionItem source)
@@ -47,6 +46,7 @@ namespace SFA.DAS.Apim.Developer.Web.Models
                 DisplayName = source.DisplayName,
                 Name = source.Name.ToLower(),
                 Description = source.Description,
+                ShowDocumentationUrl = source.Versions.Count > 0,
                 Versions = source.Versions.ToDictionary(c=>c[^2..], c=>c)
             };
         }
