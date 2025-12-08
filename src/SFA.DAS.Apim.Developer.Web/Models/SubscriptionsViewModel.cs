@@ -47,7 +47,9 @@ namespace SFA.DAS.Apim.Developer.Web.Models
                 Name = source.Name.ToLower(),
                 Description = source.Description,
                 ShowDocumentationUrl = source.Versions.Count > 0,
-                Versions = source.Versions.ToDictionary(c=>c[^2..], c=>c)
+                Versions = source.Versions
+                    .GroupBy(c => c[^2..])
+                    .ToDictionary(g => g.Key, g => g.First())
             };
         }
     }
