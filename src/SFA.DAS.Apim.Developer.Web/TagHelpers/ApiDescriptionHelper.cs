@@ -57,7 +57,7 @@ namespace SFA.DAS.Apim.Developer.Web.TagHelpers
                 "VacanciesOuterApi",
                 "Get and display adverts from Find an apprenticeship. <div class='govuk-inset-text'>" +
                 "<p>The new API version (version 2) lets you display apprenticeships that are available in more than one location.</p>" +
-                "<p>You must update to this new version by 30 January 2026. Read more about changing the version you use in the Versioning section of this page.</p>" +
+                "<p>You must update to this new version by 1 April 2026. Read more about changing the version you use in the Versioning section of this page.</p>" +
                 "<p>If you need to check your current implementation, you can view the old documentation for " +
                 "<a class='govuk-link' href='{url}'>Display advert API (version 1)</a></p></div>"
             },
