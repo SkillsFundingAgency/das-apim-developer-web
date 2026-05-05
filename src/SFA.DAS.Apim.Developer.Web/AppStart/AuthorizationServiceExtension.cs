@@ -2,7 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.GovUK.Auth.Authentication;
-using WebPolicyNames = SFA.DAS.Apim.Developer.Web.Infrastructure.PolicyNames;
+using PolicyNames = SFA.DAS.Apim.Developer.Web.Infrastructure.PolicyNames;
+
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
@@ -19,7 +20,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(
-                    WebPolicyNames
+                    PolicyNames
                         .HasEmployerAccount
                     , policy =>
                     {
@@ -29,7 +30,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.Requirements.Add(new AccountActiveRequirement());
                     });
                 options.AddPolicy(
-                    WebPolicyNames.HasEmployerViewAccount, policy =>
+                    PolicyNames.HasEmployerViewAccount, policy =>
                     {
                         policy.RequireClaim(EmployerClaims.AccountsClaimsTypeIdentifier);
                         policy.Requirements.Add(new EmployerViewerRoleRequirement());
@@ -37,7 +38,7 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.Requirements.Add(new AccountActiveRequirement());
                     });
                 options.AddPolicy(
-                    WebPolicyNames
+                    PolicyNames
                         .HasProviderAccount
                     , policy =>
                     {
@@ -48,14 +49,14 @@ namespace SFA.DAS.Apim.Developer.Web.AppStart
                         policy.Requirements.Add(new TrainingProviderAllRolesRequirement());
                         policy.RequireAuthenticatedUser();
                     });
-                options.AddPolicy(WebPolicyNames.HasExternalAccount, policy =>
+                options.AddPolicy(PolicyNames.HasExternalAccount, policy =>
                 {
                     policy.RequireClaim(ExternalUserClaims.Id);
                     policy.Requirements.Add(new ExternalAccountRequirement());
                     policy.RequireAuthenticatedUser();
                 });
                 options.AddPolicy(
-                    WebPolicyNames.HasProviderEmployerAdminOrExternalAccount,
+                    PolicyNames.HasProviderEmployerAdminOrExternalAccount,
                     policy =>
                     {
                         if (serviceParametersAuthenticationType is AuthenticationType.Employer)
