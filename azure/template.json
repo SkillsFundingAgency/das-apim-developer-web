@@ -184,13 +184,13 @@
             "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
           },
           "appServicePlanName": {
-            "value": "[parameters('sharedFrontEndAppServicePlanName')]"
+            "value": "[parameters('appConfiguration')[copyIndex()].appServicePlanName]"
           },
           "appServicePlanResourceGroup": {
             "value": "[parameters('sharedEnvResourceGroup')]"
           },
           "subnetResourceId": {
-            "value": "[parameters('sharedFrontEndSubnetResourceId')]"
+            "value": "[parameters('appConfiguration')[copyIndex()].subnetResourceId]"
           },
           "appServiceAppSettings": {
             "value": {
