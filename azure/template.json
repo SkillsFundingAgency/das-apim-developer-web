@@ -41,12 +41,6 @@
     "sharedKeyVaultName": {
       "type": "string"
     },
-    "sharedFrontEndAppServicePlanName": {
-      "type": "string"
-    },
-    "sharedFrontEndSubnetResourceId": {
-      "type": "string"
-    },
     "frontEndAccessRestrictions": {
       "type": "array"
     },
