@@ -1,9 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Apim.Developer.Domain.ThirdPartyAccounts.Infrastructure;
 using SFA.DAS.Apim.Developer.Web.Infrastructure;
 using SFA.DAS.GovUK.Auth.Authentication;
 using PolicyNames = SFA.DAS.Apim.Developer.Web.Infrastructure.PolicyNames;
-
 
 namespace SFA.DAS.Apim.Developer.Web.AppStart
 {
