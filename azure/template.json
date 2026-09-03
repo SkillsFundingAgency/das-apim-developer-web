@@ -27,7 +27,7 @@
       "type": "string"
     },
     "deployPrivateLinkedScopedResource": {
-            "type": "bool"
+      "type": "bool"
     },
     "tags": {
       "type": "object"
@@ -59,6 +59,10 @@
     "utcValue": {
       "type": "string",
       "defaultValue": "[utcNow()]"
+    },
+    "vnetRouteAllEnabled": {
+      "type": "bool",
+      "defaultValue": false
     }
   },
   "variables": {
@@ -248,6 +252,9 @@
           },
           "ipSecurityRestrictions": {
             "value": "[parameters('frontEndAccessRestrictions')]"
+          },
+          "vnetRouteAllEnabled": {
+            "value": "[parameters('vnetRouteAllEnabled')]"
           }
         }
       },
