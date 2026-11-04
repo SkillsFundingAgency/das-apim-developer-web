@@ -65,11 +65,11 @@
       "defaultValue": false
     },
     "logAnalyticsSubscriptionId": {
-        "type": "string",
-        "defaultValue": "[subscription().subscriptionId]"
+      "type": "string",
+      "defaultValue": "[subscription().subscriptionId]"
     },
     "logAnalyticsWorkspaceName": {
-        "type": "string"
+      "type": "string"
     }
   },
   "variables": {
