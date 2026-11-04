@@ -135,7 +135,7 @@
             "value": "[concat(variables('resourceNamePrefix'), '-', parameters('appConfiguration')[copyIndex()].subServiceName, '-as')]"
           },
           "logAnalyticsWorkspaceId": {
-              "value": "[resourceId(parameters('logAnalyticsSubscriptionId'),parameters('sharedManagementResourceGroup'),'Microsoft.OperationalInsights/workspaces',parameters('logAnalyticsWorkspaceName'))]"
+            "value": "[resourceId(parameters('logAnalyticsSubscriptionId'),parameters('sharedManagementResourceGroup'),'Microsoft.OperationalInsights/workspaces',parameters('logAnalyticsWorkspaceName'))]"
           }
         }
       },
