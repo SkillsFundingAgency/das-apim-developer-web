@@ -47,7 +47,6 @@ appsettings.json file
   "ConfigNames": "SFA.DAS.Apim.Developer.Web,SFA.DAS.Employer.GovSignIn,SFA.DAS.Provider.DfeSignIn",
   "Environment": "LOCAL",
   "Version": "1.0",
-  "APPINSIGHTS_INSTRUMENTATIONKEY": "",
   "AllowedHosts": "*",
   "cdn": {
     "url": "https://das-at-frnt-end.azureedge.net"
